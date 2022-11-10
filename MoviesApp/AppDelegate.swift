@@ -20,11 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if #available(iOS 15.0, *) {
             let navigationBarAppearance = UINavigationBarAppearance()
             navigationBarAppearance.configureWithOpaqueBackground()
-            navigationBarAppearance.backgroundColor = UIColor.black
+            navigationBarAppearance.backgroundColor = .clear
             UINavigationBar.appearance().standardAppearance = navigationBarAppearance
             UINavigationBar.appearance().compactAppearance = navigationBarAppearance
             UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
-            
             
             let appearance = UITabBarAppearance()
             appearance.configureWithOpaqueBackground()

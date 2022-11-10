@@ -32,9 +32,9 @@ extension MoviesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "subtitleCell")
         let movieToDispaly = filteredMovies[indexPath.row]
+        
         cell.textLabel?.text = movieToDispaly.title
         cell.detailTextLabel?.text = movieToDispaly.overview
-        
         cell.detailTextLabel?.numberOfLines = 0
         
         return cell
