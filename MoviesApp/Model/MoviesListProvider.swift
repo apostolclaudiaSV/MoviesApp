@@ -24,7 +24,7 @@ enum FilterCriteria {
 
 struct MoviesListProvider {
     
-    var unsortedMovies: [Movie] = [
+    static var unsortedMovies: [Movie] = [
         Movie(title: "Spider-Man: No Way Home", rating: 8.7, releaseDate: Date(timeIntervalSinceNow: -12), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 100000),
         Movie(title: "Venom: Let There Be Carnage", rating: 7.2, releaseDate: Date(timeIntervalSinceNow: -1200), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 9999.999),
         Movie(title: "Red Notice", rating: 6.8, releaseDate: Date(timeIntervalSinceNow: -120), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 2627.102),
@@ -75,8 +75,8 @@ struct MoviesListProvider {
         return filteredMovies
     }
     
-    func sortAndFilter(sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
-        let sortedMovies = sortBy(moviesToSort: unsortedMovies, criteria: sortCriteria)
+    func sortAndFilter(unsortedMovieList: [Movie] = unsortedMovies, sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
+        let sortedMovies = sortBy(moviesToSort: unsortedMovieList, criteria: sortCriteria)
         return filterBy(moviesToFilter: sortedMovies, criteria: filterCriteria)
     }
 }

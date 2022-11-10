@@ -8,11 +8,8 @@
 import UIKit
 
 class FavoritesViewController: BaseViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        filterCriteria = .favourites
-        sortCriteria = .none
-    }
-
+    
+    override var filterCriteria: FilterCriteria { .favourites }
+    override var sortCriteria: SortCriteria { .none }
+    
 }

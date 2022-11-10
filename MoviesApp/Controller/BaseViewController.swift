@@ -11,8 +11,8 @@ class BaseViewController: UIViewController {
 
     let movieList = MoviesListProvider()
     var filteredMovies: [Movie] = []
-    var sortCriteria: SortCriteria = .popularityDesc
-    var filterCriteria: FilterCriteria = .none
+    var sortCriteria: SortCriteria { .popularityDesc }
+    var filterCriteria: FilterCriteria { .none }
     
     override func viewDidLoad() {
         super.viewDidLoad()
