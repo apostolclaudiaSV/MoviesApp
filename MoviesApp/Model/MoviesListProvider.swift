@@ -13,16 +13,18 @@ enum SortCriteria {
     case ratingDesc
     case popularityDesc
     case releaseDesc
+    case none
 }
 
 enum FilterCriteria {
     case favourites
     case rating(value: Double)
+    case none
 }
 
-struct MovieList {
+struct MoviesListProvider {
     
-    var movies: [Movie] = [
+    var unsortedMovies: [Movie] = [
         Movie(title: "Spider-Man: No Way Home", rating: 8.7, releaseDate: Date(timeIntervalSinceNow: -12), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 100000),
         Movie(title: "Venom: Let There Be Carnage", rating: 7.2, releaseDate: Date(timeIntervalSinceNow: -1200), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 9999.999),
         Movie(title: "Red Notice", rating: 6.8, releaseDate: Date(timeIntervalSinceNow: -120), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 2627.102),
@@ -37,35 +39,44 @@ struct MovieList {
         Movie(title: "Top Gun: Maverick", rating: 8.3, releaseDate: Date(timeIntervalSinceNow: -1234558), isFavourite: true, overview: "After more than thirty years of service as one of the Navy’s top aviators, and dodging the advancement in rank that would ground him, Pete “Maverick” Mitchell finds himself training a detachment of TOP GUN graduates for a specialized mission the likes of which no living pilot has ever seen.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 1219.263)
     ]
     
-     func sortBy(_ criteria: SortCriteria) -> [Movie] {
-        var sortedMovies: [Movie] = []
+    func sortBy(moviesToSort: [Movie], criteria: SortCriteria) -> [Movie] {
+        var sortedMovies = moviesToSort
 
         switch criteria {
         case .titleAsc: // asc title
-            sortedMovies = movies.sorted(by: {$0.title < $1.title})
+            sortedMovies = moviesToSort.sorted(by: {$0.title < $1.title})
         case .titleDesc: //desc title
-            sortedMovies = movies.sorted(by: {$0.title > $1.title})
+            sortedMovies = moviesToSort.sorted(by: {$0.title > $1.title})
         case .ratingDesc: // desc rating
-            sortedMovies = movies.sorted(by: {$0.rating > $1.rating})
+            sortedMovies = moviesToSort.sorted(by: {$0.rating > $1.rating})
         case .popularityDesc:// desc popularity
-            sortedMovies = movies.sorted(by: {$0.popularity > $1.popularity})
+            sortedMovies = moviesToSort.sorted(by: {$0.popularity > $1.popularity})
         case .releaseDesc: // desc release date
-            sortedMovies = movies.sorted(by: {$0.releaseYear > $1.releaseYear})
+            sortedMovies = moviesToSort.sorted(by: {$0.releaseYear > $1.releaseYear})
+        case .none:
+            break
         }
         
         return sortedMovies
     }
     
-    func filterBy(_ criteria: FilterCriteria) -> [Movie] {
-        var filteredMovies: [Movie] = []
+    func filterBy(moviesToFilter: [Movie], criteria: FilterCriteria) -> [Movie] {
+        var filteredMovies = moviesToFilter
         
         switch criteria {
         case .favourites:
-            filteredMovies = movies.filter() { $0.isFavourite == true }
+            filteredMovies = moviesToFilter.filter() { $0.isFavourite == true }
         case let .rating(value):
-            filteredMovies = movies.filter() { $0.rating >= value }
+            filteredMovies = moviesToFilter.filter() { $0.rating >= value }
+        case .none:
+            break
         }
     
         return filteredMovies
+    }
+    
+    func sortAndFilter(sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
+        let sortedMovies = sortBy(moviesToSort: unsortedMovies, criteria: sortCriteria)
+        return filterBy(moviesToFilter: sortedMovies, criteria: filterCriteria)
     }
 }

@@ -7,10 +7,12 @@
 
 import UIKit
 
-class MoviesViewController: UIViewController {
+class BaseViewController: UIViewController {
 
-    let movieList = MovieList()
+    let movieList = MoviesListProvider()
     var filteredMovies: [Movie] = []
+    var sortCriteria: SortCriteria = .popularityDesc
+    var filterCriteria: FilterCriteria = .none
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,12 +20,12 @@ class MoviesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        filteredMovies = parent?.restorationIdentifier == "Favorites" ? movieList.filterBy(.favourites) : movieList.sortBy(.popularityDesc)
+        filteredMovies = movieList.sortAndFilter(sortCriteria: sortCriteria, filterCriteria: filterCriteria)
     }
 
 }
 
-extension MoviesViewController: UITableViewDataSource {
+extension BaseViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredMovies.count
@@ -39,11 +41,9 @@ extension MoviesViewController: UITableViewDataSource {
         
         return cell
     }
-    
-    
 }
 
-extension MoviesViewController: UITableViewDelegate {
+extension BaseViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }

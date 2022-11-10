@@ -24,22 +24,3 @@ struct Movie {
         return dateFormatter.string(from: releaseDate)
     }
 }
-
-
-struct Details {
-    let duration: Int
-    let genres: [Genre]
-    
-    func convertDurationTime() -> String {
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .abbreviated
-        formatter.allowedUnits = [.hour, .minute]
-
-        return formatter.string(from: TimeInterval(duration * 60)) ?? ""
-    }
-}
-
-struct Genre: Identifiable {
-    let id: Int
-    let name: String
-}
