@@ -9,6 +9,8 @@ import UIKit
 
 class BaseViewController: UIViewController {
 
+    @IBOutlet weak var moviesTableView: UITableView!
+    
     let movieList = MoviesListProvider()
     var filteredMovies: [Movie] = []
     var sortCriteria: SortCriteria { .popularityDesc }
@@ -16,13 +18,8 @@ class BaseViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         filteredMovies = movieList.sortAndFilter(sortCriteria: sortCriteria, filterCriteria: filterCriteria)
     }
-
 }
 
 extension BaseViewController: UITableViewDataSource {
@@ -32,7 +29,8 @@ extension BaseViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "subtitleCell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "subtitleCell", for: indexPath)
+        
         let movieToDispaly = filteredMovies[indexPath.row]
         
         cell.textLabel?.text = movieToDispaly.title
