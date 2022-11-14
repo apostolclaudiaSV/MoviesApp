@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FavoritesViewController: BaseViewController {
+class FavoritesTableViewController: BaseTableViewController {
     
     override var filterCriteria: FilterCriteria { .favourites }
     override var sortCriteria: SortCriteria { .none }
