@@ -6,7 +6,19 @@
 //
 
 import UIKit
-
+enum Icon {
+    case heart
+    case heartFill
+    case noImage
+    
+    var image: UIImage {
+        switch self {
+        case .heart: return UIImage(systemName: "heart")!
+        case .heartFill: return UIImage(systemName: "heart.fill")!
+        case .noImage: return UIImage(named: "No-Photo-Available")!
+        }
+    }
+}
 class MovieTableViewCell: UITableViewCell {
 
     @IBOutlet weak var releaseYear: UILabel!
@@ -32,7 +44,7 @@ class MovieTableViewCell: UITableViewCell {
         movieTitle.text = movie.title
         rating.text = String(movie.rating)
         releaseYear.text = movie.releaseYear
-        poster.image = UIImage(named: "No-Photo-Available")
+        poster.image = Icon.noImage.image
         favoriteButton.setImage(self.getFavoriteImage(for: movie), for: .normal)
         favoriteButton.isHidden = hideFavoriteButton
     }
@@ -46,7 +58,7 @@ class MovieTableViewCell: UITableViewCell {
     }
     
     private func getFavoriteImage(for movie: Movie) -> UIImage {
-        let favoriteImage = movie.isFavourite ? UIImage(systemName: "heart.fill")! : UIImage(systemName: "heart")!
+        let favoriteImage = movie.isFavourite ? Icon.heartFill.image : Icon.heart.image
         return favoriteImage.withTintColor(getFavoriteImageColor(for: movie), renderingMode: .alwaysOriginal)
             .withConfiguration(UIImage.SymbolConfiguration(scale: .medium))
     }
