@@ -11,5 +11,6 @@ class FavoritesTableViewController: BaseTableViewController {
     
     override var filterCriteria: FilterCriteria { .favourites }
     override var sortCriteria: SortCriteria { .none }
+    override var shouldHideFavoriteButton: Bool { true }
     
 }

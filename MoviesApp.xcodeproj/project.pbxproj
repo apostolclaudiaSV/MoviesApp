@@ -97,8 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				8E2D3DAE290FFA8A00DFD605 /* Main.storyboard */,
-				8E2D3E04291E8A7000DFD605 /* MovieTableViewCell.swift */,
 				8E2D3E05291E8A7000DFD605 /* MovieTableViewCell.xib */,
+				8E2D3E04291E8A7000DFD605 /* MovieTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
