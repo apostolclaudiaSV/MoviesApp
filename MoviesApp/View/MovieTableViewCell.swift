@@ -10,12 +10,14 @@ enum Icon {
     case heart
     case heartFill
     case noImage
+    case arrow
     
     var image: UIImage {
         switch self {
         case .heart: return UIImage(systemName: "heart")!
         case .heartFill: return UIImage(systemName: "heart.fill")!
         case .noImage: return UIImage(named: "No-Photo-Available")!
+        case .arrow: return UIImage(systemName: "chevron.right")!
         }
     }
 }

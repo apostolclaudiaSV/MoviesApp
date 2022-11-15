@@ -46,8 +46,8 @@ extension BaseTableViewController {
     }
     
     private func setupCellAccesory() -> UIImageView {
-        let image = UIImage(systemName: "chevron.right")
-        let accessory  = UIImageView(frame:CGRect(x:0, y:0, width:(image?.size.width)!, height:(image?.size.height)!))
+        let image = Icon.arrow.image
+        let accessory  = UIImageView(frame:CGRect(x:0, y:0, width:(image.size.width), height:(image.size.height)))
         accessory.image = image
         accessory.tintColor = UIColor.label
         return accessory
