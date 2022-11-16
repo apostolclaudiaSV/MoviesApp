@@ -31,7 +31,7 @@ class BaseTableViewController: UITableViewController, FavoriteValueDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        filteredMovies = moviesSingleton.sortAndFilter(unsortedMovieList: moviesSingleton.moviess, sortCriteria: sortCriteria, filterCriteria: filterCriteria)
+        filteredMovies = moviesSingleton.sortAndFilter(unsortedMovieList: moviesSingleton.movies, sortCriteria: sortCriteria, filterCriteria: filterCriteria)
         tableView.reloadData()
     }
 }
@@ -71,8 +71,8 @@ extension BaseTableViewController {
 extension BaseTableViewController: FavoriteMovieDelegate {
     func setFavoriteFor(for cell: MovieTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        moviesSingleton.modifyFavorite(index: indexPath.row)
-        filteredMovies = moviesSingleton.sortAndFilter(unsortedMovieList: moviesSingleton.moviess, sortCriteria: sortCriteria, filterCriteria: filterCriteria)
+        moviesSingleton.modifyFavorite(index: moviesSingleton.getIndexOfSortedMovie(filteredMovies[indexPath.row]))
+        filteredMovies = moviesSingleton.sortAndFilter(unsortedMovieList: moviesSingleton.movies, sortCriteria: sortCriteria, filterCriteria: filterCriteria)
         tableView.reloadRows(at: [indexPath], with: .none)
     }
     

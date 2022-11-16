@@ -40,7 +40,7 @@ class MoviesListProvider {
         Movie(title: "Top Gun: Maverick", rating: 8.3, releaseDate: Date(timeIntervalSinceNow: -1234558), isFavourite: true, overview: "After more than thirty years of service as one of the Navy’s top aviators, and dodging the advancement in rank that would ground him, Pete “Maverick” Mitchell finds himself training a detachment of TOP GUN graduates for a specialized mission the likes of which no living pilot has ever seen.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 1219.263)
     ]
     
-    private (set) var moviess = unsortedMovies
+    private (set) var movies = unsortedMovies
     
     func sortBy(moviesToSort: [Movie], criteria: SortCriteria) -> [Movie] {
         var sortedMovies = moviesToSort
@@ -80,14 +80,16 @@ class MoviesListProvider {
     
     func sortAndFilter(unsortedMovieList: [Movie] = unsortedMovies, sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
         let sortedMovies = sortBy(moviesToSort: unsortedMovieList, criteria: sortCriteria)
-        
         return filterBy(moviesToFilter: sortedMovies, criteria: filterCriteria)
     }
         
     func modifyFavorite(index: Int) {
-        moviess[index].isFavourite.toggle()
+        movies[index].isFavourite.toggle()
         self.delegate?.datasourceChanged()
-        //return moviess
+    }
+    
+    func getIndexOfSortedMovie(_ movie: Movie) -> Int{
+        return movies.firstIndex(where: {$0.title == movie.title}) ?? 0
     }
     
 }
@@ -100,9 +102,5 @@ protocol FavoriteValueDelegate: NSObjectProtocol {
 class MovieListManager {
     static let shared = MovieListManager()
     var sharedMovies = MoviesListProvider()
-    private init() {
-        
-    }
-    
-    
+    private init() {}
 }
