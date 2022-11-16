@@ -22,7 +22,8 @@ enum FilterCriteria {
     case none
 }
 
-struct MoviesListProvider {
+class MoviesListProvider {
+    weak var delegate: FavoriteValueDelegate?
     
     static var unsortedMovies: [Movie] = [
         Movie(title: "Spider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way Home", rating: 8.7, releaseDate: Date(timeIntervalSinceNow: -12), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 100000),
@@ -38,6 +39,8 @@ struct MoviesListProvider {
         Movie(title: "Black Adam", rating: 6.8, releaseDate: Date(timeIntervalSinceNow: -1234558), isFavourite: true, overview: "Nearly 5,000 years after he was bestowed with the almighty powers of the Egyptian gods—and imprisoned just as quickly—Black Adam is freed from his earthly tomb, ready to unleash his unique form of justice on the modern world.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 3193.354),
         Movie(title: "Top Gun: Maverick", rating: 8.3, releaseDate: Date(timeIntervalSinceNow: -1234558), isFavourite: true, overview: "After more than thirty years of service as one of the Navy’s top aviators, and dodging the advancement in rank that would ground him, Pete “Maverick” Mitchell finds himself training a detachment of TOP GUN graduates for a specialized mission the likes of which no living pilot has ever seen.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 1219.263)
     ]
+    
+    private (set) var moviess = unsortedMovies
     
     func sortBy(moviesToSort: [Movie], criteria: SortCriteria) -> [Movie] {
         var sortedMovies = moviesToSort
@@ -77,6 +80,29 @@ struct MoviesListProvider {
     
     func sortAndFilter(unsortedMovieList: [Movie] = unsortedMovies, sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
         let sortedMovies = sortBy(moviesToSort: unsortedMovieList, criteria: sortCriteria)
+        
         return filterBy(moviesToFilter: sortedMovies, criteria: filterCriteria)
     }
+        
+    func modifyFavorite(index: Int) {
+        moviess[index].isFavourite.toggle()
+        self.delegate?.datasourceChanged()
+        //return moviess
+    }
+    
+}
+
+protocol FavoriteValueDelegate: NSObjectProtocol {
+    func datasourceChanged()
+}
+
+
+class MovieListManager {
+    static let shared = MovieListManager()
+    var sharedMovies = MoviesListProvider()
+    private init() {
+        
+    }
+    
+    
 }

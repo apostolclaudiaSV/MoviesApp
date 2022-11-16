@@ -11,21 +11,29 @@ protocol FavoriteMovieDelegate: AnyObject {
     func setFavoriteFor(for cell: MovieTableViewCell)
 }
 
-class BaseTableViewController: UITableViewController {
+class BaseTableViewController: UITableViewController, FavoriteValueDelegate {
+    func datasourceChanged() {
+    }
     
-    let movieList = MoviesListProvider()
     var filteredMovies: [Movie] = []
     var sortCriteria: SortCriteria { .popularityDesc }
     var filterCriteria: FilterCriteria { .none }
     var shouldHideFavoriteButton: Bool { false }
-    
+    var moviesSingleton = MovieListManager.shared.sharedMovies
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        filteredMovies = movieList.sortAndFilter(sortCriteria: sortCriteria, filterCriteria: filterCriteria)
+        filteredMovies = moviesSingleton.sortAndFilter(sortCriteria: sortCriteria, filterCriteria: filterCriteria)
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
         self.title = "All Movies"
+        moviesSingleton.delegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        filteredMovies = moviesSingleton.sortAndFilter(unsortedMovieList: moviesSingleton.moviess, sortCriteria: sortCriteria, filterCriteria: filterCriteria)
+        tableView.reloadData()
+    }
 }
 
 extension BaseTableViewController {
@@ -63,7 +71,9 @@ extension BaseTableViewController {
 extension BaseTableViewController: FavoriteMovieDelegate {
     func setFavoriteFor(for cell: MovieTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        filteredMovies[indexPath.row].isFavourite = !filteredMovies[indexPath.row].isFavourite
+        moviesSingleton.modifyFavorite(index: indexPath.row)
+        filteredMovies = moviesSingleton.sortAndFilter(unsortedMovieList: moviesSingleton.moviess, sortCriteria: sortCriteria, filterCriteria: filterCriteria)
         tableView.reloadRows(at: [indexPath], with: .none)
     }
+    
 }

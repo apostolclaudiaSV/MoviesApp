@@ -13,4 +13,10 @@ class FavoritesTableViewController: BaseTableViewController {
     override var sortCriteria: SortCriteria { .none }
     override var shouldHideFavoriteButton: Bool { true }
     
+  
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        print(filteredMovies.count)
+//    }
 }
