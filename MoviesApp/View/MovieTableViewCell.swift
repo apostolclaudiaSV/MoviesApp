@@ -30,11 +30,13 @@ class MovieTableViewCell: UITableViewCell {
     @IBOutlet weak var poster: UIImageView!
     
     var hideFavoriteButton = false
-    weak var delegate: FavoriteMovieDelegate?
+    weak var delegate: MovieCellDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         favoriteButton.backgroundColor = UIColor.clear.withAlphaComponent(0.2)
+        self.accessoryView = setupCellAccesory()
+
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -52,7 +54,7 @@ class MovieTableViewCell: UITableViewCell {
     }
     
     @IBAction func favoriteButtonPressed(_ sender: Any) {
-        delegate?.setFavoriteFor(for: self)
+        delegate?.cellDidToggleFavorite(cell: self)
     }
     
     private func getFavoriteImageColor(for movie: Movie) -> UIColor {
@@ -63,5 +65,13 @@ class MovieTableViewCell: UITableViewCell {
         let favoriteImage = movie.isFavourite ? Icon.heartFill.image : Icon.heart.image
         return favoriteImage.withTintColor(getFavoriteImageColor(for: movie), renderingMode: .alwaysOriginal)
             .withConfiguration(UIImage.SymbolConfiguration(scale: .medium))
+    }
+    
+    private func setupCellAccesory() -> UIImageView {
+        let image = Icon.arrow.image
+        let accessory  = UIImageView(frame:CGRect(x:0, y:0, width:(image.size.width), height:(image.size.height)))
+        accessory.image = image
+        accessory.tintColor = UIColor.label
+        return accessory
     }
 }

@@ -7,11 +7,11 @@
 
 import UIKit
 
-protocol FavoriteMovieDelegate: AnyObject {
-    func setFavoriteFor(for cell: MovieTableViewCell)
+protocol MovieCellDelegate: AnyObject {
+    func cellDidToggleFavorite(cell: MovieTableViewCell)
 }
 
-class BaseTableViewController: UITableViewController, FavoriteValueDelegate {
+class BaseTableViewController: UITableViewController {
     func datasourceChanged() {
     }
     
@@ -19,20 +19,21 @@ class BaseTableViewController: UITableViewController, FavoriteValueDelegate {
     var sortCriteria: SortCriteria { .popularityDesc }
     var filterCriteria: FilterCriteria { .none }
     var shouldHideFavoriteButton: Bool { false }
-    var moviesSingleton = MovieListManager.shared.sharedMovies
+    var moviesManager = MoviesListManager.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        filteredMovies = moviesSingleton.sortAndFilter(sortCriteria: sortCriteria, filterCriteria: filterCriteria)
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
-        self.title = "All Movies"
-        moviesSingleton.delegate = self
-    }
+        self.title = "All Movies"    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        filteredMovies = moviesSingleton.sortAndFilter(unsortedMovieList: moviesSingleton.movies, sortCriteria: sortCriteria, filterCriteria: filterCriteria)
+        reloadMovies()
         tableView.reloadData()
+    }
+    
+    func reloadMovies() {
+        filteredMovies = moviesManager.sortedAndFiltered(by: sortCriteria, filterCriteria: filterCriteria)
     }
 }
 
@@ -43,7 +44,6 @@ extension BaseTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieTableViewCell", for: indexPath) as! MovieTableViewCell
-        cell.accessoryView = setupCellAccesory()
         
         let movieToDispaly = filteredMovies[indexPath.row]
         cell.delegate = self
@@ -51,14 +51,6 @@ extension BaseTableViewController {
         cell.configure(with: movieToDispaly)
         
         return cell
-    }
-    
-    private func setupCellAccesory() -> UIImageView {
-        let image = Icon.arrow.image
-        let accessory  = UIImageView(frame:CGRect(x:0, y:0, width:(image.size.width), height:(image.size.height)))
-        accessory.image = image
-        accessory.tintColor = UIColor.label
-        return accessory
     }
 }
 
@@ -68,11 +60,11 @@ extension BaseTableViewController {
     }
 }
 
-extension BaseTableViewController: FavoriteMovieDelegate {
-    func setFavoriteFor(for cell: MovieTableViewCell) {
+extension BaseTableViewController: MovieCellDelegate {
+    func cellDidToggleFavorite(cell: MovieTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        moviesSingleton.modifyFavorite(index: moviesSingleton.getIndexOfSortedMovie(filteredMovies[indexPath.row]))
-        filteredMovies = moviesSingleton.sortAndFilter(unsortedMovieList: moviesSingleton.movies, sortCriteria: sortCriteria, filterCriteria: filterCriteria)
+        moviesManager.modifyFavorite(index: moviesManager.getIndexOfSortedMovie(filteredMovies[indexPath.row]))
+        reloadMovies()
         tableView.reloadRows(at: [indexPath], with: .none)
     }
     
