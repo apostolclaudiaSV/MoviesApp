@@ -34,7 +34,8 @@ class MoviesListManager {
         return sortedMovies.filtered(by: filterCriteria)
     }
         
-    func modifyFavorite(index: Int) {
+    func modifyFavorite(for movie: Movie) {
+        let index = getIndexOfSortedMovie(movie)
         allMovies[index].isFavourite.toggle()
     }
     

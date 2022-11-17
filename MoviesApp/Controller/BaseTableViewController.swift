@@ -28,11 +28,11 @@ class BaseTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reloadMovies()
+        reloadFilteredMovies()
         tableView.reloadData()
     }
     
-    func reloadMovies() {
+    func reloadFilteredMovies() {
         filteredMovies = moviesManager.sortedAndFiltered(by: sortCriteria, filterCriteria: filterCriteria)
     }
 }
@@ -63,8 +63,8 @@ extension BaseTableViewController {
 extension BaseTableViewController: MovieCellDelegate {
     func cellDidToggleFavorite(cell: MovieTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        moviesManager.modifyFavorite(index: moviesManager.getIndexOfSortedMovie(filteredMovies[indexPath.row]))
-        reloadMovies()
+        moviesManager.modifyFavorite(for: filteredMovies[indexPath.row])
+        reloadFilteredMovies()
         tableView.reloadRows(at: [indexPath], with: .none)
     }
     
