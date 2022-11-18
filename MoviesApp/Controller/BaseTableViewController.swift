@@ -15,7 +15,6 @@ class BaseTableViewController: UITableViewController {
     @objc func datasourceChanged(notification: Notification) {
         DispatchQueue.main.async {
             self.reloadFilteredMovies()
-            self.tableView.reloadData()
         }
     }
     
@@ -37,11 +36,11 @@ class BaseTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadFilteredMovies()
-        tableView.reloadData()
     }
     
     func reloadFilteredMovies() {
         filteredMovies = moviesManager.sortedAndFiltered(by: sortCriteria, filterCriteria: filterCriteria)
+        tableView.reloadData()
     }
 }
 
