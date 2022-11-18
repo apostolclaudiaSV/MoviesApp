@@ -47,7 +47,7 @@ class MovieTableViewCell: UITableViewCell {
     func configure(with movie: Movie) {
         movieTitle.text = movie.title
         rating.text = String(movie.rating)
-        releaseYear.text = ""//movie.releaseYear
+        releaseYear.text = movie.releaseYear
         poster.image = Icon.noImage.image
         favoriteButton.setImage(self.getFavoriteImage(for: movie), for: .normal)
         favoriteButton.isHidden = hideFavoriteButton

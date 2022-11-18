@@ -10,7 +10,7 @@ import UIKit
 struct Movie {
     let title: String
     var rating: Double
-    let releaseDate: Date = Date()
+    var releaseDate: Date
     var isFavourite: Bool = false
     let overview: String
     let poster: UIImage = UIImage()
@@ -39,16 +39,19 @@ extension Movie: Decodable {
         let rawTitle = try? values.decode(String.self, forKey: .title)
         let rawOverview = try? values.decode(String.self, forKey: .overview)
         let rawRating = try? values.decode(Double.self, forKey: .rating)
+        let rawDate = try? values.decode(String.self, forKey: .releaseDate)
         
         guard let title = rawTitle,
-                let overview = rawOverview,
-              let rating = rawRating else {
+              let overview = rawOverview,
+              let rating = rawRating,
+              let date = rawDate?.toDate() else {
             throw fatalError("error decoding")
         }
 
         self.title = title
         self.rating = rating
         self.overview = overview
+        self.releaseDate = date
     }
 }
 

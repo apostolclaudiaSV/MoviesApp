@@ -7,16 +7,18 @@
 
 import Foundation
 
-struct ClientResponse: Decodable {
+struct ClientResponse {
     private(set) var results: [Movie] = []
-    
-    private enum RootCodingKeys: String, CodingKey {
+}
+
+extension ClientResponse: Decodable {
+    private enum CodingKeys: String, CodingKey {
         case results
     }
     
     init(from decoder: Decoder) throws {
-        let rootContainer = try decoder.container(keyedBy: RootCodingKeys.self)
-        var moviesContainer = try rootContainer.nestedUnkeyedContainer(forKey: .results)
+        let resultstContainer = try decoder.container(keyedBy: CodingKeys.self)
+        var moviesContainer = try resultstContainer.nestedUnkeyedContainer(forKey: .results)
         while !moviesContainer.isAtEnd {
             if let movie = try? moviesContainer.decode(Movie.self) {
                 results.append(movie)
