@@ -22,10 +22,29 @@ enum FilterCriteria {
     case none
 }
 
-struct MoviesListProvider {
+class MoviesListManager {
+    static let shared = MoviesListManager()
+    
+    private init() {}
+    
+    private (set) var allMovies = unsortedMovies
+    
+    func sortedAndFiltered(by sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
+        let sortedMovies = allMovies.sorted(by: sortCriteria)
+        return sortedMovies.filtered(by: filterCriteria)
+    }
+        
+    func modifyFavorite(for movie: Movie) {
+        let index = getIndexOfSortedMovie(movie)
+        allMovies[index].isFavourite.toggle()
+    }
+    
+    func getIndexOfSortedMovie(_ movie: Movie) -> Int{
+        return allMovies.firstIndex(where: {$0.title == movie.title}) ?? 0
+    }
     
     static var unsortedMovies: [Movie] = [
-        Movie(title: "Spider-Man: No Way Home", rating: 8.7, releaseDate: Date(timeIntervalSinceNow: -12), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 100000),
+        Movie(title: "Spider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way HomeSpider-Man: No Way Home", rating: 8.7, releaseDate: Date(timeIntervalSinceNow: -12), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 100000),
         Movie(title: "Venom: Let There Be Carnage", rating: 7.2, releaseDate: Date(timeIntervalSinceNow: -1200), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 9999.999),
         Movie(title: "Red Notice", rating: 6.8, releaseDate: Date(timeIntervalSinceNow: -120), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 2627.102),
         Movie(title: "Fast and Furious", rating: 9.7, releaseDate: Date(timeIntervalSinceNow: -120000), overview: "Peter Parker is unmasked and no longer able to separate his normal life from the high-stakes og being a superhero.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 2005.684),
@@ -38,45 +57,4 @@ struct MoviesListProvider {
         Movie(title: "Black Adam", rating: 6.8, releaseDate: Date(timeIntervalSinceNow: -1234558), isFavourite: true, overview: "Nearly 5,000 years after he was bestowed with the almighty powers of the Egyptian gods—and imprisoned just as quickly—Black Adam is freed from his earthly tomb, ready to unleash his unique form of justice on the modern world.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 3193.354),
         Movie(title: "Top Gun: Maverick", rating: 8.3, releaseDate: Date(timeIntervalSinceNow: -1234558), isFavourite: true, overview: "After more than thirty years of service as one of the Navy’s top aviators, and dodging the advancement in rank that would ground him, Pete “Maverick” Mitchell finds himself training a detachment of TOP GUN graduates for a specialized mission the likes of which no living pilot has ever seen.", poster: UIImage(), details: Details(duration: 121, genres: [Genre(id: 1, name: "Action")]), popularity: 1219.263)
     ]
-    
-    func sortBy(moviesToSort: [Movie], criteria: SortCriteria) -> [Movie] {
-        var sortedMovies = moviesToSort
-
-        switch criteria {
-        case .titleAsc: // asc title
-            sortedMovies = moviesToSort.sorted(by: {$0.title < $1.title})
-        case .titleDesc: //desc title
-            sortedMovies = moviesToSort.sorted(by: {$0.title > $1.title})
-        case .ratingDesc: // desc rating
-            sortedMovies = moviesToSort.sorted(by: {$0.rating > $1.rating})
-        case .popularityDesc:// desc popularity
-            sortedMovies = moviesToSort.sorted(by: {$0.popularity > $1.popularity})
-        case .releaseDesc: // desc release date
-            sortedMovies = moviesToSort.sorted(by: {$0.releaseYear > $1.releaseYear})
-        case .none:
-            break
-        }
-        
-        return sortedMovies
-    }
-    
-    func filterBy(moviesToFilter: [Movie], criteria: FilterCriteria) -> [Movie] {
-        var filteredMovies = moviesToFilter
-        
-        switch criteria {
-        case .favourites:
-            filteredMovies = moviesToFilter.filter() { $0.isFavourite == true }
-        case let .rating(value):
-            filteredMovies = moviesToFilter.filter() { $0.rating >= value }
-        case .none:
-            break
-        }
-    
-        return filteredMovies
-    }
-    
-    func sortAndFilter(unsortedMovieList: [Movie] = unsortedMovies, sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
-        let sortedMovies = sortBy(moviesToSort: unsortedMovieList, criteria: sortCriteria)
-        return filterBy(moviesToFilter: sortedMovies, criteria: filterCriteria)
-    }
 }
