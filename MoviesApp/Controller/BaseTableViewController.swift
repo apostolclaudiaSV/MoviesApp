@@ -26,17 +26,6 @@ class BaseTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
         self.title = "All Movies"
-        fetchAllMovies()
-    }
-    
-    func fetchAllMovies() {
-        networkingManager.getAllMovies() { [weak self] decodedMovies in
-            DispatchQueue.main.async {
-                self?.moviesManager.updateAllMovies(with: decodedMovies)
-                self?.reloadFilteredMovies()
-                self?.tableView.reloadData()
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

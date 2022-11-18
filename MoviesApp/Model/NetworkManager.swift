@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum paths {
+enum Paths {
     case allMovies(_ key: String)
     
     var url: URL? {
@@ -23,7 +23,7 @@ class NetworkManager {
     private let key = "626d05abf324b3be1c089c695497d49c"
 
     func getAllMovies(completionHandler: @escaping ([Movie]) -> Void) {
-        guard let url = paths.allMovies(key).url else {
+        guard let url = Paths.allMovies(key).url else {
             fatalError("error getting movie list")
         }
         let session = URLSession.shared

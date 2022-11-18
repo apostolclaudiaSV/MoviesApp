@@ -45,7 +45,7 @@ extension Movie: Decodable {
               let overview = rawOverview,
               let rating = rawRating,
               let date = rawDate?.toDate() else {
-            throw fatalError("error decoding")
+            throw CustomErrors.decodingFailure
         }
 
         self.title = title

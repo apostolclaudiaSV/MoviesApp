@@ -18,11 +18,6 @@ extension ClientResponse: Decodable {
     
     init(from decoder: Decoder) throws {
         let resultstContainer = try decoder.container(keyedBy: CodingKeys.self)
-        var moviesContainer = try resultstContainer.nestedUnkeyedContainer(forKey: .results)
-        while !moviesContainer.isAtEnd {
-            if let movie = try? moviesContainer.decode(Movie.self) {
-                results.append(movie)
-            }
-        }
+        self.results = try resultstContainer.decode([Movie].self, forKey: .results)
     }
 }

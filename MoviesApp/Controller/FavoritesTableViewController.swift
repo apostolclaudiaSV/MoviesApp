@@ -13,7 +13,4 @@ class FavoritesTableViewController: BaseTableViewController {
     override var sortCriteria: SortCriteria { .none }
     override var shouldHideFavoriteButton: Bool { true }
     
-    override func fetchAllMovies() {
-        self.reloadFilteredMovies()
-    }
 }
