@@ -13,9 +13,9 @@ struct Movie {
     var releaseDate: Date
     var isFavourite: Bool = false
     let overview: String
-    let poster: UIImage = UIImage()
-    let details: Details? = Details(duration: 10, genres: [Genre(id: 1, name: "")])
-    let popularity: Double = 0
+    let poster: UIImage
+    let details: Details?
+    let popularity: Double
  
     var releaseYear: String {
         let dateFormatter = DateFormatter()
@@ -52,6 +52,9 @@ extension Movie: Decodable {
         self.rating = rating
         self.overview = overview
         self.releaseDate = date
+        self.poster = UIImage()
+        self.details = Details(duration: 1, genres: [Genre(id: 1, name: "")])
+        self.popularity = 0
     }
 }
 

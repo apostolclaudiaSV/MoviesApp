@@ -12,7 +12,11 @@ protocol MovieCellDelegate: AnyObject {
 }
 
 class BaseTableViewController: UITableViewController {
-    func datasourceChanged() {
+    @objc func datasourceChanged(notification: Notification) {
+        DispatchQueue.main.async {
+            self.reloadFilteredMovies()
+            self.tableView.reloadData()
+        }
     }
     
     var filteredMovies: [Movie] = []
@@ -26,6 +30,8 @@ class BaseTableViewController: UITableViewController {
         super.viewDidLoad()
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
         self.title = "All Movies"
+        
+        NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: Notification.Name("DataSourceChanged"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
