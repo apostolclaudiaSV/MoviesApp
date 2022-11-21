@@ -36,8 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let moviesManager = MoviesListManager.shared
         networkingManager.getAllMovies() { decodedMovies in
             moviesManager.updateAllMovies(with: decodedMovies)
+            networkingManager.displayPosterImage(for: moviesManager.allMovies)
         }
-        
+        //networkingManager.downloadPosterImage(for: moviesManager.allMovies)
         return true
     }
 

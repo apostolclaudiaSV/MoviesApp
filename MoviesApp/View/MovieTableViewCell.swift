@@ -20,6 +20,13 @@ enum Icon {
         case .arrow: return UIImage(systemName: "chevron.right")!
         }
     }
+    
+    var data: Data {
+        switch self {
+        case .noImage: return image.pngData()!
+        default: return Data()
+        }
+    }
 }
 class MovieTableViewCell: UITableViewCell {
 
@@ -48,9 +55,10 @@ class MovieTableViewCell: UITableViewCell {
         movieTitle.text = movie.title
         rating.text = String(movie.rating)
         releaseYear.text = movie.releaseYear
-        poster.image = Icon.noImage.image
         favoriteButton.setImage(self.getFavoriteImage(for: movie), for: .normal)
         favoriteButton.isHidden = hideFavoriteButton
+        poster.image = movie.posterImage
+        //displayPosterImage(for: movie)
     }
     
     @IBAction func favoriteButtonPressed(_ sender: Any) {
@@ -74,4 +82,14 @@ class MovieTableViewCell: UITableViewCell {
         accessory.tintColor = UIColor.label
         return accessory
     }
+    
+//    private func displayPosterImage(for movie: Movie) {
+//        let url = Paths.poster(movie.poster).url
+//        DispatchQueue.global().async {
+//            let data = try? Data(contentsOf: url!)
+//            DispatchQueue.main.async {
+//                self.poster.image = UIImage(data: data ?? Icon.noImage.data)
+//            }
+//        }
+//    }
 }

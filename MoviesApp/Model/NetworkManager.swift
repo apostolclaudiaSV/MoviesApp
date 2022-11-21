@@ -5,16 +5,18 @@
 //  Created by claudia.apostol on 11/18/22.
 //
 
-import Foundation
+import UIKit
 
 enum Paths {
     case allMovies(_ key: String)
+    case poster(_ path: String)
     
     var url: URL? {
         switch self {
         case .allMovies(let key):
             return URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=\(key)")
-        
+        case .poster(let path):
+            return URL(string: "https://image.tmdb.org/t/p/w500" + path)
         }
     }
 }
@@ -27,15 +29,28 @@ class NetworkManager {
             fatalError("error getting movie list")
         }
         let session = URLSession.shared
-        session.dataTask(with: url) { (data, response, error) in
+        session.dataTask(with: url) { [weak self] (data, response, error) in
             if let data = data {
                 do {
                     let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)
                     completionHandler(decoded.results)
+                    //self?.displayPosterImage(for: decoded.result)
                 } catch {
                     print(error)
                 }
             }
         }.resume()
+    }
+    
+    func displayPosterImage(for movies: [Movie]) {
+        movies.forEach { movie in
+            let url = Paths.poster(movie.poster).url
+            DispatchQueue.global().async {
+                let data = try? Data(contentsOf: url!)
+                DispatchQueue.main.async {
+                    MoviesListManager.shared.updateImageFor(for: movie, image: UIImage(data: data ?? Icon.noImage.data)!)
+                }
+            }
+        }
     }
 }
