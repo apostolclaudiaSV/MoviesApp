@@ -58,7 +58,6 @@ class MovieTableViewCell: UITableViewCell {
         favoriteButton.setImage(self.getFavoriteImage(for: movie), for: .normal)
         favoriteButton.isHidden = hideFavoriteButton
         poster.image = movie.posterImage
-        //displayPosterImage(for: movie)
     }
     
     @IBAction func favoriteButtonPressed(_ sender: Any) {
@@ -82,14 +81,4 @@ class MovieTableViewCell: UITableViewCell {
         accessory.tintColor = UIColor.label
         return accessory
     }
-    
-//    private func displayPosterImage(for movie: Movie) {
-//        let url = Paths.poster(movie.poster).url
-//        DispatchQueue.global().async {
-//            let data = try? Data(contentsOf: url!)
-//            DispatchQueue.main.async {
-//                self.poster.image = UIImage(data: data ?? Icon.noImage.data)
-//            }
-//        }
-//    }
 }

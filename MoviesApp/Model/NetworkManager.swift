@@ -29,7 +29,7 @@ class NetworkManager {
             fatalError("error getting movie list")
         }
         let session = URLSession.shared
-        session.dataTask(with: url) { [weak self] (data, response, error) in
+        session.dataTask(with: url) { (data, response, error) in
             if let data = data {
                 do {
                     let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)

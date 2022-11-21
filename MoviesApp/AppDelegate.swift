@@ -38,7 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             moviesManager.updateAllMovies(with: decodedMovies)
             networkingManager.displayPosterImage(for: moviesManager.allMovies)
         }
-        //networkingManager.downloadPosterImage(for: moviesManager.allMovies)
         return true
     }
 
