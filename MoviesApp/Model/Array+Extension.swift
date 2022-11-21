@@ -19,7 +19,7 @@ extension Array where Element == Movie {
         case .popularityDesc:// desc popularity
             return self.sorted(by: {$0.popularity > $1.popularity})
         case .releaseDesc: // desc release date
-            return self.sorted(by: {$0.releaseYear > $1.releaseYear})
+            return self //self.sorted(by: {$0.releaseYear > $1.releaseYear})
         case .none:
             return self
         }

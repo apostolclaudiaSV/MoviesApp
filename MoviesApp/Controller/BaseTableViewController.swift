@@ -12,7 +12,10 @@ protocol MovieCellDelegate: AnyObject {
 }
 
 class BaseTableViewController: UITableViewController {
-    func datasourceChanged() {
+    @objc func datasourceChanged(notification: Notification) {
+        DispatchQueue.main.async {
+            self.reloadFilteredMovies()
+        }
     }
     
     var filteredMovies: [Movie] = []
@@ -20,20 +23,24 @@ class BaseTableViewController: UITableViewController {
     var filterCriteria: FilterCriteria { .none }
     var shouldHideFavoriteButton: Bool { false }
     var moviesManager = MoviesListManager.shared
-
+    var networkingManager = NetworkManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
-        self.title = "All Movies"    }
+        self.title = "All Movies"
+        
+        NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: Notification.Name("DataSourceChanged"), object: nil)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadFilteredMovies()
-        tableView.reloadData()
     }
     
     func reloadFilteredMovies() {
         filteredMovies = moviesManager.sortedAndFiltered(by: sortCriteria, filterCriteria: filterCriteria)
+        tableView.reloadData()
     }
 }
 

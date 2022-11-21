@@ -28,6 +28,12 @@ class MoviesListManager {
     private init() {}
     
     private (set) var allMovies = unsortedMovies
+
+    func updateAllMovies(with newMoviesList: [Movie]) {
+        allMovies = newMoviesList
+        NotificationCenter.default.post(name: Notification.Name("DataSourceChanged"), object: nil)
+
+    }
     
     func sortedAndFiltered(by sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
         let sortedMovies = allMovies.sorted(by: sortCriteria)

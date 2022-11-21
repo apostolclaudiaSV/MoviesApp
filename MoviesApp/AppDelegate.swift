@@ -31,6 +31,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UITabBar.appearance().standardAppearance = appearance
             UITabBar.appearance().scrollEdgeAppearance = UITabBar.appearance().standardAppearance
         }
+        
+        let networkingManager = NetworkManager()
+        let moviesManager = MoviesListManager.shared
+        networkingManager.getAllMovies() { decodedMovies in
+            moviesManager.updateAllMovies(with: decodedMovies)
+        }
+        
         return true
     }
 
