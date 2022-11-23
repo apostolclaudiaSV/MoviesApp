@@ -30,11 +30,12 @@ class BaseTableViewController: UITableViewController {
     var shouldHideFavoriteButton: Bool { false }
     var moviesManager = MoviesListManager.shared
     var networkingManager = NetworkManager()
+    var screenTitle: String { "All Movies" }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
-        self.title = "All Movies"
+        self.title = screenTitle
         
         NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .ImageLoaded, object: nil)
@@ -77,6 +78,12 @@ extension BaseTableViewController {
 extension BaseTableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 200
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailsVC = MovieDetailsViewController()
+        detailsVC.title = filteredMovies[indexPath.row].title
+        navigationController?.pushViewController(detailsVC, animated: true)
     }
 }
 
