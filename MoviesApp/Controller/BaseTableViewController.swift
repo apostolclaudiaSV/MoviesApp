@@ -13,19 +13,15 @@ protocol MovieCellDelegate: AnyObject {
 
 class BaseTableViewController: UITableViewController {
     @objc func datasourceChanged(notification: Notification) {
-        DispatchQueue.main.async {
-            self.reloadFilteredMovies()
-            self.tableView.reloadData()
-        }
+        reloadFilteredMovies()
+        tableView.reloadData()
     }
     
     @objc func imageLoaded(notification: Notification) {
         guard let movie = notification.object as? Movie else {
             return
         }
-        DispatchQueue.main.async {
-            self.reloadOneMovie(movie: movie)
-        }
+        self.reloadOneMovie(movie: movie)
     }
     
     var filteredMovies: [Movie] = []
@@ -40,8 +36,8 @@ class BaseTableViewController: UITableViewController {
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
         self.title = "All Movies"
         
-        NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .datasourceChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .imageLoaded, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .ImageLoaded, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,6 +90,6 @@ extension BaseTableViewController: MovieCellDelegate {
 }
 
 extension Notification.Name {
-    static let datasourceChanged = Notification.Name("datasourceChanged")
-    static let imageLoaded = Notification.Name("imageLoaded")
+    static let DatasourceChanged = Notification.Name("datasourceChanged")
+    static let ImageLoaded = Notification.Name("imageLoaded")
 }

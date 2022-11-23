@@ -31,7 +31,7 @@ class MoviesListManager {
 
     func updateAllMovies(with newMoviesList: [Movie]) {
         allMovies = newMoviesList
-        NotificationCenter.default.post(name: .datasourceChanged, object: nil)
+        NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
     }
     
     func sortedAndFiltered(by sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
@@ -47,7 +47,7 @@ class MoviesListManager {
     func updateImageFor(for movie: Movie, image: UIImage) {
         let index = getIndexOfSortedMovie(movie)
         allMovies[index].setPosterImage(image)
-        NotificationCenter.default.post(name: .imageLoaded, object: movie)
+        NotificationCenter.default.post(name: .ImageLoaded, object: movie)
     }
     
     private func allImagesSet() -> Bool {
