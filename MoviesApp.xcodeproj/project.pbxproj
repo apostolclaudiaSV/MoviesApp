@@ -25,6 +25,7 @@
 		8E2D3E0D2927A3ED00DFD605 /* ClientResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2D3E0C2927A3ED00DFD605 /* ClientResponse.swift */; };
 		8E2D3E0F2927B43500DFD605 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2D3E0E2927B43500DFD605 /* String+Extension.swift */; };
 		8E2D3E112927BBCD00DFD605 /* CustomErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2D3E102927BBCD00DFD605 /* CustomErrors.swift */; };
+		8E2D3E13292E25BA00DFD605 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2D3E12292E25BA00DFD605 /* Date+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		8E2D3E0C2927A3ED00DFD605 /* ClientResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientResponse.swift; sourceTree = "<group>"; };
 		8E2D3E0E2927B43500DFD605 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		8E2D3E102927BBCD00DFD605 /* CustomErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomErrors.swift; sourceTree = "<group>"; };
+		8E2D3E12292E25BA00DFD605 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				8E2D3E0C2927A3ED00DFD605 /* ClientResponse.swift */,
 				8E2D3E0E2927B43500DFD605 /* String+Extension.swift */,
 				8E2D3E102927BBCD00DFD605 /* CustomErrors.swift */,
+				8E2D3E12292E25BA00DFD605 /* Date+Extension.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 				8E2D3E092926860E00DFD605 /* Array+Extension.swift in Sources */,
 				8E2D3DA9290FFA8A00DFD605 /* AppDelegate.swift in Sources */,
 				8E2D3E06291E8A7000DFD605 /* MovieTableViewCell.swift in Sources */,
+				8E2D3E13292E25BA00DFD605 /* Date+Extension.swift in Sources */,
 				8E2D3E0B2927A3C300DFD605 /* NetworkManager.swift in Sources */,
 				8E2D3E0F2927B43500DFD605 /* String+Extension.swift in Sources */,
 				8E2D3E112927BBCD00DFD605 /* CustomErrors.swift in Sources */,

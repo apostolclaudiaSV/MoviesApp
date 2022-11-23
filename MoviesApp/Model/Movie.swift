@@ -13,15 +13,15 @@ struct Movie {
     var releaseDate: Date
     var isFavourite: Bool = false
     let overview: String
-    let poster: UIImage
+    let poster: String
     let details: Details?
     let popularity: Double
- 
-    var releaseYear: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy"
-        
-        return dateFormatter.string(from: releaseDate)
+    var posterImage: UIImage?
+    
+    var releaseYear: String { releaseDate.getYearFromDate() }
+    
+    mutating func setPosterImage(_ image: UIImage) {
+        self.posterImage = image
     }
 }
 
@@ -31,7 +31,7 @@ extension Movie: Decodable {
         case title
         case overview
         case releaseDate = "release_date"
-        //case poster = "poster_path"
+        case poster = "poster_path"
     }
     
     init(from decoder: Decoder) throws {
@@ -40,10 +40,12 @@ extension Movie: Decodable {
         let rawOverview = try? values.decode(String.self, forKey: .overview)
         let rawRating = try? values.decode(Double.self, forKey: .rating)
         let rawDate = try? values.decode(String.self, forKey: .releaseDate)
+        let rawPosterPath = try? values.decode(String.self, forKey: .poster)
         
         guard let title = rawTitle,
               let overview = rawOverview,
               let rating = rawRating,
+              let poster = rawPosterPath,
               let date = rawDate?.toDate() else {
             throw CustomErrors.decodingFailure
         }
@@ -52,9 +54,10 @@ extension Movie: Decodable {
         self.rating = rating
         self.overview = overview
         self.releaseDate = date
-        self.poster = UIImage()
+        self.poster = poster
         self.details = Details(duration: 1, genres: [Genre(id: 1, name: "")])
         self.popularity = 0
+        self.posterImage = UIImage()
     }
 }
 

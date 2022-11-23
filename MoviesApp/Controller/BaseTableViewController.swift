@@ -13,9 +13,15 @@ protocol MovieCellDelegate: AnyObject {
 
 class BaseTableViewController: UITableViewController {
     @objc func datasourceChanged(notification: Notification) {
-        DispatchQueue.main.async {
-            self.reloadFilteredMovies()
+        reloadFilteredMovies()
+        tableView.reloadData()
+    }
+    
+    @objc func imageLoaded(notification: Notification) {
+        guard let movie = notification.object as? Movie else {
+            return
         }
+        self.reloadOneMovie(movie: movie)
     }
     
     var filteredMovies: [Movie] = []
@@ -30,17 +36,24 @@ class BaseTableViewController: UITableViewController {
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
         self.title = "All Movies"
         
-        NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: Notification.Name("DataSourceChanged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .ImageLoaded, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadFilteredMovies()
+        tableView.reloadData()
     }
     
     func reloadFilteredMovies() {
         filteredMovies = moviesManager.sortedAndFiltered(by: sortCriteria, filterCriteria: filterCriteria)
-        tableView.reloadData()
+    }
+    
+    func reloadOneMovie(movie: Movie) {
+        let indexPath = IndexPath(row: moviesManager.getIndexOfSortedMovie(movie), section: 0)
+        reloadFilteredMovies()
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
 }
 
@@ -74,5 +87,9 @@ extension BaseTableViewController: MovieCellDelegate {
         reloadFilteredMovies()
         tableView.reloadRows(at: [indexPath], with: .none)
     }
-    
+}
+
+extension Notification.Name {
+    static let DatasourceChanged = Notification.Name("datasourceChanged")
+    static let ImageLoaded = Notification.Name("imageLoaded")
 }

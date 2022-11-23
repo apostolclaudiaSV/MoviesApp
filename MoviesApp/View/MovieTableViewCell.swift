@@ -20,6 +20,13 @@ enum Icon {
         case .arrow: return UIImage(systemName: "chevron.right")!
         }
     }
+    
+    var data: Data {
+        switch self {
+        case .noImage: return image.pngData()!
+        default: return Data()
+        }
+    }
 }
 class MovieTableViewCell: UITableViewCell {
 
@@ -48,9 +55,9 @@ class MovieTableViewCell: UITableViewCell {
         movieTitle.text = movie.title
         rating.text = String(movie.rating)
         releaseYear.text = movie.releaseYear
-        poster.image = Icon.noImage.image
         favoriteButton.setImage(self.getFavoriteImage(for: movie), for: .normal)
         favoriteButton.isHidden = hideFavoriteButton
+        poster.image = movie.posterImage
     }
     
     @IBAction func favoriteButtonPressed(_ sender: Any) {
