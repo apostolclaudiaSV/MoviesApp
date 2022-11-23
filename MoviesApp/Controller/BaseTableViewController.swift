@@ -9,20 +9,22 @@ import UIKit
 
 protocol MovieCellDelegate: AnyObject {
     func cellDidToggleFavorite(cell: MovieTableViewCell)
-    func cellDidDownloadImage(cell: MovieTableViewCell)
 }
 
 class BaseTableViewController: UITableViewController {
     @objc func datasourceChanged(notification: Notification) {
         DispatchQueue.main.async {
             self.reloadFilteredMovies()
-//          self.tableView.reloadData()
+            self.tableView.reloadData()
         }
     }
     
     @objc func imageLoaded(notification: Notification) {
+        guard let movie = notification.object as? Movie else {
+            return
+        }
         DispatchQueue.main.async {
-            self.reloadFilteredMovies()
+            self.reloadOneMovie(movie: movie)
         }
     }
     
@@ -38,25 +40,25 @@ class BaseTableViewController: UITableViewController {
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
         self.title = "All Movies"
         
-        NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: Notification.Name("DataSourceChanged"), object: nil)
-        NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: Notification.Name("ImageLoaded"), object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .datasourceChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .imageLoaded, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadFilteredMovies()
-//        self.tableView.reloadData()
+        tableView.reloadData()
     }
     
     func reloadFilteredMovies() {
         filteredMovies = moviesManager.sortedAndFiltered(by: sortCriteria, filterCriteria: filterCriteria)
-        self.tableView.reloadData()
     }
     
-//    func reloadOneMovie(movie: Movie) {
-//        let indexPath = IndexPath(row: moviesManager.getIndexOfSortedMovie(movie), section: 0)
-//        tableView.reloadRows(at: [indexPath], with: .none)
-//    }
+    func reloadOneMovie(movie: Movie) {
+        let indexPath = IndexPath(row: moviesManager.getIndexOfSortedMovie(movie), section: 0)
+        reloadFilteredMovies()
+        tableView.reloadRows(at: [indexPath], with: .none)
+    }
 }
 
 extension BaseTableViewController {
@@ -83,18 +85,15 @@ extension BaseTableViewController {
 }
 
 extension BaseTableViewController: MovieCellDelegate {
-    func cellDidDownloadImage(cell: MovieTableViewCell) {
-        guard let indexPath = tableView.indexPath(for: cell) else { return }
-        moviesManager.updateMovie(with: filteredMovies[indexPath.row])
-        reloadFilteredMovies()
-        tableView.reloadRows(at: [indexPath], with: .none)
-    }
-    
     func cellDidToggleFavorite(cell: MovieTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         moviesManager.modifyFavorite(for: filteredMovies[indexPath.row])
         reloadFilteredMovies()
         tableView.reloadRows(at: [indexPath], with: .none)
     }
-    
+}
+
+extension Notification.Name {
+    static let datasourceChanged = Notification.Name("datasourceChanged")
+    static let imageLoaded = Notification.Name("imageLoaded")
 }

@@ -58,9 +58,6 @@ class MovieTableViewCell: UITableViewCell {
         favoriteButton.setImage(self.getFavoriteImage(for: movie), for: .normal)
         favoriteButton.isHidden = hideFavoriteButton
         poster.image = movie.posterImage
-//        if movie.posterImage != Icon.noImage.image {
-//            delegate?.cellDidDownloadImage(cell: self)
-//        }
     }
     
     @IBAction func favoriteButtonPressed(_ sender: Any) {

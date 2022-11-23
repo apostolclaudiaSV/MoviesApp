@@ -34,7 +34,6 @@ class NetworkManager {
                 do {
                     let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)
                     completionHandler(decoded.results)
-                    //self?.displayPosterImage(for: decoded.result)
                 } catch {
                     print(error)
                 }

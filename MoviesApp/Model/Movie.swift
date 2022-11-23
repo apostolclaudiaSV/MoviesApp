@@ -18,12 +18,7 @@ struct Movie {
     let popularity: Double
     var posterImage: UIImage?
     
-    var releaseYear: String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy"
-        
-        return dateFormatter.string(from: releaseDate)
-    }
+    var releaseYear: String { releaseDate.getYearFromDate() }
     
     mutating func setPosterImage(_ image: UIImage) {
         self.posterImage = image
