@@ -7,10 +7,10 @@
 
 import Foundation
 
-enum CustomErrors: Error {
+enum CustomError: Error {
     case decodingFailure
 }
-extension CustomErrors: LocalizedError {
+extension CustomError: LocalizedError {
     var description: String? {
         switch self {
         case .decodingFailure:

@@ -24,7 +24,7 @@
 		8E2D3E0B2927A3C300DFD605 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2D3E0A2927A3C300DFD605 /* NetworkManager.swift */; };
 		8E2D3E0D2927A3ED00DFD605 /* ClientResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2D3E0C2927A3ED00DFD605 /* ClientResponse.swift */; };
 		8E2D3E0F2927B43500DFD605 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2D3E0E2927B43500DFD605 /* String+Extension.swift */; };
-		8E2D3E112927BBCD00DFD605 /* CustomErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2D3E102927BBCD00DFD605 /* CustomErrors.swift */; };
+		8E2D3E112927BBCD00DFD605 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2D3E102927BBCD00DFD605 /* CustomError.swift */; };
 		8E2D3E13292E25BA00DFD605 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2D3E12292E25BA00DFD605 /* Date+Extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +48,7 @@
 		8E2D3E0A2927A3C300DFD605 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		8E2D3E0C2927A3ED00DFD605 /* ClientResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientResponse.swift; sourceTree = "<group>"; };
 		8E2D3E0E2927B43500DFD605 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
-		8E2D3E102927BBCD00DFD605 /* CustomErrors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomErrors.swift; sourceTree = "<group>"; };
+		8E2D3E102927BBCD00DFD605 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		8E2D3E12292E25BA00DFD605 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,7 +105,7 @@
 				8E2D3E0A2927A3C300DFD605 /* NetworkManager.swift */,
 				8E2D3E0C2927A3ED00DFD605 /* ClientResponse.swift */,
 				8E2D3E0E2927B43500DFD605 /* String+Extension.swift */,
-				8E2D3E102927BBCD00DFD605 /* CustomErrors.swift */,
+				8E2D3E102927BBCD00DFD605 /* CustomError.swift */,
 				8E2D3E12292E25BA00DFD605 /* Date+Extension.swift */,
 			);
 			path = Model;
@@ -210,7 +210,7 @@
 				8E2D3E13292E25BA00DFD605 /* Date+Extension.swift in Sources */,
 				8E2D3E0B2927A3C300DFD605 /* NetworkManager.swift in Sources */,
 				8E2D3E0F2927B43500DFD605 /* String+Extension.swift in Sources */,
-				8E2D3E112927BBCD00DFD605 /* CustomErrors.swift in Sources */,
+				8E2D3E112927BBCD00DFD605 /* CustomError.swift in Sources */,
 				8E2D3DF8291BE5C900DFD605 /* Movie.swift in Sources */,
 				8E2D3DFA291BE60B00DFD605 /* MoviesListProvider.swift in Sources */,
 				8E2D3DFE291D2EB500DFD605 /* FavoritesTableViewController.swift in Sources */,
