@@ -14,7 +14,7 @@ extension CustomErrors: LocalizedError {
     var description: String? {
         switch self {
         case .decodingFailure:
-            return NSLocalizedString("There eas an error decoding the response", comment: "")
+            return NSLocalizedString("There was an error decoding the response", comment: "")
         }
     }
 }
