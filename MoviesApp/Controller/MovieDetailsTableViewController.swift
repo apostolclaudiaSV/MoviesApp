@@ -15,6 +15,7 @@ class MovieDetailsTableViewController: UITableViewController {
         
         tableView.register(UINib.init(nibName: "MovieTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTitleTableViewCell")
         tableView.register(UINib.init(nibName: "BackdropTableViewCell", bundle: nil), forCellReuseIdentifier: "BackdropTableViewCell")
+        tableView.register(UINib.init(nibName: "MovieDescriptionTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieDescriptionTableViewCell")
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: Icon.heart.image, style: .plain, target: self, action: #selector(heartTapped))
         navigationItem.rightBarButtonItem?.tintColor = .red
@@ -46,6 +47,10 @@ extension MovieDetailsTableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "BackdropTableViewCell", for: indexPath) as! BackdropTableViewCell
             cell.configure(with: movieToDisplay!)
             return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MovieDescriptionTableViewCell", for: indexPath) as! MovieDescriptionTableViewCell
+            cell.configure(with: movieToDisplay!)
+            return cell
         default:
             return UITableViewCell()
         }
@@ -60,6 +65,8 @@ extension MovieDetailsTableViewController {
             return 90
         case 1:
             return 150
+        case 2:
+            return 250
         default:
             return 0
         }
