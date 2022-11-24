@@ -66,7 +66,7 @@ extension Movie: Decodable {
         self.overview = overview
         self.releaseDate = date
         self.poster = poster
-        self.details = Details(duration: 1, genres: [Genre(id: 1, name: "")])
+        self.details = Details(duration: 1, genres: [Genre(id: 1, name: "Science Fiction"), Genre(id: 1, name: "Action"), Genre(id: 1, name: "Family")])
         self.popularity = 0
         self.posterImage = UIImage()
     }

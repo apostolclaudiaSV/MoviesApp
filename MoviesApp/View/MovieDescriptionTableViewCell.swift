@@ -13,54 +13,39 @@ class MovieDescriptionTableViewCell: UITableViewCell {
     @IBOutlet weak var posterImage: UIImageView!
     @IBOutlet weak var genresCollectionView: UICollectionView!
     @IBOutlet weak var descriptionTextField: UITextView!
+    var genres: [Genre] = []
     
     override func awakeFromNib() {
         super.awakeFromNib()
         genresCollectionView.register(UINib.init(nibName: "GenreCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "GenreCollectionViewCell")
         
         let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         genresCollectionView.collectionViewLayout = layout
-        genresCollectionView.contentSize = stackView.frame.size
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     func configure(with movie: Movie) {
         posterImage.image = movie.posterImage
         descriptionTextField.text = movie.overview
+        genres = movie.details?.genres ?? []
     }
     
 }
 
 extension MovieDescriptionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return genres.count
         
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCollectionViewCell", for: indexPath) as! GenreCollectionViewCell
-        var text = ""
-        switch indexPath.row {
-        case 0:
-            text = "Comedy"
-        case 1:
-            text = "Science Fiction"
-        case 2:
-            text = "Adventure"
-        case 3:
-            text = "Documentary"
-        case 4:
-            text = "Action"
-        default:
-            text = "tralalalala"
-        }
-        cell.configure(with: text)
+        cell.configure(with: genres[indexPath.row].name)
         return cell
     }
     
