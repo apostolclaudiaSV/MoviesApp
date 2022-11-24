@@ -85,7 +85,7 @@ extension BaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let detailsVC = storyboard?.instantiateViewController(withIdentifier: "MovieDetailsTableViewController") as? MovieDetailsTableViewController {
+        if let detailsVC = storyboard?.instantiateViewController(withIdentifier: "MovieDetailsTableViewController") as? MovieDetailsViewController {
             detailsVC.title = filteredMovies[indexPath.row].title
             detailsVC.movieToDisplay = filteredMovies[indexPath.row]
             detailsVC.delegate = self

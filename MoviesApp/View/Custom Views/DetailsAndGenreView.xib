@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_0" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DetailsAndGenreView" customModule="MoviesApp" customModuleProvider="target">
+            <connections>
+                <outlet property="genreCollectionView" destination="1BY-ee-7hO" id="sgP-D3-QA5"/>
+                <outlet property="overviewTextField" destination="UjD-BR-4l1" id="CIo-WV-Xjw"/>
+                <outlet property="posterImage" destination="l9y-9j-iIb" id="XSX-eu-BWY"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="624" height="255"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l9y-9j-iIb">
+                    <rect key="frame" x="0.0" y="10" width="120" height="245"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="120" id="cKg-09-huq"/>
+                    </constraints>
+                </imageView>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jlf-H3-lSZ">
+                    <rect key="frame" x="125" y="5" width="494" height="250"/>
+                    <subviews>
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="1BY-ee-7hO">
+                            <rect key="frame" x="0.0" y="0.0" width="494" height="50"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="z7D-aF-GJm"/>
+                            </constraints>
+                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="o0Y-rJ-LAI">
+                                <size key="itemSize" width="128" height="128"/>
+                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </collectionViewFlowLayout>
+                            <connections>
+                                <outlet property="dataSource" destination="-1" id="tIS-Wp-doc"/>
+                                <outlet property="delegate" destination="-1" id="nQu-ry-JSC"/>
+                            </connections>
+                        </collectionView>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="UjD-BR-4l1">
+                            <rect key="frame" x="0.0" y="60" width="494" height="190"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                            <color key="textColor" systemColor="labelColor"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                </stackView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="l9y-9j-iIb" secondAttribute="bottom" id="34i-LG-3Kk"/>
+                <constraint firstItem="jlf-H3-lSZ" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="HQ9-ry-lWh"/>
+                <constraint firstItem="jlf-H3-lSZ" firstAttribute="leading" secondItem="l9y-9j-iIb" secondAttribute="trailing" constant="5" id="IpE-hk-U6P"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="jlf-H3-lSZ" secondAttribute="trailing" constant="5" id="VrU-Xm-zm4"/>
+                <constraint firstItem="l9y-9j-iIb" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Yzd-cC-sKJ"/>
+                <constraint firstItem="l9y-9j-iIb" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="eJK-C9-sJI"/>
+                <constraint firstAttribute="bottom" secondItem="jlf-H3-lSZ" secondAttribute="bottom" id="tFa-cI-T4x"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="329.23076923076923" y="-125.47393364928909"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
