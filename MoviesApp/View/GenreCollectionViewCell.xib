@@ -18,31 +18,37 @@
                 <rect key="frame" x="0.0" y="0.0" width="227" height="133"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iYh-eM-6eB">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LIm-Pd-yzG">
                         <rect key="frame" x="0.0" y="0.0" width="227" height="133"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="u1B-gq-nYI">
+                                <rect key="frame" x="10" y="5" width="207" height="123"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <attributedString key="attributedText">
-                            <fragment content="Label">
-                                <attributes>
-                                    <font key="NSFont" metaFont="system" size="17"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" firstLineHeadIndent="10" headIndent="10" tailIndent="10" defaultTabInterval="10" tighteningFactorForTruncation="0.0"/>
-                                </attributes>
-                            </fragment>
-                        </attributedString>
-                        <nil key="highlightedColor"/>
-                    </label>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="u1B-gq-nYI" secondAttribute="trailing" constant="10" id="5CJ-MV-u9K"/>
+                            <constraint firstAttribute="bottom" secondItem="u1B-gq-nYI" secondAttribute="bottom" constant="5" id="TDJ-YG-wUn"/>
+                            <constraint firstItem="u1B-gq-nYI" firstAttribute="leading" secondItem="LIm-Pd-yzG" secondAttribute="leading" constant="10" id="YTy-MR-bHl"/>
+                            <constraint firstItem="u1B-gq-nYI" firstAttribute="top" secondItem="LIm-Pd-yzG" secondAttribute="top" constant="5" id="wdS-iA-rkm"/>
+                        </constraints>
+                    </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="iYh-eM-6eB" secondAttribute="trailing" id="FXq-YL-iYv"/>
-                <constraint firstItem="iYh-eM-6eB" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="XvH-tf-U8r"/>
-                <constraint firstAttribute="bottom" secondItem="iYh-eM-6eB" secondAttribute="bottom" id="jFa-hN-L1s"/>
-                <constraint firstItem="iYh-eM-6eB" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="mR5-rd-lNJ"/>
+                <constraint firstItem="LIm-Pd-yzG" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="7KR-wm-gFA"/>
+                <constraint firstAttribute="bottom" secondItem="LIm-Pd-yzG" secondAttribute="bottom" id="Cc7-9a-E1m"/>
+                <constraint firstItem="LIm-Pd-yzG" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="S8d-Hv-4SL"/>
+                <constraint firstAttribute="trailing" secondItem="LIm-Pd-yzG" secondAttribute="trailing" id="pgR-2X-S9w"/>
             </constraints>
             <size key="customSize" width="227" height="133"/>
             <connections>
-                <outlet property="genreLabel" destination="iYh-eM-6eB" id="qQQ-rY-rnq"/>
+                <outlet property="containerView" destination="LIm-Pd-yzG" id="FSN-fn-Qvc"/>
+                <outlet property="genreLabel" destination="u1B-gq-nYI" id="WbC-jF-j3q"/>
             </connections>
             <point key="canvasLocation" x="273.07692307692309" y="50.11848341232227"/>
         </collectionViewCell>

@@ -9,6 +9,7 @@ import UIKit
 
 class MovieDescriptionTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var stackView: UICollectionView!
     @IBOutlet weak var posterImage: UIImageView!
     @IBOutlet weak var genresCollectionView: UICollectionView!
     @IBOutlet weak var descriptionTextField: UITextView!
@@ -16,8 +17,11 @@ class MovieDescriptionTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         genresCollectionView.register(UINib.init(nibName: "GenreCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "GenreCollectionViewCell")
-        genresCollectionView.delegate = self
-        genresCollectionView.dataSource = self
+        
+        let layout = UICollectionViewFlowLayout()
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        genresCollectionView.collectionViewLayout = layout
+        genresCollectionView.contentSize = stackView.frame.size
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -41,13 +45,33 @@ extension MovieDescriptionTableViewCell: UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GenreCollectionViewCell", for: indexPath) as! GenreCollectionViewCell
-        cell.configure(with: "Comedy")
+        var text = ""
+        switch indexPath.row {
+        case 0:
+            text = "Comedy"
+        case 1:
+            text = "Science Fiction"
+        case 2:
+            text = "Adventure"
+        case 3:
+            text = "Documentary"
+        case 4:
+            text = "Action"
+        default:
+            text = "tralalalala"
+        }
+        cell.configure(with: text)
         return cell
     }
+    
 }
 
-//extension MovieDescriptionTableViewCell: UICollectionViewFlowLayout {
+//extension MovieDescriptionTableViewCell: UICollectionViewDelegateFlowLayout {
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: screenWidth, height: 30)
+//        return UICollectionViewFlowLayout.automaticSize
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 //    }
 //}
