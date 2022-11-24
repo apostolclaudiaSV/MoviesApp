@@ -12,5 +12,5 @@ class FavoritesTableViewController: BaseTableViewController {
     override var filterCriteria: FilterCriteria { .favourites }
     override var sortCriteria: SortCriteria { .none }
     override var shouldHideFavoriteButton: Bool { true }
-    override var screenTitle: String { "Favorites" }
+    override var screenTitle: String { Text.favoritesMovies.text }
 }

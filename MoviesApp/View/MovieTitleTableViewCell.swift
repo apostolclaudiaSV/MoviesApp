@@ -30,9 +30,9 @@ class MovieTitleTableViewCell: UITableViewCell {
     }
     
     private func configureRatingLabel(for rating: String) -> NSMutableAttributedString {
-        let maximumRating = "/10"
+        let maximumRating = Text.maximumRating.text
         let maximumRatingString = NSMutableAttributedString(string: maximumRating, attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
-        var ratingString = NSMutableAttributedString(string: rating, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        let ratingString = NSMutableAttributedString(string: rating, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         ratingString.append(maximumRatingString)
         return ratingString
     }

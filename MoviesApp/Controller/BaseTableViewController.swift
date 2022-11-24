@@ -34,7 +34,7 @@ class BaseTableViewController: UITableViewController {
     var shouldHideFavoriteButton: Bool { false }
     var moviesManager = MoviesListManager.shared
     var networkingManager = NetworkManager()
-    var screenTitle: String { "All Movies" }
+    var screenTitle: String { Text.allMovies.text }
     
     override func viewDidLoad() {
         super.viewDidLoad()
