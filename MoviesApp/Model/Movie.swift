@@ -23,6 +23,17 @@ struct Movie {
     mutating func setPosterImage(_ image: UIImage) {
         self.posterImage = image
     }
+    
+    func getFavoriteImageColor() -> UIColor {
+        return isFavourite ? .red : .white
+    }
+    
+    func getFavoriteImage() -> UIImage {
+        let favoriteImage = isFavourite ? Icon.heartFill.image : Icon.heart.image
+        return favoriteImage.withTintColor(getFavoriteImageColor(
+        ), renderingMode: .alwaysOriginal)
+            .withConfiguration(UIImage.SymbolConfiguration(scale: .medium))
+    }
 }
 
 extension Movie: Decodable {

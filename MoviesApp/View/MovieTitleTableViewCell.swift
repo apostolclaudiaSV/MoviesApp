@@ -16,19 +16,24 @@ class MovieTitleTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     func configure(with movie: Movie) {
         titleLabel.text = movie.title
         releaseYearLabel.text = movie.releaseYear
         durationLabel.text = movie.details?.convertDurationTime()
-        ratingLabel.text = "\(movie.rating)" + "/10"
+        ratingLabel.attributedText = configureRatingLabel(for: String(movie.rating))
+    }
+    
+    private func configureRatingLabel(for rating: String) -> NSMutableAttributedString {
+        let maximumRating = "/10"
+        let maximumRatingString = NSMutableAttributedString(string: maximumRating, attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
+        var ratingString = NSMutableAttributedString(string: rating, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        ratingString.append(maximumRatingString)
+        return ratingString
     }
 }

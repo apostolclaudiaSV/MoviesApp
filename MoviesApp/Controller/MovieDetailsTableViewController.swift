@@ -10,21 +10,29 @@ import UIKit
 class MovieDetailsTableViewController: UITableViewController {
 
     var movieToDisplay: Movie?
+    weak var delegate: MovieDetailsDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setTableView()
+        setImage()
+    }
+    
+    private func setImage() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: movieToDisplay?.getFavoriteImage(), style: .plain, target: self, action: #selector(heartTapped))
+    }
+    
+    private func setTableView() {
         tableView.register(UINib.init(nibName: "MovieTitleTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTitleTableViewCell")
         tableView.register(UINib.init(nibName: "BackdropTableViewCell", bundle: nil), forCellReuseIdentifier: "BackdropTableViewCell")
         tableView.register(UINib.init(nibName: "MovieDescriptionTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieDescriptionTableViewCell")
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: Icon.heart.image, style: .plain, target: self, action: #selector(heartTapped))
-        navigationItem.rightBarButtonItem?.tintColor = .red
-        //view.backgroundColor = .red
-        // Do any additional setup after loading the view.
+        tableView.register(UINib.init(nibName: "SimilarMoviesTableViewCell", bundle: nil), forCellReuseIdentifier: "SimilarMoviesTableViewCell")
     }
     
     @objc func heartTapped() {
-        
+        movieToDisplay?.isFavourite.toggle()
+        delegate?.didChangeFavorite(movie: movieToDisplay!)
+        setImage()
     }
 }
 
@@ -51,6 +59,9 @@ extension MovieDetailsTableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "MovieDescriptionTableViewCell", for: indexPath) as! MovieDescriptionTableViewCell
             cell.configure(with: movieToDisplay!)
             return cell
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SimilarMoviesTableViewCell", for: indexPath) as! SimilarMoviesTableViewCell
+            return cell
         default:
             return UITableViewCell()
         }
@@ -68,7 +79,7 @@ extension MovieDetailsTableViewController {
         case 2:
             return 250
         default:
-            return 0
+            return 100
         }
     }
 }

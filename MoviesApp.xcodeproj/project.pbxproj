@@ -30,6 +30,8 @@
 		8E5A66C8292F69950043F8D8 /* MovieDescriptionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E5A66C6292F69950043F8D8 /* MovieDescriptionTableViewCell.xib */; };
 		8E5A66CC292F710F0043F8D8 /* GenreCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5A66CA292F710F0043F8D8 /* GenreCollectionViewCell.swift */; };
 		8E5A66CD292F710F0043F8D8 /* GenreCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E5A66CB292F710F0043F8D8 /* GenreCollectionViewCell.xib */; };
+		8E90685B292FA3380046777B /* SimilarMoviesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E906859292FA3380046777B /* SimilarMoviesTableViewCell.swift */; };
+		8E90685C292FA3380046777B /* SimilarMoviesTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E90685A292FA3380046777B /* SimilarMoviesTableViewCell.xib */; };
 		8EAA02C7292E6C7900330804 /* MovieDetailsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAA02C6292E6C7900330804 /* MovieDetailsTableViewController.swift */; };
 		8EAA02CA292EA71900330804 /* MovieTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EAA02C8292EA71900330804 /* MovieTitleTableViewCell.swift */; };
 		8EAA02CB292EA71900330804 /* MovieTitleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8EAA02C9292EA71900330804 /* MovieTitleTableViewCell.xib */; };
@@ -63,6 +65,8 @@
 		8E5A66C6292F69950043F8D8 /* MovieDescriptionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieDescriptionTableViewCell.xib; sourceTree = "<group>"; };
 		8E5A66CA292F710F0043F8D8 /* GenreCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreCollectionViewCell.swift; sourceTree = "<group>"; };
 		8E5A66CB292F710F0043F8D8 /* GenreCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenreCollectionViewCell.xib; sourceTree = "<group>"; };
+		8E906859292FA3380046777B /* SimilarMoviesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarMoviesTableViewCell.swift; sourceTree = "<group>"; };
+		8E90685A292FA3380046777B /* SimilarMoviesTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SimilarMoviesTableViewCell.xib; sourceTree = "<group>"; };
 		8EAA02C6292E6C7900330804 /* MovieDetailsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsTableViewController.swift; sourceTree = "<group>"; };
 		8EAA02C8292EA71900330804 /* MovieTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTitleTableViewCell.swift; sourceTree = "<group>"; };
 		8EAA02C9292EA71900330804 /* MovieTitleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieTitleTableViewCell.xib; sourceTree = "<group>"; };
@@ -143,6 +147,8 @@
 				8E5A66C6292F69950043F8D8 /* MovieDescriptionTableViewCell.xib */,
 				8E5A66CA292F710F0043F8D8 /* GenreCollectionViewCell.swift */,
 				8E5A66CB292F710F0043F8D8 /* GenreCollectionViewCell.xib */,
+				8E906859292FA3380046777B /* SimilarMoviesTableViewCell.swift */,
+				8E90685A292FA3380046777B /* SimilarMoviesTableViewCell.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -217,6 +223,7 @@
 			files = (
 				8E2D3DB5290FFA8C00DFD605 /* LaunchScreen.storyboard in Resources */,
 				8E2D3DB2290FFA8C00DFD605 /* Assets.xcassets in Resources */,
+				8E90685C292FA3380046777B /* SimilarMoviesTableViewCell.xib in Resources */,
 				8E2D3E07291E8A7000DFD605 /* MovieTableViewCell.xib in Resources */,
 				8E5A66C8292F69950043F8D8 /* MovieDescriptionTableViewCell.xib in Resources */,
 				8E5A66CD292F710F0043F8D8 /* GenreCollectionViewCell.xib in Resources */,
@@ -233,6 +240,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E90685B292FA3380046777B /* SimilarMoviesTableViewCell.swift in Sources */,
 				8EAA02C7292E6C7900330804 /* MovieDetailsTableViewController.swift in Sources */,
 				8EAA02CE292F65B700330804 /* BackdropTableViewCell.swift in Sources */,
 				8E2D3DAD290FFA8A00DFD605 /* BaseTableViewController.swift in Sources */,

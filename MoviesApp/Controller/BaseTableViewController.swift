@@ -11,6 +11,10 @@ protocol MovieCellDelegate: AnyObject {
     func cellDidToggleFavorite(cell: MovieTableViewCell)
 }
 
+protocol MovieDetailsDelegate: AnyObject {
+    func didChangeFavorite(movie: Movie)
+}
+
 class BaseTableViewController: UITableViewController {
     @objc func datasourceChanged(notification: Notification) {
         reloadFilteredMovies()
@@ -84,6 +88,7 @@ extension BaseTableViewController {
         if let detailsVC = storyboard?.instantiateViewController(withIdentifier: "MovieDetailsTableViewController") as? MovieDetailsTableViewController {
             detailsVC.title = filteredMovies[indexPath.row].title
             detailsVC.movieToDisplay = filteredMovies[indexPath.row]
+            detailsVC.delegate = self
             navigationController?.pushViewController(detailsVC, animated: true)
         }
     }
@@ -101,4 +106,11 @@ extension BaseTableViewController: MovieCellDelegate {
 extension Notification.Name {
     static let DatasourceChanged = Notification.Name("datasourceChanged")
     static let ImageLoaded = Notification.Name("imageLoaded")
+}
+
+extension BaseTableViewController: MovieDetailsDelegate {
+    func didChangeFavorite(movie: Movie) {
+        moviesManager.modifyFavorite(for: movie)
+        reloadFilteredMovies()
+    }
 }
