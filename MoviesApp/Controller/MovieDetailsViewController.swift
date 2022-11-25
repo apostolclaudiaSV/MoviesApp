@@ -18,15 +18,15 @@ class MovieDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureViews()
-        setImage()
+        configureCustomViews()
+        setNavigationBarButton()
     }
     
-    private func setImage() {
+    private func setNavigationBarButton() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: movieToDisplay?.getFavoriteImage(), style: .plain, target: self, action: #selector(heartTapped))
     }
     
-    private func configureViews() {
+    private func configureCustomViews() {
         if let movie = movieToDisplay {
             titleView.configure(with: movie)
             detailsView.configure(with: movie)
@@ -37,6 +37,6 @@ class MovieDetailsViewController: UIViewController {
     @objc func heartTapped() {
         movieToDisplay?.isFavourite.toggle()
         delegate?.didChangeFavorite(movie: movieToDisplay!)
-        setImage()
+        setNavigationBarButton()
     }
 }
