@@ -7,21 +7,11 @@
 
 import UIKit
 
-class DetailsAndGenreView: UIView {
+class DetailsAndGenreView: BaseCustomView {
     @IBOutlet weak var posterImage: UIImageView!
     @IBOutlet weak var overviewTextField: UITextView!
     @IBOutlet weak var genreCollectionView: UICollectionView!
     var genres: [Genre] = []
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.initWithNibName("DetailsAndGenreView")
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.initWithNibName("DetailsAndGenreView")
-    }
 
     func configure(with movie: Movie) {
         posterImage.image = movie.posterImage

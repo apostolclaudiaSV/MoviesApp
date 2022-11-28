@@ -7,23 +7,13 @@
 
 import UIKit
 
-class TitleView: UIView {
+class TitleView: BaseCustomView {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var duarationLabel: UILabel!
     @IBOutlet weak var releaseYearLabel: UILabel!
     @IBOutlet weak var backdropImage: UIImageView!
     @IBOutlet weak var ratingLabel: UILabel!
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.initWithNibName("TitleView")
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.initWithNibName("TitleView")
-    }
     
     func configure(with movie: Movie) {
         titleLabel.text = movie.title
@@ -35,18 +25,10 @@ class TitleView: UIView {
     
     private func configureRatingLabel(for rating: String) -> NSMutableAttributedString {
         let maximumRating = Text.maximumRating.text
-        let maximumRatingString = NSMutableAttributedString(string: maximumRating, attributes: [NSAttributedString.Key.foregroundColor : UIColor.lightGray])
-        let ratingString = NSMutableAttributedString(string: rating, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        let maximumRatingString = NSMutableAttributedString(string: maximumRating, attributes: [NSAttributedString.Key.foregroundColor : UIColor.gray])
+        let ratingString = NSMutableAttributedString(string: rating, attributes: [NSAttributedString.Key.foregroundColor: UIColor.label])
         ratingString.append(maximumRatingString)
         return ratingString
     }
     
-}
-
-extension UIView {
-    func initWithNibName(_ name: String) {
-        let view = Bundle.main.loadNibNamed(name, owner: self, options: nil)![0] as! UIView
-        view.frame = self.bounds
-        addSubview(view)
-    }
 }

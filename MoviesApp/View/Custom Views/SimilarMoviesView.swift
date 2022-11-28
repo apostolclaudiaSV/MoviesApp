@@ -7,18 +7,8 @@
 
 import UIKit
 
-class SimilarMoviesView: UIView {
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.initWithNibName("SimilarMoviesView")
-    }
+class SimilarMoviesView: BaseCustomView {
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.initWithNibName("SimilarMoviesView")
-    }
-
     func configure(with movie: Movie) {
         
     }
