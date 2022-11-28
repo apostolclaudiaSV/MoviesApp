@@ -20,9 +20,13 @@ class BaseCustomView: UIView {
     }
     
     func commonInit() {
-        let view = Bundle.main.loadNibNamed("\(type(of: self))", owner: self, options: nil)![0] as! UIView
-        view.frame = self.bounds
-        addSubview(view)
+        let containerView = Bundle.main.loadNibNamed("\(type(of: self))", owner: self, options: nil)?.first as! UIView
+        addSubview(containerView)
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+                                     containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+                                     containerView.topAnchor.constraint(equalTo: self.topAnchor),
+                                     containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor)Ω])
     }
     
 }
