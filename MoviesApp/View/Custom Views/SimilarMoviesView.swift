@@ -11,18 +11,12 @@ class SimilarMoviesView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        commonInit()
+        self.initWithNibName("SimilarMoviesView")
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        commonInit()
-    }
-    
-    private func commonInit() {
-        let view = Bundle.main.loadNibNamed("SimilarMoviesView", owner: self, options: nil)![0] as! UIView
-        view.frame = self.bounds
-        addSubview(view)
+        self.initWithNibName("SimilarMoviesView")
     }
 
     func configure(with movie: Movie) {

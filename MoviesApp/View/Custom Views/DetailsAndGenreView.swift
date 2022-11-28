@@ -15,18 +15,12 @@ class DetailsAndGenreView: UIView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        commonInit()
+        self.initWithNibName("DetailsAndGenreView")
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        commonInit()
-    }
-    
-    func commonInit() {
-        let view = Bundle.main.loadNibNamed("DetailsAndGenreView", owner: self, options: nil)![0] as! UIView
-        view.frame = self.bounds
-        addSubview(view)
+        self.initWithNibName("DetailsAndGenreView")
     }
 
     func configure(with movie: Movie) {
