@@ -26,7 +26,7 @@ class BaseCustomView: UIView {
         NSLayoutConstraint.activate([containerView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
                                      containerView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
                                      containerView.topAnchor.constraint(equalTo: self.topAnchor),
-                                     containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor)Ω])
+                                     containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor)])
     }
     
 }
