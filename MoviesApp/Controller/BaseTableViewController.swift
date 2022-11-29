@@ -11,6 +11,10 @@ protocol MovieCellDelegate: AnyObject {
     func cellDidToggleFavorite(cell: MovieTableViewCell)
 }
 
+protocol MovieDetailsDelegate: AnyObject {
+    func didChangeFavorite(movie: Movie)
+}
+
 class BaseTableViewController: UITableViewController {
     @objc func datasourceChanged(notification: Notification) {
         reloadFilteredMovies()
@@ -30,11 +34,12 @@ class BaseTableViewController: UITableViewController {
     var shouldHideFavoriteButton: Bool { false }
     var moviesManager = MoviesListManager.shared
     var networkingManager = NetworkManager()
+    var screenTitle: String { Text.allMovies.text }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
-        self.title = "All Movies"
+        self.title = screenTitle
         
         NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .ImageLoaded, object: nil)
@@ -78,6 +83,15 @@ extension BaseTableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 200
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let detailsVC = storyboard?.instantiateViewController(withIdentifier: "MovieDetailsTableViewController") as? MovieDetailsViewController {
+            detailsVC.title = filteredMovies[indexPath.row].title
+            detailsVC.movieToDisplay = filteredMovies[indexPath.row]
+            detailsVC.delegate = self
+            navigationController?.pushViewController(detailsVC, animated: true)
+        }
+    }
 }
 
 extension BaseTableViewController: MovieCellDelegate {
@@ -92,4 +106,11 @@ extension BaseTableViewController: MovieCellDelegate {
 extension Notification.Name {
     static let DatasourceChanged = Notification.Name("datasourceChanged")
     static let ImageLoaded = Notification.Name("imageLoaded")
+}
+
+extension BaseTableViewController: MovieDetailsDelegate {
+    func didChangeFavorite(movie: Movie) {
+        moviesManager.modifyFavorite(for: movie)
+        reloadFilteredMovies()
+    }
 }

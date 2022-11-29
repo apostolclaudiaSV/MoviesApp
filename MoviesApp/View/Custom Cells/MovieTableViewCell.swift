@@ -55,23 +55,13 @@ class MovieTableViewCell: UITableViewCell {
         movieTitle.text = movie.title
         rating.text = String(movie.rating)
         releaseYear.text = movie.releaseYear
-        favoriteButton.setImage(self.getFavoriteImage(for: movie), for: .normal)
+        favoriteButton.setImage(movie.getFavoriteImage(), for: .normal)
         favoriteButton.isHidden = hideFavoriteButton
         poster.image = movie.posterImage
     }
     
     @IBAction func favoriteButtonPressed(_ sender: Any) {
         delegate?.cellDidToggleFavorite(cell: self)
-    }
-    
-    private func getFavoriteImageColor(for movie: Movie) -> UIColor {
-        return movie.isFavourite ? UIColor.red : UIColor.white
-    }
-    
-    private func getFavoriteImage(for movie: Movie) -> UIImage {
-        let favoriteImage = movie.isFavourite ? Icon.heartFill.image : Icon.heart.image
-        return favoriteImage.withTintColor(getFavoriteImageColor(for: movie), renderingMode: .alwaysOriginal)
-            .withConfiguration(UIImage.SymbolConfiguration(scale: .medium))
     }
     
     private func setupCellAccesory() -> UIImageView {

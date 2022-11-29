@@ -24,7 +24,7 @@ enum Paths {
 class NetworkManager {
     private let key = "626d05abf324b3be1c089c695497d49c"
 
-    func getAllMovies(completionHandler: @escaping (Result<[Movie], CustomErrors>) -> Void) {
+    func getAllMovies(completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
         guard let url = Paths.allMovies(key).url else {
             fatalError("error getting movie list")
         }
@@ -37,7 +37,7 @@ class NetworkManager {
                         completionHandler(.success(decoded.results))
                     }
                 } catch {
-                    completionHandler(.failure(CustomErrors.decodingFailure))
+                    completionHandler(.failure(CustomError.decodingFailure))
                 }
             }
         }.resume()

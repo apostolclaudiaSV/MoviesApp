@@ -23,6 +23,17 @@ struct Movie {
     mutating func setPosterImage(_ image: UIImage) {
         self.posterImage = image
     }
+    
+    func getFavoriteImageColor() -> UIColor {
+        return isFavourite ? .red : .white
+    }
+    
+    func getFavoriteImage() -> UIImage {
+        let favoriteImage = isFavourite ? Icon.heartFill.image : Icon.heart.image
+        return favoriteImage.withTintColor(getFavoriteImageColor(
+        ), renderingMode: .alwaysOriginal)
+            .withConfiguration(UIImage.SymbolConfiguration(scale: .medium))
+    }
 }
 
 extension Movie: Decodable {
@@ -47,7 +58,7 @@ extension Movie: Decodable {
               let rating = rawRating,
               let poster = rawPosterPath,
               let date = rawDate?.toDate() else {
-            throw CustomErrors.decodingFailure
+            throw CustomError.decodingFailure
         }
 
         self.title = title
@@ -55,7 +66,7 @@ extension Movie: Decodable {
         self.overview = overview
         self.releaseDate = date
         self.poster = poster
-        self.details = Details(duration: 1, genres: [Genre(id: 1, name: "")])
+        self.details = Details(duration: 90, genres: [Genre(id: 1, name: "Science Fiction"), Genre(id: 1, name: "Action"), Genre(id: 1, name: "Family")])
         self.popularity = 0
         self.posterImage = UIImage()
     }

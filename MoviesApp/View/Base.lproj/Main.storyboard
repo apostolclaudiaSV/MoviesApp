@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,6 +17,8 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0oH-kZ-Pcs">
                         <rect key="frame" x="0.0" y="47" width="390" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" systemColor="labelColor"/>
+                        <color key="barTintColor" systemColor="labelColor"/>
                     </navigationBar>
                     <connections>
                         <segue destination="ADh-mi-dfw" kind="relationship" relationship="rootViewController" id="Eob-Oe-yf9"/>
@@ -38,11 +41,55 @@
                             <outlet property="delegate" destination="ADh-mi-dfw" id="bCY-Ij-eYc"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="iSj-Az-QQ6"/>
+                    <navigationItem key="navigationItem" id="iSj-Az-QQ6">
+                        <barButtonItem key="backBarButtonItem" title=" " id="Qcn-X2-wrp"/>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DvO-MW-8QY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1291" y="-677"/>
+        </scene>
+        <!--Movie Details View Controller-->
+        <scene sceneID="Up2-9J-PYg">
+            <objects>
+                <viewController storyboardIdentifier="MovieDetailsTableViewController" id="eSS-hz-tFW" customClass="MovieDetailsViewController" customModule="MoviesApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MC3-HJ-lex">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="K8v-Zu-Oob">
+                                <rect key="frame" x="0.0" y="47" width="390" height="763"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dJX-WB-Wac" customClass="TitleView" customModule="MoviesApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="251"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5iJ-2H-b1l" customClass="DetailsAndGenreView" customModule="MoviesApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="256" width="390" height="251"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gLc-s9-8zu" customClass="SimilarMoviesView" customModule="MoviesApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="512" width="390" height="251"/>
+                                    </view>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Q2t-8l-eph"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Q2t-8l-eph" firstAttribute="trailing" secondItem="K8v-Zu-Oob" secondAttribute="trailing" id="f0g-Mk-p2P"/>
+                            <constraint firstItem="Q2t-8l-eph" firstAttribute="bottom" secondItem="K8v-Zu-Oob" secondAttribute="bottom" id="fH4-qM-srG"/>
+                            <constraint firstItem="K8v-Zu-Oob" firstAttribute="leading" secondItem="Q2t-8l-eph" secondAttribute="leading" id="pEj-9X-jHQ"/>
+                            <constraint firstItem="K8v-Zu-Oob" firstAttribute="top" secondItem="Q2t-8l-eph" secondAttribute="top" id="zJc-dY-FGj"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="detailsView" destination="5iJ-2H-b1l" id="Hu5-er-Dj6"/>
+                        <outlet property="similarMoviesView" destination="gLc-s9-8zu" id="voS-5g-Mrh"/>
+                        <outlet property="titleView" destination="dJX-WB-Wac" id="6iw-cn-79C"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ktf-hC-naS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2732" y="-255"/>
         </scene>
         <!--Favorites-->
         <scene sceneID="Ufw-0j-9Sw">
@@ -52,6 +99,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Q8z-8T-9tl">
                         <rect key="frame" x="0.0" y="47" width="390" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" systemColor="labelColor"/>
                     </navigationBar>
                     <connections>
                         <segue destination="OdO-Ji-Cbz" kind="relationship" relationship="rootViewController" id="LHj-qn-Clt"/>
@@ -74,7 +122,9 @@
                             <outlet property="delegate" destination="OdO-Ji-Cbz" id="rxz-a6-vb4"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="lUO-sa-jYX"/>
+                    <navigationItem key="navigationItem" id="lUO-sa-jYX">
+                        <barButtonItem key="backBarButtonItem" title=" " id="OHx-bb-erK"/>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xnK-TY-Cf3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -110,6 +160,9 @@
         <image name="film.fill" catalog="system" width="128" height="93"/>
         <image name="heart" catalog="system" width="128" height="107"/>
         <image name="heart.fill" catalog="system" width="128" height="107"/>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
