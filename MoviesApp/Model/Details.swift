@@ -28,7 +28,7 @@ extension Details: Decodable {
         case id
         case backdropPath = "backdrop_path"
         case duration = "runtime"
-        case genres 
+        case genres
     }
     
     init(from decoder: Decoder) throws {
@@ -36,8 +36,8 @@ extension Details: Decodable {
         let rawId = try? values.decode(Int.self, forKey: .id)
         let rawBackdrop = try? values.decode(String.self, forKey: .backdropPath)
         let rawDuration = try? values.decode(Int.self, forKey: .duration)
-//        let rawGenres = try? values.decode([Genre.self], forKey: .genres)
-        
+        let rawGenre = try? values.decode([Genre].self, forKey: .genres)
+       
         guard let id = rawId,
               let backdropPath = rawBackdrop,
               let duration = rawDuration else {
@@ -48,16 +48,6 @@ extension Details: Decodable {
         self.duration = duration
         self.backdropPath = backdropPath
         self.backdropImage = UIImage()
-        self.genres = [Genre(id: 1, name: "")]
-    }
-}
-
-extension Details: Hashable {
-    static func == (lhs: Details, rhs: Details) -> Bool {
-        return lhs.id == rhs.id
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        return hasher.combine(id)
+        self.genres = rawGenre ?? []
     }
 }
