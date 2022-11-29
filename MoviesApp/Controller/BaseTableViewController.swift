@@ -87,7 +87,6 @@ extension BaseTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let detailsVC = storyboard?.instantiateViewController(withIdentifier: "MovieDetailsTableViewController") as? MovieDetailsViewController {
             detailsVC.title = filteredMovies[indexPath.row].title
-            detailsVC.movieToDisplay = filteredMovies[indexPath.row]
             detailsVC.delegate = self
             
             guard let _ = filteredMovies[indexPath.row].details else {
@@ -95,17 +94,19 @@ extension BaseTableViewController {
                     switch result{
                     case .success(let details):
                         self.moviesManager.setDetails(for: self.filteredMovies[indexPath.row], details: details)
+                        self.networkingManager.displayBackDropImage(for: self.filteredMovies[indexPath.row]) {
+                            detailsVC.movieToDisplay = self.filteredMovies[indexPath.row]
+                        }
                     case .failure( let error):
                         print(error)
                     }
-                    self.networkingManager.displayBackDropImage(for: self.filteredMovies[indexPath.row]) {
-                        detailsVC.movieToDisplay = self.filteredMovies[indexPath.row]
-                        self.navigationController?.pushViewController(detailsVC, animated: true)
-                    }
                 }
+                detailsVC.movieToDisplay = self.filteredMovies[indexPath.row]
+                self.navigationController?.pushViewController(detailsVC, animated: true)
                 return
             }
             
+            detailsVC.movieToDisplay = self.filteredMovies[indexPath.row]
             navigationController?.pushViewController(detailsVC, animated: true)
         }
     }
