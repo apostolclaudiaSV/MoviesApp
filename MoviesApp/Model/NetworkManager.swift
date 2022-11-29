@@ -77,4 +77,19 @@ class NetworkManager {
             }
         }
     }
+    
+    func displayBackDropImage(for movie: Movie, completionHandler: @escaping () -> Void) {
+        let url = Paths.poster(movie.details?.backdropPath ?? "").url
+        DispatchQueue.global().async {
+            let data = try? Data(contentsOf: url!)
+            DispatchQueue.main.async {
+                MoviesListManager.shared.updateBackDropFor(for: movie, image: UIImage(data: data ?? Icon.noImage.data)!)
+            }
+        }
+    }
+}
+
+enum TypeOfImage {
+    case poster
+    case backdrop
 }

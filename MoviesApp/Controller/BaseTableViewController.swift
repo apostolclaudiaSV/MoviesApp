@@ -89,17 +89,18 @@ extension BaseTableViewController {
             detailsVC.title = filteredMovies[indexPath.row].title
             detailsVC.movieToDisplay = filteredMovies[indexPath.row]
             detailsVC.delegate = self
+            
             guard let _ = filteredMovies[indexPath.row].details else {
                 networkingManager.getMovieDetails(for: filteredMovies[indexPath.row].id) { result in
                     switch result{
                     case .success(let details):
                         self.moviesManager.setDetails(for: self.filteredMovies[indexPath.row], details: details)
-                        detailsVC.movieToDisplay = self.filteredMovies[indexPath.row]
-                        DispatchQueue.main.async {
-                            self.navigationController?.pushViewController(detailsVC, animated: true)
-                        }
                     case .failure( let error):
                         print(error)
+                    }
+                    self.networkingManager.displayBackDropImage(for: self.filteredMovies[indexPath.row]) {
+                        detailsVC.movieToDisplay = self.filteredMovies[indexPath.row]
+                        self.navigationController?.pushViewController(detailsVC, animated: true)
                     }
                 }
                 return

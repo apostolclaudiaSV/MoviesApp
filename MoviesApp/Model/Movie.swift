@@ -25,6 +25,10 @@ struct Movie: Identifiable {
         self.posterImage = image
     }
     
+    mutating func setBackdropImage(_ image: UIImage) {
+        self.details?.backdropImage = image
+    }
+    
     func getFavoriteImageColor() -> UIColor {
         return isFavourite ? .red : .white
     }
@@ -71,7 +75,6 @@ extension Movie: Decodable {
         self.overview = overview
         self.releaseDate = date
         self.poster = poster
-//        self.details = Details(id: 1, duration: 90, genres: [Genre(id: 1, name: "Science Fiction"), Genre(id: 1, name: "Action"), Genre(id: 1, name: "Family")])
         self.popularity = 0
         self.posterImage = UIImage()
     }

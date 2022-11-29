@@ -54,9 +54,14 @@ class MoviesListManager {
         let index = getIndexOfSortedMovie(movie)
         allMovies[index].details = details
         NotificationCenter.default.post(name: .ImageLoaded, object: movie)
-
     }
     
+    func updateBackDropFor(for movie: Movie, image: UIImage) {
+        let index = getIndexOfSortedMovie(movie)
+        allMovies[index].setBackdropImage(image)
+        NotificationCenter.default.post(name: .ImageLoaded, object: movie)
+
+    }
     private func allImagesSet() -> Bool {
         return allMovies.filter { $0.posterImage != nil }.count == allMovies.count
     }
