@@ -7,14 +7,15 @@
 
 import UIKit
 
-struct Movie {
+struct Movie: Identifiable {
+    let id: Int
     let title: String
     var rating: Double
     var releaseDate: Date
     var isFavourite: Bool = false
     let overview: String
     let poster: String
-    let details: Details?
+    var details: Details? = nil
     let popularity: Double
     var posterImage: UIImage?
     
@@ -41,12 +42,14 @@ extension Movie: Decodable {
         case rating = "vote_average"
         case title
         case overview
+        case id
         case releaseDate = "release_date"
         case poster = "poster_path"
     }
     
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
+        let rawId = try? values.decode(Int.self, forKey: .id)
         let rawTitle = try? values.decode(String.self, forKey: .title)
         let rawOverview = try? values.decode(String.self, forKey: .overview)
         let rawRating = try? values.decode(Double.self, forKey: .rating)
@@ -54,19 +57,21 @@ extension Movie: Decodable {
         let rawPosterPath = try? values.decode(String.self, forKey: .poster)
         
         guard let title = rawTitle,
+              let id = rawId,
               let overview = rawOverview,
               let rating = rawRating,
               let poster = rawPosterPath,
               let date = rawDate?.toDate() else {
             throw CustomError.decodingFailure
         }
-
+        
+        self.id = id
         self.title = title
         self.rating = rating
         self.overview = overview
         self.releaseDate = date
         self.poster = poster
-        self.details = Details(duration: 90, genres: [Genre(id: 1, name: "Science Fiction"), Genre(id: 1, name: "Action"), Genre(id: 1, name: "Family")])
+//        self.details = Details(id: 1, duration: 90, genres: [Genre(id: 1, name: "Science Fiction"), Genre(id: 1, name: "Action"), Genre(id: 1, name: "Family")])
         self.popularity = 0
         self.posterImage = UIImage()
     }
