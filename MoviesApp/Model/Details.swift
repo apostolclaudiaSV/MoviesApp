@@ -10,7 +10,7 @@ import UIKit
 struct Details: Identifiable {
     let id: Int
     var backdropPath: String = ""
-    var backdropImage: UIImage?
+    var backdropImage: UIImage? = nil
     let duration: Int
     let genres: [Genre]
     
@@ -47,7 +47,7 @@ extension Details: Decodable {
         self.id = id
         self.duration = duration
         self.backdropPath = backdropPath
-        self.backdropImage = UIImage()
+        self.backdropImage = nil
         self.genres = rawGenre ?? []
     }
 }
