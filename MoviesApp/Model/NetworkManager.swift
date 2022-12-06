@@ -78,7 +78,7 @@ class NetworkManager {
         }
     }
     
-    func displayBackDropImage(for movie: Movie, completionHandler: @escaping () -> Void) {
+    func displayBackDropImage(for movie: Movie) {
         let url = Paths.poster(movie.details?.backdropPath ?? "").url
         DispatchQueue.global().async {
             let data = try? Data(contentsOf: url!)

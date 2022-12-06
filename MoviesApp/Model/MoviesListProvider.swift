@@ -71,8 +71,8 @@ class MoviesListManager {
         return allMovies.firstIndex(where: {$0.title == movie.title}) ?? 0
     }
     
-    func getMovieById(id: Int) -> Movie? {
-        return allMovies.filter { $0.id == id }.first
+    func getMovieById(id: Int) -> Movie {
+        return allMovies.filter { $0.id == id }.first!
     }
     
     static var unsortedMovies: [Movie] = [
