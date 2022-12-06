@@ -50,18 +50,14 @@ class MoviesListManager {
         NotificationCenter.default.post(name: .ImageLoaded, object: movie)
     }
     
-    func setDetails(for movie: Movie, details: Details) -> Movie {
+    func setDetails(for movie: Movie, details: Details){
         let index = getIndexOfSortedMovie(movie)
         allMovies[index].details = details
-//        NotificationCenter.default.post(name: .ImageLoaded, object: movie)
-        return allMovies[index]
     }
     
-    func setBackDrop(for movie: Movie, image: UIImage) -> Movie {
+    func setBackDrop(for movie: Movie, image: UIImage) {
         let index = getIndexOfSortedMovie(movie)
         allMovies[index].setBackdropImage(image)
-//        NotificationCenter.default.post(name: .DetailsUpdated, object: movie)
-        return allMovies[index]
     }
     
     private func allImagesSet() -> Bool {
