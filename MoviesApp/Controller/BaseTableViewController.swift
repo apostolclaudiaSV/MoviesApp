@@ -85,11 +85,11 @@ extension BaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let detailsVC = storyboard?.instantiateViewController(withIdentifier: "MovieDetailsTableViewController") as? MovieDetailsViewController {
-            detailsVC.title = filteredMovies[indexPath.row].title
+        if let detailsVC = storyboard?.instantiateViewController(identifier: "MovieDetailsTableViewController", creator: { coder -> MovieDetailsViewController? in
+            MovieDetailsViewController(coder: coder, movie: self.filteredMovies[indexPath.row])
+        }) {
             detailsVC.delegate = self
-            detailsVC.movieToDisplay = self.filteredMovies[indexPath.row]
-            self.navigationController?.pushViewController(detailsVC, animated: true)
+            navigationController?.pushViewController(detailsVC, animated: true)
         }
     }
 }

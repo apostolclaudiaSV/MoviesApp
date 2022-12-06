@@ -15,14 +15,23 @@ class MovieDetailsViewController: UIViewController {
     @IBOutlet weak var titleView: TitleView!
     @IBOutlet weak var containerView: UIView!
     
-    var movieToDisplay: Movie?
+    var movieToDisplay: Movie
     weak var delegate: MovieDetailsDelegate?
     var networkingManager = NetworkManager()
     var moviesManager = MoviesListManager.shared
 
+    init?(coder: NSCoder, movie: Movie) {
+        movieToDisplay = movie
+        super.init(coder: coder)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("This class does not support NSCoder")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = movieToDisplay.title
         showSpinner()
         displayOrDownloadDetails()
         setNavigationBarButton()
@@ -39,7 +48,7 @@ class MovieDetailsViewController: UIViewController {
     }
     
     private func setNavigationBarButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: movieToDisplay?.getFavoriteImage(), style: .plain, target: self, action: #selector(heartTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: movieToDisplay.getFavoriteImage(), style: .plain, target: self, action: #selector(heartTapped))
     }
     
     private func configureCustomViews(with movie: Movie) {
@@ -49,34 +58,31 @@ class MovieDetailsViewController: UIViewController {
     }
     
     private func displayOrDownloadDetails() {
-        guard let movie = movieToDisplay else {
-            return
-        }
-        
-        guard let _ = movie.details else {
-            networkingManager.getMovieDetails(for: movie.id) { result in
+        if movieToDisplay.details == nil {
+            networkingManager.getMovieDetails(for: movieToDisplay.id) { [weak self] result in
+                guard let self = self else { return }
                 switch result {
                 case .success(let details):
-                    let newMovie = self.moviesManager.setDetails(for: movie, details: details)
-                    self.networkingManager.displayBackDropImage(for: newMovie)
+                    let detailedMovie = self.moviesManager.setDetails(for: self.movieToDisplay, details: details)
+                    self.networkingManager.getBackDropImage(for: detailedMovie) { [weak self] image in
+                        guard let self = self else { return }
+                        let backdropMovie = self.moviesManager.setBackDrop(for: detailedMovie, image: image)
+                        self.stopSpinner()
+                        self.configureCustomViews(with: backdropMovie)
+                    }
                 case .failure(let error):
                     print(error)
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                self.stopSpinner()
-                self.configureCustomViews(with: self.moviesManager.getMovieById(id: movie.id))
-            }
-           
-            return
         }
+        
         self.stopSpinner()
-        self.configureCustomViews(with: movie)
+        self.configureCustomViews(with: movieToDisplay)
     }
     
     @objc func heartTapped() {
-        movieToDisplay?.isFavourite.toggle()
-        delegate?.didChangeFavorite(movie: movieToDisplay!)
+        movieToDisplay.isFavourite.toggle()
+        delegate?.didChangeFavorite(movie: movieToDisplay)
         setNavigationBarButton()
     }
 }
