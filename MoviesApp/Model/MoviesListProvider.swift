@@ -50,7 +50,8 @@ class MoviesListManager {
         NotificationCenter.default.post(name: .ImageLoaded, object: movie)
     }
     
-    func setDetails(for movie: Movie, details: Details){
+    func setDetails(for id: Int, details: Details){
+        let movie = getMovieById(id: id)
         let index = getIndexOfSortedMovie(movie)
         allMovies[index].details = details
     }
@@ -65,7 +66,7 @@ class MoviesListManager {
     }
     
     func getIndexOfSortedMovie(_ movie: Movie) -> Int {
-        return allMovies.firstIndex(where: {$0.title == movie.title}) ?? 0
+        return allMovies.firstIndex(where: {$0.id == movie.id}) ?? 0
     }
     
     func getMovieById(id: Int) -> Movie {

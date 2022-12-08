@@ -63,11 +63,12 @@ class MovieDetailsViewController: UIViewController {
                 guard let self = self else { return }
                 switch result {
                 case .success(let details):
-                    self.moviesManager.setDetails(for: self.movieToDisplay, details: details)
                     let id = self.movieToDisplay.id
-                    self.networkingManager.getBackDropImage(for: self.moviesManager.getMovieById(id: id)) { [weak self] image in
+                    self.moviesManager.setDetails(for: id, details: details)
+                    let movie = self.moviesManager.getMovieById(id: id)
+                    self.networkingManager.getBackDropImage(for: movie.details?.backdropPath) { [weak self] image in
                         guard let self = self else { return }
-                        self.moviesManager.setBackDrop(for: self.moviesManager.getMovieById(id: id), image: image)
+                        self.moviesManager.setBackDrop(for: movie, image: image)
                         self.stopSpinner()
                         self.movieToDisplay = self.moviesManager.getMovieById(id: id)
                         self.configureCustomViews(with: self.movieToDisplay)

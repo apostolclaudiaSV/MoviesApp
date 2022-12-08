@@ -78,10 +78,12 @@ class NetworkManager {
         }
     }
     
-    func getBackDropImage(for movie: Movie, completion: @escaping (UIImage) -> Void) {
-        let url = Paths.poster(movie.details?.backdropPath ?? "").url
+    func getBackDropImage(for path: String?, completion: @escaping (UIImage) -> Void) {
+        guard let path = path, let url = Paths.poster(path).url else {
+            return
+        }
         DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url!)
+            let data = try? Data(contentsOf: url)
             DispatchQueue.main.async {
                 completion(UIImage(data: data ?? Icon.noImage.data)!)
             }
