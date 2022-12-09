@@ -56,7 +56,8 @@ class BaseTableViewController: UITableViewController {
     }
     
     func reloadOneMovie(movie: Movie) {
-        let indexPath = IndexPath(row: moviesManager.getIndexOfSortedMovie(movie), section: 0)
+        guard let index = moviesManager.getIndexOfSortedMovie(movie) else { return }
+        let indexPath = IndexPath(row: index, section: 0)
         reloadFilteredMovies()
         tableView.reloadRows(at: [indexPath], with: .none)
     }
@@ -85,9 +86,9 @@ extension BaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let detailsVC = storyboard?.instantiateViewController(withIdentifier: "MovieDetailsTableViewController") as? MovieDetailsViewController {
-            detailsVC.title = filteredMovies[indexPath.row].title
-            detailsVC.movieToDisplay = filteredMovies[indexPath.row]
+        if let detailsVC = storyboard?.instantiateViewController(identifier: "MovieDetailsTableViewController", creator: { coder -> MovieDetailsViewController? in
+            MovieDetailsViewController(coder: coder, movie: self.filteredMovies[indexPath.row])
+        }) {
             detailsVC.delegate = self
             navigationController?.pushViewController(detailsVC, animated: true)
         }

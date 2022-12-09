@@ -19,7 +19,7 @@ class TitleView: BaseCustomView {
         titleLabel.text = movie.title
         duarationLabel.text = movie.details?.convertDurationTime()
         releaseYearLabel.text = movie.releaseYear
-        backdropImage.image = movie.posterImage
+        backdropImage.image = movie.details?.backdropImage
         ratingLabel.attributedText = configureRatingLabel(for: String(movie.rating))
     }
     

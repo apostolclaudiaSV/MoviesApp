@@ -18,6 +18,7 @@ class DetailsAndGenreView: BaseCustomView {
         overviewTextField.text = movie.overview
         setupCollectionView()
         genres = movie.details?.genres ?? []
+        genreCollectionView.reloadData()
     }
     
     func setupCollectionView() {
