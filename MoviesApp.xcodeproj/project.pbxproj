@@ -28,6 +28,8 @@
 		8E2D3E13292E25BA00DFD605 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E2D3E12292E25BA00DFD605 /* Date+Extension.swift */; };
 		8E5A66CC292F710F0043F8D8 /* GenreCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5A66CA292F710F0043F8D8 /* GenreCollectionViewCell.swift */; };
 		8E5A66CD292F710F0043F8D8 /* GenreCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E5A66CB292F710F0043F8D8 /* GenreCollectionViewCell.xib */; };
+		8E6A1A3C29436B44000A538B /* SimilarMovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6A1A3A29436B44000A538B /* SimilarMovieCollectionViewCell.swift */; };
+		8E6A1A3D29436B44000A538B /* SimilarMovieCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E6A1A3B29436B44000A538B /* SimilarMovieCollectionViewCell.xib */; };
 		8E84D122292FFC4A00A40E46 /* TitleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E84D121292FFC4A00A40E46 /* TitleView.xib */; };
 		8E84D1242930005800A40E46 /* DetailsAndGenreView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E84D1232930005800A40E46 /* DetailsAndGenreView.xib */; };
 		8E84D1262930007300A40E46 /* DetailsAndGenreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E84D1252930007300A40E46 /* DetailsAndGenreView.swift */; };
@@ -63,6 +65,8 @@
 		8E2D3E12292E25BA00DFD605 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		8E5A66CA292F710F0043F8D8 /* GenreCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreCollectionViewCell.swift; sourceTree = "<group>"; };
 		8E5A66CB292F710F0043F8D8 /* GenreCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenreCollectionViewCell.xib; sourceTree = "<group>"; };
+		8E6A1A3A29436B44000A538B /* SimilarMovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimilarMovieCollectionViewCell.swift; sourceTree = "<group>"; };
+		8E6A1A3B29436B44000A538B /* SimilarMovieCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SimilarMovieCollectionViewCell.xib; sourceTree = "<group>"; };
 		8E84D121292FFC4A00A40E46 /* TitleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TitleView.xib; sourceTree = "<group>"; };
 		8E84D1232930005800A40E46 /* DetailsAndGenreView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailsAndGenreView.xib; sourceTree = "<group>"; };
 		8E84D1252930007300A40E46 /* DetailsAndGenreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsAndGenreView.swift; sourceTree = "<group>"; };
@@ -161,6 +165,8 @@
 				8E5A66CA292F710F0043F8D8 /* GenreCollectionViewCell.swift */,
 				8E2D3E04291E8A7000DFD605 /* MovieTableViewCell.swift */,
 				8E2D3E05291E8A7000DFD605 /* MovieTableViewCell.xib */,
+				8E6A1A3A29436B44000A538B /* SimilarMovieCollectionViewCell.swift */,
+				8E6A1A3B29436B44000A538B /* SimilarMovieCollectionViewCell.xib */,
 			);
 			path = "Custom Cells";
 			sourceTree = "<group>";
@@ -245,6 +251,7 @@
 				8E5A66CD292F710F0043F8D8 /* GenreCollectionViewCell.xib in Resources */,
 				8E84D1242930005800A40E46 /* DetailsAndGenreView.xib in Resources */,
 				8E2D3DB0290FFA8A00DFD605 /* Main.storyboard in Resources */,
+				8E6A1A3D29436B44000A538B /* SimilarMovieCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +272,7 @@
 				8E2D3E13292E25BA00DFD605 /* Date+Extension.swift in Sources */,
 				8E84D1262930007300A40E46 /* DetailsAndGenreView.swift in Sources */,
 				8E2D3E0B2927A3C300DFD605 /* NetworkManager.swift in Sources */,
+				8E6A1A3C29436B44000A538B /* SimilarMovieCollectionViewCell.swift in Sources */,
 				8E2D3E0F2927B43500DFD605 /* String+Extension.swift in Sources */,
 				8E2D3E112927BBCD00DFD605 /* CustomError.swift in Sources */,
 				8E5A66CC292F710F0043F8D8 /* GenreCollectionViewCell.swift in Sources */,

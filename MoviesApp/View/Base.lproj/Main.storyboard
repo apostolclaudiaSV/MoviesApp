@@ -61,19 +61,22 @@
                                 <rect key="frame" x="0.0" y="47" width="390" height="763"/>
                             </activityIndicatorView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kei-xA-mTz">
-                                <rect key="frame" x="0.0" y="47" width="390" height="797"/>
+                                <rect key="frame" x="0.0" y="47" width="390" height="763"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="K8v-Zu-Oob">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="797"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="763"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dJX-WB-Wac" customClass="TitleView" customModule="MoviesApp" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="390" height="262.33333333333331"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="390" height="251"/>
+                                                <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5iJ-2H-b1l" customClass="DetailsAndGenreView" customModule="MoviesApp" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="267.33333333333337" width="390" height="262.33333333333337"/>
+                                                <rect key="frame" x="0.0" y="256" width="390" height="251"/>
+                                                <color key="backgroundColor" systemColor="systemCyanColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gLc-s9-8zu" customClass="SimilarMoviesView" customModule="MoviesApp" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="534.66666666666663" width="390" height="262.33333333333337"/>
+                                                <rect key="frame" x="0.0" y="512" width="390" height="251"/>
+                                                <color key="backgroundColor" systemColor="systemGreenColor"/>
                                             </view>
                                         </subviews>
                                     </stackView>
@@ -96,7 +99,7 @@
                             <constraint firstItem="Kei-xA-mTz" firstAttribute="leading" secondItem="MC3-HJ-lex" secondAttribute="leading" id="i5D-Qz-1wY"/>
                             <constraint firstItem="Q2t-8l-eph" firstAttribute="bottom" secondItem="GFV-JZ-AQE" secondAttribute="bottom" id="jpG-P9-KOo"/>
                             <constraint firstItem="Kei-xA-mTz" firstAttribute="top" secondItem="Q2t-8l-eph" secondAttribute="top" id="npa-lp-9fC"/>
-                            <constraint firstAttribute="bottom" secondItem="Kei-xA-mTz" secondAttribute="bottom" id="tRc-DX-lwh"/>
+                            <constraint firstItem="Q2t-8l-eph" firstAttribute="bottom" secondItem="Kei-xA-mTz" secondAttribute="bottom" id="tRc-DX-lwh"/>
                             <constraint firstItem="Q2t-8l-eph" firstAttribute="trailing" secondItem="GFV-JZ-AQE" secondAttribute="trailing" id="v7r-fz-2zc"/>
                         </constraints>
                     </view>
@@ -187,8 +190,17 @@
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
+        <systemColor name="systemCyanColor">
+            <color red="0.19607843137254902" green="0.67843137254901964" blue="0.90196078431372551" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemGray2Color">
             <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemIndigoColor">
+            <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
