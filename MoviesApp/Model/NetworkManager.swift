@@ -80,6 +80,7 @@ class NetworkManager {
     
     func getBackDropImage(for path: String?, completion: @escaping (UIImage) -> Void) {
         guard let path = path, let url = Paths.poster(path).url else {
+            completion(UIImage(data: Icon.noImage.data)!)
             return
         }
         DispatchQueue.global().async {
@@ -89,9 +90,4 @@ class NetworkManager {
             }
         }
     }
-}
-
-enum TypeOfImage {
-    case poster
-    case backdrop
 }

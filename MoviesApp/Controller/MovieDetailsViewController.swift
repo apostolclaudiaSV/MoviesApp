@@ -15,7 +15,12 @@ class MovieDetailsViewController: UIViewController {
     @IBOutlet weak var titleView: TitleView!
     @IBOutlet weak var containerView: UIView!
     
-    var movieToDisplay: Movie
+    var movieToDisplay: Movie {
+        didSet {
+           configureCustomViews(with: movieToDisplay)
+        }
+    }
+    
     weak var delegate: MovieDetailsDelegate?
     var networkingManager = NetworkManager()
     var moviesManager = MoviesListManager.shared
@@ -65,22 +70,21 @@ class MovieDetailsViewController: UIViewController {
                 case .success(let details):
                     let id = self.movieToDisplay.id
                     self.moviesManager.setDetails(for: id, details: details)
-                    let movie = self.moviesManager.getMovieById(id: id)
-                    self.networkingManager.getBackDropImage(for: movie.details?.backdropPath) { [weak self] image in
+                    self.networkingManager.getBackDropImage(for: details.backdropPath) { [weak self] image in
                         guard let self = self else { return }
-                        self.moviesManager.setBackDrop(for: movie, image: image)
+                        self.moviesManager.setBackDrop(for: id, image: image)
                         self.stopSpinner()
-                        self.movieToDisplay = self.moviesManager.getMovieById(id: id)
-                        self.configureCustomViews(with: self.movieToDisplay)
+                        guard let movie = self.moviesManager.getMovieById(id: id) else { return }
+                        self.movieToDisplay = movie
                     }
                 case .failure(let error):
                     print(error)
                 }
             }
+        } else {
+            self.stopSpinner()
+            self.configureCustomViews(with: movieToDisplay)
         }
-        
-        self.stopSpinner()
-        self.configureCustomViews(with: movieToDisplay)
     }
     
     @objc func heartTapped() {

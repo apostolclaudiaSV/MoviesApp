@@ -40,24 +40,25 @@ class MoviesListManager {
     }
         
     func modifyFavorite(for movie: Movie) {
-        let index = getIndexOfSortedMovie(movie)
+        guard let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].isFavourite.toggle()
     }
     
     func updateImageFor(for movie: Movie, image: UIImage) {
-        let index = getIndexOfSortedMovie(movie)
+        guard let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].setPosterImage(image)
         NotificationCenter.default.post(name: .ImageLoaded, object: movie)
     }
     
     func setDetails(for id: Int, details: Details){
-        let movie = getMovieById(id: id)
-        let index = getIndexOfSortedMovie(movie)
+        guard let movie = getMovieById(id: id),
+              let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].details = details
     }
     
-    func setBackDrop(for movie: Movie, image: UIImage) {
-        let index = getIndexOfSortedMovie(movie)
+    func setBackDrop(for id: Int, image: UIImage) {
+        guard let movie = getMovieById(id: id),
+              let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].setBackdropImage(image)
     }
     
@@ -65,12 +66,12 @@ class MoviesListManager {
         return allMovies.filter { $0.posterImage != nil }.count == allMovies.count
     }
     
-    func getIndexOfSortedMovie(_ movie: Movie) -> Int {
-        return allMovies.firstIndex(where: {$0.id == movie.id}) ?? 0
+    func getIndexOfSortedMovie(_ movie: Movie) -> Int? {
+        return allMovies.firstIndex(where: {$0.id == movie.id})
     }
     
-    func getMovieById(id: Int) -> Movie {
-        return allMovies.filter { $0.id == id }.first!
+    func getMovieById(id: Int) -> Movie? {
+        return allMovies.filter { $0.id == id }.first
     }
     
     static var unsortedMovies: [Movie] = [

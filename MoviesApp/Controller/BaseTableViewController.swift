@@ -56,7 +56,8 @@ class BaseTableViewController: UITableViewController {
     }
     
     func reloadOneMovie(movie: Movie) {
-        let indexPath = IndexPath(row: moviesManager.getIndexOfSortedMovie(movie), section: 0)
+        guard let index = moviesManager.getIndexOfSortedMovie(movie) else { return }
+        let indexPath = IndexPath(row: index, section: 0)
         reloadFilteredMovies()
         tableView.reloadRows(at: [indexPath], with: .none)
     }
