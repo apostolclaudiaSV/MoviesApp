@@ -7,10 +7,11 @@
 
 import UIKit
 
-class SimilarMoviesView: BaseCustomView {
+class SimilarMoviesView: BaseCustomView{
     
     @IBOutlet weak var collectionView: UICollectionView!
     var moviee: Movie?
+    weak var delegate: SimilarMoviesDelegate?
     func configure(with movie: Movie) {
         moviee = movie
         setupCollectionView()
@@ -35,5 +36,8 @@ extension SimilarMoviesView: UICollectionViewDelegate, UICollectionViewDataSourc
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.cellDidSelectMovie(movie:  moviee!)
+    }
     
 }

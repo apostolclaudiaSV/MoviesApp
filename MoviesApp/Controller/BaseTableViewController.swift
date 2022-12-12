@@ -13,6 +13,7 @@ protocol MovieCellDelegate: AnyObject {
 
 protocol MovieDetailsDelegate: AnyObject {
     func didChangeFavorite(movie: Movie)
+    func didSelectSimilarMovie(movie: Movie)
 }
 
 class BaseTableViewController: UITableViewController {
@@ -61,6 +62,15 @@ class BaseTableViewController: UITableViewController {
         reloadFilteredMovies()
         tableView.reloadRows(at: [indexPath], with: .none)
     }
+    
+    func showDetailsScreen(for movie: Movie) {
+        if let detailsVC = storyboard?.instantiateViewController(identifier: "MovieDetailsTableViewController", creator: { coder -> MovieDetailsViewController? in
+            MovieDetailsViewController(coder: coder, movie: movie)
+        }) {
+            detailsVC.delegate = self
+            navigationController?.pushViewController(detailsVC, animated: true)
+        }
+    }
 }
 
 extension BaseTableViewController {
@@ -86,12 +96,7 @@ extension BaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let detailsVC = storyboard?.instantiateViewController(identifier: "MovieDetailsTableViewController", creator: { coder -> MovieDetailsViewController? in
-            MovieDetailsViewController(coder: coder, movie: self.filteredMovies[indexPath.row])
-        }) {
-            detailsVC.delegate = self
-            navigationController?.pushViewController(detailsVC, animated: true)
-        }
+        showDetailsScreen(for: self.filteredMovies[indexPath.row])
     }
 }
 
@@ -110,8 +115,13 @@ extension Notification.Name {
 }
 
 extension BaseTableViewController: MovieDetailsDelegate {
+    func didSelectSimilarMovie(movie: Movie) {
+        showDetailsScreen(for: movie)
+    }
+    
     func didChangeFavorite(movie: Movie) {
         moviesManager.modifyFavorite(for: movie)
         reloadFilteredMovies()
     }
+    
 }
