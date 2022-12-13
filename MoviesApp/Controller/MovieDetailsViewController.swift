@@ -43,7 +43,7 @@ class MovieDetailsViewController: UIViewController {
         self.title = movieToDisplay.title
         showSpinner()
         displayOrDownloadDetails()
-        setNavigationBarButton()
+        setNavigationBarButtons()
     }
     
     private func showSpinner() {
@@ -56,7 +56,8 @@ class MovieDetailsViewController: UIViewController {
         containerView.isHidden = false
     }
     
-    private func setNavigationBarButton() {
+    private func setNavigationBarButtons() {
+        navigationItem.backButtonTitle = ""
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: movieToDisplay.getFavoriteImage(), style: .plain, target: self, action: #selector(heartTapped))
     }
     
@@ -96,7 +97,7 @@ class MovieDetailsViewController: UIViewController {
     @objc func heartTapped() {
         movieToDisplay.isFavourite.toggle()
         delegate?.didChangeFavorite(movie: movieToDisplay)
-        setNavigationBarButton()
+        setNavigationBarButtons()
     }
 }
 

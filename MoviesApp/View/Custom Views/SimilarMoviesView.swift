@@ -10,11 +10,11 @@ import UIKit
 class SimilarMoviesView: BaseCustomView{
     
     @IBOutlet weak var collectionView: UICollectionView!
-    var moviee: Movie?
+    var similarMovies: [Movie] = []
     weak var delegate: SimilarMoviesDelegate?
     
     func configure(with movie: Movie) {
-        moviee = movie
+        similarMovies.append(contentsOf: [movie, movie, movie]) // test data, will be changed after implementing the networking call
         setupCollectionView()
         collectionView.reloadData()
     }
@@ -26,17 +26,17 @@ class SimilarMoviesView: BaseCustomView{
 
 extension SimilarMoviesView: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return moviee?.details?.genres.count ?? 0
+        return similarMovies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SimilarMovieCollectionViewCell", for: indexPath) as! SimilarMovieCollectionViewCell
-        cell.configure(with: moviee!.posterImage!, rating: String(moviee!.rating), title: moviee!.title)
+        cell.configure(with: similarMovies[indexPath.row])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.cellDidSelectMovie(movie:  moviee!)
+        delegate?.cellDidSelectMovie(movie: similarMovies[indexPath.row])
     }
     
 }

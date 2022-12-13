@@ -18,9 +18,9 @@ class SimilarMovieCollectionViewCell: UICollectionViewCell {
         // Initialization code
     }
 
-    func configure(with image: UIImage, rating: String, title: String) {
-        posterImage.image = image
-        ratingLabel.text = rating
-        titleLabel.text = title
+    func configure(with movie: Movie) {
+        posterImage.image = movie.posterImage
+        ratingLabel.text = "\(movie.rating)"
+        titleLabel.text = movie.title
     }
 }

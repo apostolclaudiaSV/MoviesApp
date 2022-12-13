@@ -11,6 +11,7 @@ enum Paths {
     case allMovies(_ key: String)
     case poster(_ path: String)
     case movieDetails(key: String, id: Int)
+    case similarMovies(key: String, id: Int)
     
     var url: URL? {
         switch self {
@@ -20,6 +21,8 @@ enum Paths {
             return URL(string: "https://image.tmdb.org/t/p/w500" + path)
         case .movieDetails(let key, let id):
             return URL(string: "https://api.themoviedb.org/3/movie/\(id)?api_key=\(key)")
+        case .similarMovies(let key, let id):
+            return URL(string: "https://api.themoviedb.org/3/movie/\(id)/similar?api_key=\(key)")
         }
     }
 }
