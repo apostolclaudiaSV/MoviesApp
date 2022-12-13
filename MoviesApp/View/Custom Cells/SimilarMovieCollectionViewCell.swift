@@ -8,6 +8,7 @@
 import UIKit
 
 class SimilarMovieCollectionViewCell: UICollectionViewCell {
+    
     @IBOutlet weak var posterImage: UIImageView!
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!

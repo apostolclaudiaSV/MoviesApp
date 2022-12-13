@@ -12,6 +12,7 @@ class SimilarMoviesView: BaseCustomView{
     @IBOutlet weak var collectionView: UICollectionView!
     var moviee: Movie?
     weak var delegate: SimilarMoviesDelegate?
+    
     func configure(with movie: Movie) {
         moviee = movie
         setupCollectionView()
@@ -20,7 +21,6 @@ class SimilarMoviesView: BaseCustomView{
     
     func setupCollectionView() {
         collectionView.register(UINib.init(nibName: "SimilarMovieCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SimilarMovieCollectionViewCell")
-        
     }
 }
 
@@ -31,7 +31,6 @@ extension SimilarMoviesView: UICollectionViewDelegate, UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SimilarMovieCollectionViewCell", for: indexPath) as! SimilarMovieCollectionViewCell
-        
         cell.configure(with: moviee!.posterImage!, rating: String(moviee!.rating), title: moviee!.title)
         return cell
     }
