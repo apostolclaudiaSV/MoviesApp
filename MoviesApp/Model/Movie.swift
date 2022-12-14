@@ -18,6 +18,7 @@ struct Movie: Identifiable {
     var details: Details? = nil
     let popularity: Double
     var posterImage: UIImage?
+    var similarMovies: [Movie] = []
     
     var releaseYear: String { releaseDate.getYearFromDate() }
     

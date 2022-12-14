@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol SimilarMoviesDelegate: AnyObject {
+    func cellDidSelectMovie(movie: Movie)
+}
+
 class MovieDetailsViewController: UIViewController {
     
     @IBOutlet weak var similarMoviesView: SimilarMoviesView!
@@ -39,7 +43,7 @@ class MovieDetailsViewController: UIViewController {
         self.title = movieToDisplay.title
         showSpinner()
         displayOrDownloadDetails()
-        setNavigationBarButton()
+        setNavigationBarButtons()
     }
     
     private func showSpinner() {
@@ -52,7 +56,8 @@ class MovieDetailsViewController: UIViewController {
         containerView.isHidden = false
     }
     
-    private func setNavigationBarButton() {
+    private func setNavigationBarButtons() {
+        navigationItem.backButtonTitle = ""
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: movieToDisplay.getFavoriteImage(), style: .plain, target: self, action: #selector(heartTapped))
     }
     
@@ -60,6 +65,8 @@ class MovieDetailsViewController: UIViewController {
         titleView.configure(with: movie)
         detailsView.configure(with: movie)
         similarMoviesView.configure(with: movie)
+        
+        similarMoviesView.delegate = self
     }
     
     private func displayOrDownloadDetails() {
@@ -90,6 +97,12 @@ class MovieDetailsViewController: UIViewController {
     @objc func heartTapped() {
         movieToDisplay.isFavourite.toggle()
         delegate?.didChangeFavorite(movie: movieToDisplay)
-        setNavigationBarButton()
+        setNavigationBarButtons()
+    }
+}
+
+extension MovieDetailsViewController: SimilarMoviesDelegate {
+    func cellDidSelectMovie(movie: Movie) {
+        delegate?.didSelectSimilarMovie(movie: movie)
     }
 }
