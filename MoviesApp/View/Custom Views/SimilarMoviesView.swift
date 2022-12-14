@@ -14,7 +14,7 @@ class SimilarMoviesView: BaseCustomView{
     weak var delegate: SimilarMoviesDelegate?
     
     func configure(with movie: Movie) {
-        similarMovies.append(contentsOf: [movie, movie, movie]) // test data, will be changed after implementing the networking call
+        similarMovies.append(contentsOf: [movie, movie, movie, movie, movie]) // test data, will be changed after implementing the networking call
         setupCollectionView()
         collectionView.reloadData()
     }
@@ -24,7 +24,7 @@ class SimilarMoviesView: BaseCustomView{
     }
 }
 
-extension SimilarMoviesView: UICollectionViewDelegate, UICollectionViewDataSource {
+extension SimilarMoviesView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return similarMovies.count
     }
@@ -39,4 +39,7 @@ extension SimilarMoviesView: UICollectionViewDelegate, UICollectionViewDataSourc
         delegate?.cellDidSelectMovie(movie: similarMovies[indexPath.row])
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width / 3, height: collectionView.frame.height)
+    }
 }
