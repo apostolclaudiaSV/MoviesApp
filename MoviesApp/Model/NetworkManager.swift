@@ -69,6 +69,26 @@ class NetworkManager {
         }.resume()
     }
     
+    func getSimilarMovies(for id: Int, completion: @escaping (Result<[Movie], CustomError>) -> Void) {
+        guard let url = Paths.similarMovies(key: key, id: id).url else {
+            fatalError("Error getting similar movies")
+        }
+        
+        let session = URLSession.shared
+        session.dataTask(with: url) { (data, response, error) in
+            if let data = data {
+                do {
+                    let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(.success(decoded.results))
+                    }
+                } catch {
+                    completion(.failure(CustomError.decodingFailure))
+                }
+            }
+        }.resume()
+    }
+    
     func displayPosterImage(for movies: [Movie]) {
         movies.forEach { movie in
             let url = Paths.poster(movie.poster).url

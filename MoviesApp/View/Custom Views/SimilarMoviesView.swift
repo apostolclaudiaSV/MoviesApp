@@ -14,7 +14,7 @@ class SimilarMoviesView: BaseCustomView{
     weak var delegate: SimilarMoviesDelegate?
     
     func configure(with movie: Movie) {
-        similarMovies.append(contentsOf: [movie, movie, movie, movie, movie]) // test data, will be changed after implementing the networking call
+        similarMovies = movie.details?.similarMovies ?? [] // test data, will be changed after implementing the networking call
         setupCollectionView()
         collectionView.reloadData()
     }

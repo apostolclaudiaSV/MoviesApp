@@ -62,6 +62,12 @@ class MoviesListManager {
         allMovies[index].setBackdropImage(image)
     }
     
+    func setSimilarMovies(for id: Int, movies: [Movie]) {
+        guard let movie = getMovieById(id: id),
+              let index = getIndexOfSortedMovie(movie) else { return }
+        allMovies[index].details?.similarMovies = movies
+    }
+    
     private func allImagesSet() -> Bool {
         return allMovies.filter { $0.posterImage != nil }.count == allMovies.count
     }

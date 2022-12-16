@@ -13,6 +13,7 @@ struct Details: Identifiable {
     var backdropImage: UIImage? = nil
     let duration: Int
     let genres: [Genre]
+    var similarMovies: [Movie] = []
     
     func convertDurationTime() -> String {
         let formatter = DateComponentsFormatter()

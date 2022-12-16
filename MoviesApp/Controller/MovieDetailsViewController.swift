@@ -80,9 +80,19 @@ class MovieDetailsViewController: UIViewController {
                     self.networkingManager.getBackDropImage(for: details.backdropPath) { [weak self] image in
                         guard let self = self else { return }
                         self.moviesManager.setBackDrop(for: id, image: image)
-                        self.stopSpinner()
-                        guard let movie = self.moviesManager.getMovieById(id: id) else { return }
-                        self.movieToDisplay = movie
+                        self.networkingManager.getSimilarMovies(for: id) { [weak self] result in
+                            guard let self = self else { return }
+                            switch result {
+                            case .success(let movies):
+                                self.moviesManager.setSimilarMovies(for: id, movies: movies)
+                                self.stopSpinner()
+                                guard let movie = self.moviesManager.getMovieById(id: id) else { return }
+                                self.movieToDisplay = movie
+                            case .failure(let error):
+                                print(error)
+                            }
+                        }
+                       
                     }
                 case .failure(let error):
                     print(error)
