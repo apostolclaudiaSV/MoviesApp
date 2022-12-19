@@ -80,7 +80,7 @@ class MovieDetailsViewController: UIViewController {
                     self.networkingManager.getBackDropImage(for: details.backdropPath) { [weak self] image in
                         guard let self = self else { return }
                         self.moviesManager.setBackDrop(for: id, image: image)
-                        self.networkingManager.getSimilarMovies(for: id) { [weak self] result in
+                        self.networkingManager.getAllSimilarMovies(id: id) { [weak self] result in
                             guard let self = self else { return }
                             switch result {
                             case .success(let movies):

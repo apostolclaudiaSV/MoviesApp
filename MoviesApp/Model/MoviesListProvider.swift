@@ -50,6 +50,11 @@ class MoviesListManager {
         NotificationCenter.default.post(name: .ImageLoaded, object: movie)
     }
     
+//    func setSimilarMovieImage(for similarMovie: Movie, movie: Movie, image: UIImage) {
+//        guard let index = getIndexOfSortedMovie(movie) else { return }
+//        allMovies[
+//    }
+    
     func setDetails(for id: Int, details: Details){
         guard let movie = getMovieById(id: id),
               let index = getIndexOfSortedMovie(movie) else { return }
@@ -63,9 +68,19 @@ class MoviesListManager {
     }
     
     func setSimilarMovies(for id: Int, movies: [Movie]) {
+        addMovies(movies: movies)
         guard let movie = getMovieById(id: id),
               let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].details?.similarMovies = movies
+    }
+    
+    private func addMovies(movies: [Movie]) {
+        movies.forEach { movie in
+            if !existById(id: movie.id) {
+                allMovies.append(movie)
+            }
+        }
+        NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
     }
     
     private func allImagesSet() -> Bool {
@@ -78,6 +93,10 @@ class MoviesListManager {
     
     func getMovieById(id: Int) -> Movie? {
         return allMovies.filter { $0.id == id }.first
+    }
+    
+    private func existById(id: Int) -> Bool {
+        return getMovieById(id: id) != nil
     }
     
     static var unsortedMovies: [Movie] = [
