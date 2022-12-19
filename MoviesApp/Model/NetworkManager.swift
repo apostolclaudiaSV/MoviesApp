@@ -103,12 +103,21 @@ class NetworkManager {
     
     func getPosterImages(for movies: [Movie]) {
         movies.forEach { movie in
-            let url = Paths.poster(movie.poster).url
-            DispatchQueue.global().async {
-                let data = try? Data(contentsOf: url!)
-                DispatchQueue.main.async {
-                    MoviesListManager.shared.updateImageFor(for: movie, image: UIImage(data: data ?? Icon.noImage.data)!)
-                }
+            self.getPosterImage(for: movie) { _ in
+            }
+        }
+    }
+    
+    func getPosterImage(for movie: Movie, completion: @escaping (UIImage) -> Void) {
+        guard let url = Paths.poster(movie.poster).url else {
+            return
+        }
+        DispatchQueue.global().async {
+            let data = try? Data(contentsOf: url)
+            DispatchQueue.main.async {
+                let image = UIImage(data: data ?? Icon.noImage.data)!
+                MoviesListManager.shared.updateImageFor(for: movie, image: image)
+                completion(image)
             }
         }
     }

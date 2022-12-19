@@ -50,11 +50,6 @@ class MoviesListManager {
         NotificationCenter.default.post(name: .ImageLoaded, object: movie)
     }
     
-//    func setSimilarMovieImage(for similarMovie: Movie, movie: Movie, image: UIImage) {
-//        guard let index = getIndexOfSortedMovie(movie) else { return }
-//        allMovies[
-//    }
-    
     func setDetails(for id: Int, details: Details){
         guard let movie = getMovieById(id: id),
               let index = getIndexOfSortedMovie(movie) else { return }

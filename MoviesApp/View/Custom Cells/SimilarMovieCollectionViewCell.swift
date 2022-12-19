@@ -19,8 +19,12 @@ class SimilarMovieCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(with movie: Movie) {
-        posterImage.image = movie.posterImage
+        //posterImage.image = movie.posterImage
         ratingLabel.text = "\(movie.rating)"
         titleLabel.text = movie.title
+        
+        NetworkManager().getPosterImage(for: movie) { image in
+            self.posterImage.image = image
+        }
     }
 }
