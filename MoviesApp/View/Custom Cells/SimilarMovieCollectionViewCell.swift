@@ -13,7 +13,12 @@ class SimilarMovieCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     var movieToDisplay: Movie?
-
+    
+    override func awakeFromNib() {
+           super.awakeFromNib()
+           NotificationCenter.default.addObserver(self, selector:#selector(similarImageLoaded(notification:)), name: .ImageLoaded, object: nil)
+    }
+    
     func configure(with movie: Movie) {
         movieToDisplay = movie
         ratingLabel.text = "\(movie.rating)"
@@ -22,7 +27,6 @@ class SimilarMovieCollectionViewCell: UICollectionViewCell {
             posterImage.image = img
         } else {
             posterImage.image = UIImage(data: Icon.noImage.data)
-            NotificationCenter.default.addObserver(self, selector:#selector(similarImageLoaded(notification:)), name: .ImageLoaded, object: nil)
         }
     }
     

@@ -25,11 +25,6 @@ struct Movie: Identifiable {
         self.posterImage = image
     }
     
-//    mutating func setSimilarMovieImage(_ image: UIImage, for movie: Movie) {
-//        guard let index = getIndexOfSimilarMovie(movie) else { return }
-//        self.details?.similarMovies[index]
-//    }
-    
     func getIndexOfSimilarMovie(_ movie: Movie) -> Int? {
         return details?.similarMovies.firstIndex(where: {$0.id == movie.id})
     }
