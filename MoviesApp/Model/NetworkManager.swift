@@ -108,14 +108,17 @@ class NetworkManager {
         }
     }
     
-    func getPosterImage(for movie: Movie, completion: @escaping (UIImage) -> Void) {
+    func getPosterImage(for movie: Movie, completion: @escaping (UIImage?) -> Void) {
         guard let url = Paths.poster(movie.poster).url else {
             return
         }
         DispatchQueue.global().async {
             let data = try? Data(contentsOf: url)
             DispatchQueue.main.async {
-                let image = UIImage(data: data ?? Icon.noImage.data)!
+                guard let data = data, let image = UIImage(data: data) else {
+                    completion(nil)
+                    return
+                }
                 MoviesListManager.shared.updateImageFor(for: movie, image: image)
                 completion(image)
             }

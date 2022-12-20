@@ -13,29 +13,23 @@ class SimilarMovieCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     var movieToDisplay: Movie?
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        NotificationCenter.default.addObserver(self, selector:#selector(similarImageLoaded(notification:)), name: .SimiarImageLoaded, object: nil)
-    }
 
     func configure(with movie: Movie) {
         movieToDisplay = movie
-        //posterImage.image = movie.posterImage
         ratingLabel.text = "\(movie.rating)"
         titleLabel.text = movie.title
-//        NetworkManager().getPosterImage(for: movie) { image in
-//            self.posterImage.image = image
-//        }
-
+        if let img = MoviesListManager.shared.getMovieById(id: movie.id)?.posterImage {
+            posterImage.image = img
+        } else {
+            posterImage.image = UIImage(data: Icon.noImage.data)
+            NotificationCenter.default.addObserver(self, selector:#selector(similarImageLoaded(notification:)), name: .ImageLoaded, object: nil)
+        }
     }
     
     @objc func similarImageLoaded(notification: Notification) {
         guard let movie = notification.object as? Movie, movie.id == movieToDisplay?.id else {
             return
         }
-        NetworkManager().getPosterImage(for: movie) { image in
-            self.posterImage.image = image
-        }
+        posterImage.image = MoviesListManager.shared.getMovieById(id: movie.id)?.posterImage
     }
 }
