@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Movie: Identifiable {
+final class Movie: Identifiable {
     let id: Int
     let title: String
     var rating: Double
@@ -21,7 +21,20 @@ struct Movie: Identifiable {
     
     var releaseYear: String { releaseDate.getYearFromDate() }
     
-    mutating func setPosterImage(_ image: UIImage) {
+    init(id: Int, title: String, rating: Double, releaseDate: Date, isFavourite: Bool, overview: String, poster: String, details: Details? = nil, popularity: Double, posterImage: UIImage? = nil) {
+        self.id = id
+        self.title = title
+        self.rating = rating
+        self.releaseDate = releaseDate
+        self.isFavourite = isFavourite
+        self.overview = overview
+        self.poster = poster
+        self.details = details
+        self.popularity = popularity
+        self.posterImage = posterImage
+    }
+    
+    func setPosterImage(_ image: UIImage) {
         self.posterImage = image
     }
     
@@ -29,7 +42,7 @@ struct Movie: Identifiable {
         return details?.similarMovies.firstIndex(where: {$0.id == movie.id})
     }
     
-    mutating func setBackdropImage(_ image: UIImage) {
+    func setBackdropImage(_ image: UIImage) {
         self.details?.backdropImage = image
     }
     
@@ -55,7 +68,7 @@ extension Movie: Decodable {
         case poster = "poster_path"
     }
     
-    init(from decoder: Decoder) throws {
+    convenience init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let rawId = try? values.decode(Int.self, forKey: .id)
         let rawTitle = try? values.decode(String.self, forKey: .title)
@@ -72,15 +85,8 @@ extension Movie: Decodable {
               let date = rawDate?.toDate() else {
             throw CustomError.decodingFailure
         }
-        
-        self.id = id
-        self.title = title
-        self.rating = rating
-        self.overview = overview
-        self.releaseDate = date
-        self.poster = poster
-        self.popularity = 0
-        self.posterImage = UIImage()
+    
+        self.init(id: id, title: title, rating: rating, releaseDate: date, isFavourite: false, overview: overview, poster: poster, popularity: 0)
     }
 }
 

@@ -23,7 +23,7 @@ class SimilarMovieCollectionViewCell: UICollectionViewCell {
         movieToDisplay = movie
         ratingLabel.text = "\(movie.rating)"
         titleLabel.text = movie.title
-        if let img = MoviesListManager.shared.getMovieById(id: movie.id)?.posterImage {
+        if let img = movie.posterImage {
             posterImage.image = img
         } else {
             posterImage.image = UIImage(data: Icon.noImage.data)
@@ -34,6 +34,6 @@ class SimilarMovieCollectionViewCell: UICollectionViewCell {
         guard let movie = notification.object as? Movie, movie.id == movieToDisplay?.id else {
             return
         }
-        posterImage.image = MoviesListManager.shared.getMovieById(id: movie.id)?.posterImage
+        posterImage.image = movie.posterImage
     }
 }
