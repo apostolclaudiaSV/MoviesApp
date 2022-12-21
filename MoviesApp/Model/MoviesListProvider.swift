@@ -47,7 +47,7 @@ class MoviesListManager {
     func updateImageFor(for movie: Movie, image: UIImage) {
         guard let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].setPosterImage(image)
-        NotificationCenter.default.post(name: .ImageLoaded, object: movie)
+        NotificationCenter.default.post(name: .ImageLoaded, object: allMovies[index])
     }
     
     func setDetails(for id: Int, details: Details){

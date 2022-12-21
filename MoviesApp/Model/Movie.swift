@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class Movie: Identifiable {
+struct Movie: Identifiable {
     let id: Int
     let title: String
     var rating: Double
@@ -34,7 +34,7 @@ final class Movie: Identifiable {
         self.posterImage = posterImage
     }
     
-    func setPosterImage(_ image: UIImage) {
+    mutating func setPosterImage(_ image: UIImage) {
         self.posterImage = image
     }
     
@@ -42,7 +42,7 @@ final class Movie: Identifiable {
         return details?.similarMovies.firstIndex(where: {$0.id == movie.id})
     }
     
-    func setBackdropImage(_ image: UIImage) {
+    mutating func setBackdropImage(_ image: UIImage) {
         self.details?.backdropImage = image
     }
     
@@ -68,7 +68,7 @@ extension Movie: Decodable {
         case poster = "poster_path"
     }
     
-    convenience init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let rawId = try? values.decode(Int.self, forKey: .id)
         let rawTitle = try? values.decode(String.self, forKey: .title)
