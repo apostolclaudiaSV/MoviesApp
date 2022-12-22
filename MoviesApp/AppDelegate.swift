@@ -34,14 +34,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let networkingManager = NetworkManager()
         let moviesManager = MoviesListManager.shared
-        networkingManager.getAllMovies() { result in
+        networkingManager.getAllMovies { result in
             switch result {
-            case .success(let decodedMovies):
-                moviesManager.updateAllMovies(with: decodedMovies)
+            case .success(let movies):
+                moviesManager.updateAllMovies(with: movies)
             case .failure(let error):
                 print(error.description ?? "")
             }
-            networkingManager.displayPosterImage(for: moviesManager.allMovies)
         }
         return true
     }

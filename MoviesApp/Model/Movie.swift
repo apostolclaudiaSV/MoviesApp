@@ -18,12 +18,28 @@ struct Movie: Identifiable {
     var details: Details? = nil
     let popularity: Double
     var posterImage: UIImage?
-    var similarMovies: [Movie] = []
     
     var releaseYear: String { releaseDate.getYearFromDate() }
     
+    init(id: Int, title: String, rating: Double, releaseDate: Date, isFavourite: Bool, overview: String, poster: String, details: Details? = nil, popularity: Double, posterImage: UIImage? = nil) {
+        self.id = id
+        self.title = title
+        self.rating = rating
+        self.releaseDate = releaseDate
+        self.isFavourite = isFavourite
+        self.overview = overview
+        self.poster = poster
+        self.details = details
+        self.popularity = popularity
+        self.posterImage = posterImage
+    }
+    
     mutating func setPosterImage(_ image: UIImage) {
         self.posterImage = image
+    }
+    
+    func getIndexOfSimilarMovie(_ movie: Movie) -> Int? {
+        return details?.similarMovies.firstIndex(where: {$0.id == movie.id})
     }
     
     mutating func setBackdropImage(_ image: UIImage) {
@@ -69,15 +85,8 @@ extension Movie: Decodable {
               let date = rawDate?.toDate() else {
             throw CustomError.decodingFailure
         }
-        
-        self.id = id
-        self.title = title
-        self.rating = rating
-        self.overview = overview
-        self.releaseDate = date
-        self.poster = poster
-        self.popularity = 0
-        self.posterImage = UIImage()
+    
+        self.init(id: id, title: title, rating: rating, releaseDate: date, isFavourite: false, overview: overview, poster: poster, popularity: 0)
     }
 }
 

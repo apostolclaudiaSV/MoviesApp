@@ -29,17 +29,15 @@ enum Paths {
 
 class NetworkManager {
     private let key = "626d05abf324b3be1c089c695497d49c"
-
-    func getAllMovies(completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
-        guard let url = Paths.allMovies(key).url else {
-            fatalError("error getting movie list")
-        }
+    
+    func getAllBaseMovies(url: URL, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
         let session = URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
             if let data = data {
                 do {
                     let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)
                     DispatchQueue.main.async {
+                        self.getPosterImages(for: decoded.results)
                         completionHandler(.success(decoded.results))
                     }
                 } catch {
@@ -47,6 +45,20 @@ class NetworkManager {
                 }
             }
         }.resume()
+    }
+    
+    func getAllSimilarMovies(id: Int, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
+        guard let url = Paths.similarMovies(key: key, id: id).url else {
+            fatalError("error getting movies")
+        }
+        self.getAllBaseMovies(url: url, completionHandler: completionHandler)
+    }
+    
+    func getAllMovies(completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
+        guard let url = Paths.allMovies(key).url else {
+            fatalError("error getting movies")
+        }
+        self.getAllBaseMovies(url: url, completionHandler: completionHandler)
     }
     
     func getMovieDetails(for id: Int, completionHandler: @escaping (Result<Details, CustomError>) -> Void) {
@@ -69,14 +81,46 @@ class NetworkManager {
         }.resume()
     }
     
-    func displayPosterImage(for movies: [Movie]) {
-        movies.forEach { movie in
-            let url = Paths.poster(movie.poster).url
-            DispatchQueue.global().async {
-                let data = try? Data(contentsOf: url!)
-                DispatchQueue.main.async {
-                    MoviesListManager.shared.updateImageFor(for: movie, image: UIImage(data: data ?? Icon.noImage.data)!)
+    func getSimilarMovies(for id: Int, completion: @escaping (Result<[Movie], CustomError>) -> Void) {
+        guard let url = Paths.similarMovies(key: key, id: id).url else {
+            fatalError("Error getting similar movies")
+        }
+        
+        let session = URLSession.shared
+        session.dataTask(with: url) { (data, response, error) in
+            if let data = data {
+                do {
+                    let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(.success(decoded.results))
+                    }
+                } catch {
+                    completion(.failure(CustomError.decodingFailure))
                 }
+            }
+        }.resume()
+    }
+    
+    func getPosterImages(for movies: [Movie]) {
+        movies.forEach { movie in
+            self.getPosterImage(for: movie) { _ in
+            }
+        }
+    }
+    
+    func getPosterImage(for movie: Movie, completion: @escaping (UIImage?) -> Void) {
+        guard let url = Paths.poster(movie.poster).url else {
+            return
+        }
+        DispatchQueue.global().async {
+            let data = try? Data(contentsOf: url)
+            DispatchQueue.main.async {
+                guard let data = data, let image = UIImage(data: data) else {
+                    completion(nil)
+                    return
+                }
+                MoviesListManager.shared.updateImageFor(for: movie, image: image)
+                completion(image)
             }
         }
     }

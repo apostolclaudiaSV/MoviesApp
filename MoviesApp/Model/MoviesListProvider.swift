@@ -47,7 +47,7 @@ class MoviesListManager {
     func updateImageFor(for movie: Movie, image: UIImage) {
         guard let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].setPosterImage(image)
-        NotificationCenter.default.post(name: .ImageLoaded, object: movie)
+        NotificationCenter.default.post(name: .ImageLoaded, object: allMovies[index])
     }
     
     func setDetails(for id: Int, details: Details){
@@ -62,6 +62,22 @@ class MoviesListManager {
         allMovies[index].setBackdropImage(image)
     }
     
+    func setSimilarMovies(for id: Int, movies: [Movie]) {
+        addMovies(movies: movies)
+        guard let movie = getMovieById(id: id),
+              let index = getIndexOfSortedMovie(movie) else { return }
+        allMovies[index].details?.similarMovies = movies
+    }
+    
+    private func addMovies(movies: [Movie]) {
+        movies.forEach { movie in
+            if !existById(id: movie.id) {
+                allMovies.append(movie)
+            }
+        }
+        NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
+    }
+    
     private func allImagesSet() -> Bool {
         return allMovies.filter { $0.posterImage != nil }.count == allMovies.count
     }
@@ -72,6 +88,10 @@ class MoviesListManager {
     
     func getMovieById(id: Int) -> Movie? {
         return allMovies.filter { $0.id == id }.first
+    }
+    
+    private func existById(id: Int) -> Bool {
+        return getMovieById(id: id) != nil
     }
     
     static var unsortedMovies: [Movie] = [
