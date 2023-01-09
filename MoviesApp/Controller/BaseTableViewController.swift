@@ -38,10 +38,12 @@ class BaseTableViewController: UITableViewController {
     var screenTitle: String { Text.allMovies.text }
     var currentPage = 1
     var isLoadingList = false
+    @IBOutlet weak var footerView: UIActivityIndicatorView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
+        tableView.tableFooterView = footerView
         self.title = screenTitle
         
         NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
@@ -74,10 +76,13 @@ class BaseTableViewController: UITableViewController {
         }
     }
     
-    private func getMovieList(_ pageNumber: Int){
+    private func getMovieList() {
         isLoadingList = true
+        footerView.startAnimating()
+        
         networkingManager.getAllMovies(pageNumber: currentPage) { [weak self] result in
             self?.isLoadingList = false
+            self?.footerView.stopAnimating()
             switch result {
             case .success(let movies):
                 self?.moviesManager.updateAllMovies(with: movies)
@@ -85,11 +90,11 @@ class BaseTableViewController: UITableViewController {
                 print(error.description ?? "")
             }
         }
-       }
+    }
     
     private func loadMoreItems(){
         currentPage += 1
-        getMovieList(currentPage)
+        getMovieList()
     }
 }
 
@@ -109,12 +114,11 @@ extension BaseTableViewController {
         return cell
     }
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if (((scrollView.contentOffset.y + scrollView.frame.size.height) > scrollView.contentSize.height) && !isLoadingList){
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == filteredMovies.count - 2 && !isLoadingList {
             self.loadMoreItems()
         }
     }
-    
 }
 
 extension BaseTableViewController {
