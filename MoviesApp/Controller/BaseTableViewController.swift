@@ -36,7 +36,9 @@ class BaseTableViewController: UITableViewController {
     var moviesManager = MoviesListManager.shared
     var networkingManager = NetworkManager()
     var screenTitle: String { Text.allMovies.text }
-    
+    var currentPage = 1
+    var isLoadingList = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
@@ -71,6 +73,24 @@ class BaseTableViewController: UITableViewController {
             navigationController?.pushViewController(detailsVC, animated: true)
         }
     }
+    
+    private func getMovieList(_ pageNumber: Int){
+        isLoadingList = true
+        networkingManager.getAllMovies(pageNumber: currentPage) { [weak self] result in
+            self?.isLoadingList = false
+            switch result {
+            case .success(let movies):
+                self?.moviesManager.updateAllMovies(with: movies)
+            case .failure(let error):
+                print(error.description ?? "")
+            }
+        }
+       }
+    
+    private func loadMoreItems(){
+        currentPage += 1
+        getMovieList(currentPage)
+    }
 }
 
 extension BaseTableViewController {
@@ -88,6 +108,13 @@ extension BaseTableViewController {
         
         return cell
     }
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (((scrollView.contentOffset.y + scrollView.frame.size.height) > scrollView.contentSize.height) && !isLoadingList){
+            self.loadMoreItems()
+        }
+    }
+    
 }
 
 extension BaseTableViewController {

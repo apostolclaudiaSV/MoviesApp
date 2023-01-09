@@ -30,7 +30,7 @@ class MoviesListManager {
     private (set) var allMovies = unsortedMovies
 
     func updateAllMovies(with newMoviesList: [Movie]) {
-        allMovies = newMoviesList
+        addMovies(movies: newMoviesList)
         NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
     }
     

@@ -8,15 +8,15 @@
 import UIKit
 
 enum Paths {
-    case allMovies(_ key: String)
+    case allMovies(_ key: String, page: Int)
     case poster(_ path: String)
     case movieDetails(key: String, id: Int)
     case similarMovies(key: String, id: Int)
     
     var url: URL? {
         switch self {
-        case .allMovies(let key):
-            return URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=\(key)")
+        case .allMovies(let key, let page):
+            return URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=\(key)&page=\(page)")
         case .poster(let path):
             return URL(string: "https://image.tmdb.org/t/p/w500" + path)
         case .movieDetails(let key, let id):
@@ -54,8 +54,8 @@ class NetworkManager {
         self.getAllBaseMovies(url: url, completionHandler: completionHandler)
     }
     
-    func getAllMovies(completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
-        guard let url = Paths.allMovies(key).url else {
+    func getAllMovies(pageNumber: Int = 1, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
+        guard let url = Paths.allMovies(key, page: pageNumber).url else {
             fatalError("error getting movies")
         }
         self.getAllBaseMovies(url: url, completionHandler: completionHandler)

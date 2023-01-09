@@ -80,7 +80,7 @@ extension Movie: Decodable {
         guard let title = rawTitle,
               let id = rawId,
               let overview = rawOverview,
-              let rating = rawRating,
+              let rating = rawRating?.truncate(places: 1),
               let poster = rawPosterPath,
               let date = rawDate?.toDate() else {
             throw CustomError.decodingFailure
@@ -90,3 +90,8 @@ extension Movie: Decodable {
     }
 }
 
+extension Double {
+    func truncate(places : Int)-> Double {
+        return Double(floor(pow(10.0, Double(places)) * self)/pow(10.0, Double(places)))
+    }
+}
