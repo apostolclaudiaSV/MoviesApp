@@ -63,8 +63,9 @@ class BaseTableViewController: UITableViewController {
     func reloadOneMovie(movie: Movie) {
         guard let index = moviesManager.getIndexOfSortedMovie(movie) else { return }
         let indexPath = IndexPath(row: index, section: 0)
-        reloadFilteredMovies()
-        tableView.reloadRows(at: [indexPath], with: .none)
+        guard let movieIndex = filteredMovies.firstIndex(where: { $0.id == movie.id }) else { return }
+        filteredMovies[movieIndex] = movie
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
     
     func showDetailsScreen(for movie: Movie) {

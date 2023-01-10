@@ -75,7 +75,6 @@ class MoviesListManager {
                 allMovies.append(movie)
             }
         }
-        NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
     }
     
     private func allImagesSet() -> Bool {
