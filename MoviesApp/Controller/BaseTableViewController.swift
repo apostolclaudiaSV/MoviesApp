@@ -101,6 +101,9 @@ class BaseTableViewController: UITableViewController {
 
 extension BaseTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if screenTitle == Text.allMovies.text {
+            footerView.startAnimating()
+        }
         return filteredMovies.count
     }
     
@@ -116,7 +119,7 @@ extension BaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == filteredMovies.count - 2 && !isLoadingList {
+        if indexPath.row == filteredMovies.count - 2 && !isLoadingList && screenTitle == Text.allMovies.text {
             self.loadMoreItems()
         }
     }
