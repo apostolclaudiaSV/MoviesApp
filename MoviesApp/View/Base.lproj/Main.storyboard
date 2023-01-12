@@ -36,6 +36,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <activityIndicatorView key="tableFooterView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" id="gVx-1R-YF4">
+                            <rect key="frame" x="0.0" y="0.0" width="390" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
                         <connections>
                             <outlet property="dataSource" destination="ADh-mi-dfw" id="qsj-tF-mCW"/>
                             <outlet property="delegate" destination="ADh-mi-dfw" id="bCY-Ij-eYc"/>
@@ -44,6 +48,9 @@
                     <navigationItem key="navigationItem" id="iSj-Az-QQ6">
                         <barButtonItem key="backBarButtonItem" title=" " id="Qcn-X2-wrp"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="footerView" destination="gVx-1R-YF4" id="oSj-cx-3OI"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DvO-MW-8QY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

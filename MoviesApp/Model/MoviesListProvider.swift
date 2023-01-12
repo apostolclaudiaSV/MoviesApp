@@ -20,6 +20,13 @@ enum FilterCriteria {
     case favourites
     case rating(value: Double)
     case none
+    
+    var isFavorites: Bool {
+        switch self {
+        case .favourites: return true
+        default: return false
+        }
+    }
 }
 
 class MoviesListManager {
@@ -30,7 +37,7 @@ class MoviesListManager {
     private (set) var allMovies = unsortedMovies
 
     func updateAllMovies(with newMoviesList: [Movie]) {
-        allMovies = newMoviesList
+        addMovies(movies: newMoviesList)
         NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
     }
     
@@ -75,7 +82,6 @@ class MoviesListManager {
                 allMovies.append(movie)
             }
         }
-        NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
     }
     
     private func allImagesSet() -> Bool {

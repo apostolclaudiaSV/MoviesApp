@@ -80,7 +80,7 @@ extension Movie: Decodable {
         guard let title = rawTitle,
               let id = rawId,
               let overview = rawOverview,
-              let rating = rawRating,
+              let rating = rawRating?.truncate(places: 1),
               let poster = rawPosterPath,
               let date = rawDate?.toDate() else {
             throw CustomError.decodingFailure
@@ -89,4 +89,3 @@ extension Movie: Decodable {
         self.init(id: id, title: title, rating: rating, releaseDate: date, isFavourite: false, overview: overview, poster: poster, popularity: 0)
     }
 }
-

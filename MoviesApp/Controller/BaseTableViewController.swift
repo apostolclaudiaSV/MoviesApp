@@ -36,10 +36,14 @@ class BaseTableViewController: UITableViewController {
     var moviesManager = MoviesListManager.shared
     var networkingManager = NetworkManager()
     var screenTitle: String { Text.allMovies.text }
-    
+    var currentPage = 1
+    var isLoadingList = false
+    @IBOutlet weak var footerView: UIActivityIndicatorView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
+        tableView.tableFooterView = footerView
         self.title = screenTitle
         
         NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
@@ -50,6 +54,7 @@ class BaseTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         reloadFilteredMovies()
         tableView.reloadData()
+        footerView?.startAnimating()
     }
     
     func reloadFilteredMovies() {
@@ -59,8 +64,9 @@ class BaseTableViewController: UITableViewController {
     func reloadOneMovie(movie: Movie) {
         guard let index = moviesManager.getIndexOfSortedMovie(movie) else { return }
         let indexPath = IndexPath(row: index, section: 0)
-        reloadFilteredMovies()
-        tableView.reloadRows(at: [indexPath], with: .none)
+        guard let movieIndex = filteredMovies.firstIndex(where: { $0.id == movie.id }) else { return }
+        filteredMovies[movieIndex] = movie
+        tableView.reloadRows(at: [indexPath], with: .automatic)
     }
     
     func showDetailsScreen(for movie: Movie) {
@@ -70,6 +76,27 @@ class BaseTableViewController: UITableViewController {
             detailsVC.delegate = self
             navigationController?.pushViewController(detailsVC, animated: true)
         }
+    }
+    
+    private func getMovieList() {
+        isLoadingList = true
+        footerView.startAnimating()
+        
+        networkingManager.getAllMovies(pageNumber: currentPage) { [weak self] result in
+            self?.isLoadingList = false
+            self?.footerView.stopAnimating()
+            switch result {
+            case .success(let movies):
+                self?.moviesManager.updateAllMovies(with: movies)
+            case .failure(let error):
+                print(error.description ?? "")
+            }
+        }
+    }
+    
+    private func loadMoreItems(){
+        currentPage += 1
+        getMovieList()
     }
 }
 
@@ -87,6 +114,12 @@ extension BaseTableViewController {
         cell.configure(with: movieToDispaly)
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if filteredMovies.count >= 2 && indexPath.row == filteredMovies.count - 2 && !isLoadingList && !filterCriteria.isFavorites {
+            self.loadMoreItems()
+        }
     }
 }
 
