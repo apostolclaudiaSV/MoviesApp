@@ -54,6 +54,7 @@ class BaseTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         reloadFilteredMovies()
         tableView.reloadData()
+        footerView?.startAnimating()
     }
     
     func reloadFilteredMovies() {
@@ -101,9 +102,6 @@ class BaseTableViewController: UITableViewController {
 
 extension BaseTableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if screenTitle == Text.allMovies.text {
-            footerView.startAnimating()
-        }
         return filteredMovies.count
     }
     
@@ -119,7 +117,7 @@ extension BaseTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == filteredMovies.count - 2 && !isLoadingList && screenTitle == Text.allMovies.text {
+        if filteredMovies.count >= 2 && indexPath.row == filteredMovies.count - 2 && !isLoadingList && !filterCriteria.isFavorites {
             self.loadMoreItems()
         }
     }

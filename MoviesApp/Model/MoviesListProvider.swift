@@ -20,6 +20,13 @@ enum FilterCriteria {
     case favourites
     case rating(value: Double)
     case none
+    
+    var isFavorites: Bool {
+        switch self {
+        case .favourites: return true
+        default: return false
+        }
+    }
 }
 
 class MoviesListManager {
