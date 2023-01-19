@@ -70,7 +70,7 @@ class MovieDetailsViewController: UIViewController {
     }
     
     private func displayOrDownloadDetails() {
-        if movieToDisplay.details == nil {
+        //if movieToDisplay.details == nil {
             networkingManager.getMovieDetails(for: movieToDisplay.id) { [weak self] result in
                 guard let self = self else { return }
                 switch result {
@@ -98,10 +98,10 @@ class MovieDetailsViewController: UIViewController {
                     print(error)
                 }
             }
-        } else {
-            self.stopSpinner()
-            self.configureCustomViews(with: movieToDisplay)
-        }
+//        } else {
+//            self.stopSpinner()
+//            self.configureCustomViews(with: movieToDisplay)
+//        }
     }
     
     @objc func heartTapped() {
