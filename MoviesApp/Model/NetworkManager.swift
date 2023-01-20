@@ -29,7 +29,6 @@ enum Paths {
 
 class NetworkManager {
     private let key = "626d05abf324b3be1c089c695497d49c"
-    private var posterImages = NSCache<NSNumber, NSData>()
     
     func getAllBaseMovies(url: URL, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
         let session = URLSession.shared
@@ -113,7 +112,7 @@ class NetworkManager {
         guard let url = Paths.poster(movie.poster).url else {
             return
         }
-        if let imageData = self.posterImages.object(forKey: movie.id as NSNumber), let image = UIImage(data: (imageData as NSData) as Data) {
+        if let image = MoviesListManager.shared.getImage(for: movie.id) {
             print("using cached image")
             completion(image)
             return
@@ -127,7 +126,6 @@ class NetworkManager {
                     return
                 }
                 MoviesListManager.shared.updateImageFor(for: movie, image: image)
-                self.posterImages.setObject(data as NSData, forKey: movie.id as NSNumber)
                 completion(image)
             }
         }
