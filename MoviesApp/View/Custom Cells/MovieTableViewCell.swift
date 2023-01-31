@@ -57,7 +57,11 @@ class MovieTableViewCell: UITableViewCell {
         releaseYear.text = movie.releaseYear
         favoriteButton.setImage(movie.getFavoriteImage(), for: .normal)
         favoriteButton.isHidden = hideFavoriteButton
-        poster.image = movie.posterImage
+        if let img = MoviesListManager.shared.getMovieById(id: movie.id)?.posterImage {
+            poster.image = img
+        } else {
+            poster.image = UIImage(data: Icon.noImage.data)
+        }
     }
     
     @IBAction func favoriteButtonPressed(_ sender: Any) {

@@ -28,6 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let appearance = UITabBarAppearance()
             appearance.configureWithOpaqueBackground()
             //appearance.backgroundColor = .black
+            
             UITabBar.appearance().standardAppearance = appearance
             UITabBar.appearance().scrollEdgeAppearance = UITabBar.appearance().standardAppearance
         }
@@ -39,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case .success(let movies):
                 moviesManager.updateAllMovies(with: movies)
             case .failure(let error):
+                moviesManager.getCachedMovies()
                 print(error.description ?? "")
             }
         }

@@ -43,7 +43,66 @@ class MoviesListManager {
     
     func updateAllMovies(with newMoviesList: [Movie]) {
         addMovies(movies: newMoviesList)
-        NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
+    }
+    
+    func cacheMovies() {
+        resetDefaults()
+        do {
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            let data = try encoder.encode(allMovies)
+//
+            let images = getAllPosterImages()
+            let imagesUrls = images.enumerated().map { (index, image) in
+                let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image\(index).png")
+                try! image.pngData()!.write(to: fileURL)
+                return fileURL
+            }
+            
+            
+            //let imagesData = images.map { $0.pngData()! }
+            //let encoded = try! PropertyListEncoder().encode(imagesData)
+            
+            UserDefaults.standard.set(imagesUrls.map{ $0.absoluteString}, forKey: "images")
+            UserDefaults.standard.set(data, forKey: "cachedMovies")
+        } catch {
+            print("Unable to encode")
+        }
+    }
+    func resetDefaults() {
+        let defaults = UserDefaults.standard
+        let dictionary = defaults.dictionaryRepresentation()
+        dictionary.keys.forEach { key in
+            defaults.removeObject(forKey: key)
+        }
+    }
+    func getCachedMovies() {
+        if let data = UserDefaults.standard.data(forKey: "cachedMovies"), let imagePaths = UserDefaults.standard.stringArray(forKey: "images") {
+            do {
+                let decoder = JSONDecoder()
+                
+                decoder.dateDecodingStrategy = .iso8601
+                let arrayOfMovies = try decoder.decode([Movie].self, from: data)
+                
+                let imageURLs = imagePaths.map { URL(string: $0)! }
+                let images = imageURLs.map { UIImage(contentsOfFile: $0.path) ?? Icon.noImage.image }
+                images.enumerated().forEach { (index,image) in
+                    arrayOfMovies[index].setPosterImage(image)
+                }
+                
+                
+//                let decodedImages = try PropertyListDecoder().decode([Data].self, from: imagePaths)
+//                decodedImages.enumerated().forEach { (index,decodedImage) in
+//                    let image = UIImage(data: decodedImage)
+//                    arrayOfMovies[index].setPosterImage(image ?? Icon.noImage.image)
+//                }
+//
+                addMovies(movies: arrayOfMovies)
+            } catch {
+                print(error.localizedDescription)
+                print("Unable to decode")
+            }
+        }
     }
     
     func sortedAndFiltered(by sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
@@ -61,6 +120,10 @@ class MoviesListManager {
         allMovies[index].setPosterImage(image)
         self.posterImages.setObject(image, forKey: movie.id as NSNumber)
         NotificationCenter.default.post(name: .ImageLoaded, object: allMovies[index])
+        
+        if allImagesSet() {
+            cacheMovies()
+        }
     }
     
     func setDetails(for id: Int, details: Details){
@@ -88,6 +151,21 @@ class MoviesListManager {
                 allMovies.append(movie)
             }
         }
+        NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
+    }
+    
+    private func addMovie(movie: Movie) {
+        if !existById(id: movie.id) {
+            allMovies.append(movie)
+        }
+        NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
+
+    }
+    
+    private func getAllPosterImages() -> [UIImage] {
+        var allImages: [UIImage] = []
+        allMovies.map { if let image = $0.posterImage {allImages.append(image)} }
+        return allImages
     }
     
     private func allImagesSet() -> Bool {
