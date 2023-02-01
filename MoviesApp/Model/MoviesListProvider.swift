@@ -31,11 +31,16 @@ enum FilterCriteria {
 
 class MoviesListManager {
     static let shared = MoviesListManager()
-    
+    private var posterImages = NSCache<NSNumber, UIImage>()
+
     private init() {}
     
     private (set) var allMovies = unsortedMovies
 
+    func getImage(for movieId: Int) -> UIImage? {
+        return posterImages.object(forKey: movieId as NSNumber)
+    }
+    
     func updateAllMovies(with newMoviesList: [Movie]) {
         addMovies(movies: newMoviesList)
         NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
@@ -54,6 +59,7 @@ class MoviesListManager {
     func updateImageFor(for movie: Movie, image: UIImage) {
         guard let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].setPosterImage(image)
+        self.posterImages.setObject(image, forKey: movie.id as NSNumber)
         NotificationCenter.default.post(name: .ImageLoaded, object: allMovies[index])
     }
     

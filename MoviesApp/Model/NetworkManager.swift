@@ -101,17 +101,23 @@ class NetworkManager {
         }.resume()
     }
     
-    func getPosterImages(for movies: [Movie]) {
+    private func getPosterImages(for movies: [Movie]) {
         movies.forEach { movie in
             self.getPosterImage(for: movie) { _ in
             }
         }
     }
     
-    func getPosterImage(for movie: Movie, completion: @escaping (UIImage?) -> Void) {
+    private func getPosterImage(for movie: Movie, completion: @escaping (UIImage?) -> Void) {
         guard let url = Paths.poster(movie.poster).url else {
             return
         }
+        if let image = MoviesListManager.shared.getImage(for: movie.id) {
+            print("using cached image")
+            completion(image)
+            return
+        }
+        
         DispatchQueue.global().async {
             let data = try? Data(contentsOf: url)
             DispatchQueue.main.async {
