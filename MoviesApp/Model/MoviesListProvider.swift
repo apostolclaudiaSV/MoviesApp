@@ -46,61 +46,44 @@ class MoviesListManager {
     }
     
     func cacheMovies() {
-        resetDefaults()
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
             let data = try encoder.encode(allMovies)
-//
+
             let images = getAllPosterImages()
             let imagesUrls = images.enumerated().map { (index, image) in
-                let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("image\(index).png")
+                let folderURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("MoviesApp")
+                try! FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true)
+                let id = getMovieIdByImage(with: image) ?? -1
+                let fileURL = folderURL.appendingPathComponent("image\(id).png")
                 try! image.pngData()!.write(to: fileURL)
                 return fileURL
             }
-            
-            
-            //let imagesData = images.map { $0.pngData()! }
-            //let encoded = try! PropertyListEncoder().encode(imagesData)
-            
-            UserDefaults.standard.set(imagesUrls.map{ $0.absoluteString}, forKey: "images")
+    
             UserDefaults.standard.set(data, forKey: "cachedMovies")
         } catch {
-            print("Unable to encode")
+            print(error.localizedDescription)
         }
     }
-    func resetDefaults() {
-        let defaults = UserDefaults.standard
-        let dictionary = defaults.dictionaryRepresentation()
-        dictionary.keys.forEach { key in
-            defaults.removeObject(forKey: key)
-        }
-    }
+    
     func getCachedMovies() {
-        if let data = UserDefaults.standard.data(forKey: "cachedMovies"), let imagePaths = UserDefaults.standard.stringArray(forKey: "images") {
+        if let data = UserDefaults.standard.data(forKey: "cachedMovies") {
             do {
                 let decoder = JSONDecoder()
-                
                 decoder.dateDecodingStrategy = .iso8601
                 let arrayOfMovies = try decoder.decode([Movie].self, from: data)
                 
-                let imageURLs = imagePaths.map { URL(string: $0)! }
-                let images = imageURLs.map { UIImage(contentsOfFile: $0.path) ?? Icon.noImage.image }
-                images.enumerated().forEach { (index,image) in
-                    arrayOfMovies[index].setPosterImage(image)
+                arrayOfMovies.forEach { movie in
+                    let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("MoviesApp/image\(movie.id).png")
+                    let imageData = try! Data(contentsOf: fileURL)
+                    let image = UIImage(data: imageData)
+                    movie.setPosterImage(image!)
                 }
                 
-                
-//                let decodedImages = try PropertyListDecoder().decode([Data].self, from: imagePaths)
-//                decodedImages.enumerated().forEach { (index,decodedImage) in
-//                    let image = UIImage(data: decodedImage)
-//                    arrayOfMovies[index].setPosterImage(image ?? Icon.noImage.image)
-//                }
-//
                 addMovies(movies: arrayOfMovies)
             } catch {
                 print(error.localizedDescription)
-                print("Unable to decode")
             }
         }
     }
@@ -153,18 +136,10 @@ class MoviesListManager {
         }
         NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
     }
-    
-    private func addMovie(movie: Movie) {
-        if !existById(id: movie.id) {
-            allMovies.append(movie)
-        }
-        NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
 
-    }
-    
     private func getAllPosterImages() -> [UIImage] {
         var allImages: [UIImage] = []
-        allMovies.map { if let image = $0.posterImage {allImages.append(image)} }
+        allMovies.forEach { if let image = $0.posterImage {allImages.append(image)} }
         return allImages
     }
     
@@ -178,6 +153,10 @@ class MoviesListManager {
     
     func getMovieById(id: Int) -> Movie? {
         return allMovies.filter { $0.id == id }.first
+    }
+    
+    private func getMovieIdByImage(with image: UIImage) -> Int? {
+        return allMovies.filter { $0.posterImage == image }.first?.id
     }
     
     private func existById(id: Int) -> Bool {
