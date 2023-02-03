@@ -52,33 +52,27 @@ class MoviesListManager {
             let data = try encoder.encode(allMovies)
 
             let images = getAllPosterImages()
-            let imagesUrls = images.enumerated().map { (index, image) in
-                let folderURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("MoviesApp")
-                try! FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true)
+            images.enumerated().map { (index, image) in
                 let id = getMovieIdByImage(with: image) ?? -1
-                let fileURL = folderURL.appendingPathComponent("image\(id).png")
-                try! image.pngData()!.write(to: fileURL)
-                return fileURL
+                return FileManager.createFile(named: Text.fileName(id: id).text, image: image, Text.appName.text)
             }
     
-            UserDefaults.standard.set(data, forKey: "cachedMovies")
+            UserDefaults.standard.set(data, forKey: Text.userDefaultsMoviesKey.text)
         } catch {
             print(error.localizedDescription)
         }
     }
     
     func getCachedMovies() {
-        if let data = UserDefaults.standard.data(forKey: "cachedMovies") {
+        if let data = UserDefaults.standard.data(forKey: Text.userDefaultsMoviesKey.text) {
             do {
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = .iso8601
                 let arrayOfMovies = try decoder.decode([Movie].self, from: data)
                 
                 arrayOfMovies.forEach { movie in
-                    let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("MoviesApp/image\(movie.id).png")
-                    let imageData = try! Data(contentsOf: fileURL)
-                    let image = UIImage(data: imageData)
-                    movie.setPosterImage(image!)
+                    let image = FileManager.getImageFromFile(at: Text.filePath(id: movie.id).text)
+                    movie.setPosterImage(image)
                 }
                 
                 addMovies(movies: arrayOfMovies)
