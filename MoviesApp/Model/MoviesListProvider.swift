@@ -32,13 +32,17 @@ enum FilterCriteria {
 class MoviesListManager {
     static let shared = MoviesListManager()
     private var posterImages = NSCache<NSNumber, UIImage>()
-
+    private let imageCache = ImageCache()
     private init() {}
     
     private (set) var allMovies = unsortedMovies
 
     func getImage(for movieId: Int) -> UIImage? {
         return posterImages.object(forKey: movieId as NSNumber)
+    }
+    
+    func getImageFromFile(for movieId: Int) -> UIImage? {
+        return imageCache.getImageFromFile(at: Text.filePath(id: movieId).text)
     }
     
     func updateAllMovies(with newMoviesList: [Movie]) {
@@ -52,9 +56,11 @@ class MoviesListManager {
             let data = try encoder.encode(allMovies)
 
             let images = getAllPosterImages()
-            images.enumerated().map { (index, image) in
-                let id = getMovieIdByImage(with: image) ?? -1
-                return FileManager.createFile(named: Text.fileName(id: id).text, image: image, Text.appName.text)
+            let _ = images.enumerated().map { (index, image) in
+                if let id = getMovieIdByImage(with: image) {
+                    return imageCache.createFile(named: Text.fileName(id: id).text, image: image, Text.appName.text)
+                }
+                return nil
             }
     
             UserDefaults.standard.set(data, forKey: Text.userDefaultsMoviesKey.text)
@@ -71,8 +77,8 @@ class MoviesListManager {
                 let arrayOfMovies = try decoder.decode([Movie].self, from: data)
                 
                 arrayOfMovies.forEach { movie in
-                    let image = FileManager.getImageFromFile(at: Text.filePath(id: movie.id).text)
-                    movie.setPosterImage(image)
+                    let image = getImageFromFile(for: movie.id)
+                    movie.setPosterImage(image ?? Icon.noImage.image)
                 }
                 
                 addMovies(movies: arrayOfMovies)
@@ -150,7 +156,7 @@ class MoviesListManager {
     }
     
     private func getMovieIdByImage(with image: UIImage) -> Int? {
-        return allMovies.filter { $0.posterImage == image }.first?.id
+        return image == Icon.noImage.image ? nil : allMovies.filter { $0.posterImage == image }.first?.id
     }
     
     private func existById(id: Int) -> Bool {

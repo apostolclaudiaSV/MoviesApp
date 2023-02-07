@@ -113,6 +113,7 @@ class NetworkManager {
     
     private func getPosterImage(for movie: Movie, completion: @escaping (UIImage?) -> Void) {
         guard let url = Paths.poster(movie.poster).url else {
+            completion(nil)
             return
         }
         if let image = MoviesListManager.shared.getImage(for: movie.id) {
@@ -121,6 +122,12 @@ class NetworkManager {
             return
         }
         
+        if let image = MoviesListManager.shared.getImageFromFile(for: movie.id) {
+            print("using image from file manager")
+            movie.setPosterImage(image)
+            completion(image)
+            return
+        }
         DispatchQueue.global().async {
             let data = try? Data(contentsOf: url)
             DispatchQueue.main.async {
