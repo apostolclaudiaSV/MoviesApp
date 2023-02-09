@@ -8,11 +8,13 @@
 import UIKit
 
 class ImageCache {
-//    static let shared = ImageCache()
-//    private init() {}
+    
+    private func createURL(for path: String) -> URL {
+        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(path)
+    }
     
     private func createOrFindDirectory(named name: String) -> URL? {
-        let folderURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(name)
+        let folderURL = createURL(for: name)
         do {
             try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: true)
             return folderURL
@@ -22,7 +24,7 @@ class ImageCache {
         }
     }
     
-    func createFile(named name: String, image: UIImage, _ folderName: String) -> URL? {
+    @discardableResult func createFile(named name: String, image: UIImage, _ folderName: String) -> URL? {
         guard let folderURL = createOrFindDirectory(named: folderName) else {
             return nil
         }
@@ -37,7 +39,7 @@ class ImageCache {
     }
     
     func getImageFromFile(at path: String) -> UIImage? {
-        let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(path)
+        let fileURL = createURL(for: path)
         do {
             let imageData = try Data(contentsOf: fileURL)
             let image = UIImage(data: imageData)!

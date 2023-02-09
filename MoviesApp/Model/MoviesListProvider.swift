@@ -56,11 +56,11 @@ class MoviesListManager {
             let data = try encoder.encode(allMovies)
 
             let images = getAllPosterImages()
-            let _ = images.enumerated().map { (index, image) in
-                if let id = getMovieIdByImage(with: image) {
-                    return imageCache.createFile(named: Text.fileName(id: id).text, image: image, Text.appName.text)
+            images.enumerated().forEach { (index, image) in
+                guard let id = getMovieIdByImage(with: image) else {
+                    return
                 }
-                return nil
+                imageCache.createFile(named: Text.fileName(id: id).text, image: image, Text.appName.text)
             }
     
             UserDefaults.standard.set(data, forKey: Text.userDefaultsMoviesKey.text)
