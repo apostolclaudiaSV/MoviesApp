@@ -29,20 +29,21 @@ enum Paths {
 
 class NetworkManager {
     private let key = "626d05abf324b3be1c089c695497d49c"
-    
+        
     func getAllBaseMovies(url: URL, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
         let session = URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
-            if let data = data {
-                do {
-                    let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)
-                    DispatchQueue.main.async {
-                        self.getPosterImages(for: decoded.results)
-                        completionHandler(.success(decoded.results))
-                    }
-                } catch {
-                    completionHandler(.failure(CustomError.decodingFailure))
+            guard let data = data else {
+                return completionHandler(.failure(CustomError.decodingFailure))
+            }
+            do {
+                let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)
+                DispatchQueue.main.async {
+                    self.getPosterImages(for: decoded.results)
+                    completionHandler(.success(decoded.results))
                 }
+            } catch {
+                completionHandler(.failure(CustomError.decodingFailure))
             }
         }.resume()
     }
@@ -67,16 +68,17 @@ class NetworkManager {
         }
         let session = URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
-            if let data = data {
-                do {
-                    
-                    let decoded = try JSONDecoder().decode(Details.self, from: data)
-                    DispatchQueue.main.async {
-                        completionHandler(.success(decoded))
-                    }
-                } catch {
-                    completionHandler(.failure(CustomError.decodingFailure))
+            guard let data = data else {
+                return completionHandler(.failure(CustomError.decodingFailure))
+            }
+            do {
+                
+                let decoded = try JSONDecoder().decode(Details.self, from: data)
+                DispatchQueue.main.async {
+                    completionHandler(.success(decoded))
                 }
+            } catch {
+                completionHandler(.failure(CustomError.decodingFailure))
             }
         }.resume()
     }
@@ -88,15 +90,16 @@ class NetworkManager {
         
         let session = URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
-            if let data = data {
-                do {
-                    let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)
-                    DispatchQueue.main.async {
-                        completion(.success(decoded.results))
-                    }
-                } catch {
-                    completion(.failure(CustomError.decodingFailure))
+            guard let data = data else {
+                return completion(.failure(CustomError.decodingFailure))
+            }
+            do {
+                let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)
+                DispatchQueue.main.async {
+                    completion(.success(decoded.results))
                 }
+            } catch {
+                completion(.failure(CustomError.decodingFailure))
             }
         }.resume()
     }
@@ -110,6 +113,7 @@ class NetworkManager {
     
     private func getPosterImage(for movie: Movie, completion: @escaping (UIImage?) -> Void) {
         guard let url = Paths.poster(movie.poster).url else {
+            completion(nil)
             return
         }
         if let image = MoviesListManager.shared.getImage(for: movie.id) {
@@ -118,6 +122,12 @@ class NetworkManager {
             return
         }
         
+        if let image = MoviesListManager.shared.getImageFromFile(for: movie.id) {
+            print("using image from file manager")
+            movie.setPosterImage(image)
+            completion(image)
+            return
+        }
         DispatchQueue.global().async {
             let data = try? Data(contentsOf: url)
             DispatchQueue.main.async {

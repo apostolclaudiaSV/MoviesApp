@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Movie: Identifiable {
+class Movie: Identifiable {
     let id: Int
     let title: String
     var rating: Double
@@ -34,41 +34,7 @@ struct Movie: Identifiable {
         self.posterImage = posterImage
     }
     
-    mutating func setPosterImage(_ image: UIImage) {
-        self.posterImage = image
-    }
-    
-    func getIndexOfSimilarMovie(_ movie: Movie) -> Int? {
-        return details?.similarMovies.firstIndex(where: {$0.id == movie.id})
-    }
-    
-    mutating func setBackdropImage(_ image: UIImage) {
-        self.details?.backdropImage = image
-    }
-    
-    func getFavoriteImageColor() -> UIColor {
-        return isFavourite ? .red : .white
-    }
-    
-    func getFavoriteImage() -> UIImage {
-        let favoriteImage = isFavourite ? Icon.heartFill.image : Icon.heart.image
-        return favoriteImage.withTintColor(getFavoriteImageColor(
-        ), renderingMode: .alwaysOriginal)
-            .withConfiguration(UIImage.SymbolConfiguration(scale: .medium))
-    }
-}
-
-extension Movie: Decodable {
-    private enum CodingKeys: String, CodingKey {
-        case rating = "vote_average"
-        case title
-        case overview
-        case id
-        case releaseDate = "release_date"
-        case poster = "poster_path"
-    }
-    
-    init(from decoder: Decoder) throws {
+    required convenience init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         let rawId = try? values.decode(Int.self, forKey: .id)
         let rawTitle = try? values.decode(String.self, forKey: .title)
@@ -87,5 +53,39 @@ extension Movie: Decodable {
         }
     
         self.init(id: id, title: title, rating: rating, releaseDate: date, isFavourite: false, overview: overview, poster: poster, popularity: 0)
+    }
+    
+    func setPosterImage(_ image: UIImage) {
+        self.posterImage = image
+    }
+    
+    func getIndexOfSimilarMovie(_ movie: Movie) -> Int? {
+        return details?.similarMovies.firstIndex(where: {$0.id == movie.id})
+    }
+    
+    func setBackdropImage(_ image: UIImage) {
+        self.details?.backdropImage = image
+    }
+    
+    func getFavoriteImageColor() -> UIColor {
+        return isFavourite ? .red : .white
+    }
+    
+    func getFavoriteImage() -> UIImage {
+        let favoriteImage = isFavourite ? Icon.heartFill.image : Icon.heart.image
+        return favoriteImage.withTintColor(getFavoriteImageColor(
+        ), renderingMode: .alwaysOriginal)
+            .withConfiguration(UIImage.SymbolConfiguration(scale: .medium))
+    }
+}
+
+extension Movie: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case rating = "vote_average"
+        case title
+        case overview
+        case id
+        case releaseDate = "release_date"
+        case poster = "poster_path"
     }
 }

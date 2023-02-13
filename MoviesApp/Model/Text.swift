@@ -11,6 +11,10 @@ enum Text {
     case maximumRating
     case allMovies
     case favoritesMovies
+    case appName
+    case userDefaultsMoviesKey
+    case fileName(id: Int)
+    case filePath(id: Int)
 }
 
 extension Text {
@@ -22,6 +26,14 @@ extension Text {
             return "All Movies"
         case .favoritesMovies:
             return "Favorites"
+        case .appName:
+            return "MoviesApp"
+        case .userDefaultsMoviesKey:
+            return "cachedMovies"
+        case .fileName(let id):
+            return "image\(id).png"
+        case .filePath(let id):
+            return Text.appName.text + "/" + Text.fileName(id: id).text
         }
     }
 }

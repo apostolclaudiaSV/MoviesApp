@@ -32,7 +32,7 @@ enum FilterCriteria {
 class MoviesListManager {
     static let shared = MoviesListManager()
     private var posterImages = NSCache<NSNumber, UIImage>()
-
+    private let imageCache = ImageCache()
     private init() {}
     
     private (set) var allMovies = unsortedMovies
@@ -41,9 +41,51 @@ class MoviesListManager {
         return posterImages.object(forKey: movieId as NSNumber)
     }
     
+    func getImageFromFile(for movieId: Int) -> UIImage? {
+        return imageCache.getImageFromFile(at: Text.filePath(id: movieId).text)
+    }
+    
     func updateAllMovies(with newMoviesList: [Movie]) {
         addMovies(movies: newMoviesList)
-        NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
+    }
+    
+    func cacheMovies() {
+        do {
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            let data = try encoder.encode(allMovies)
+
+            let images = getAllPosterImages()
+            images.enumerated().forEach { (index, image) in
+                guard let id = getMovieIdByImage(with: image) else {
+                    return
+                }
+                imageCache.createFile(named: Text.fileName(id: id).text, image: image, Text.appName.text)
+            }
+    
+            UserDefaults.standard.set(data, forKey: Text.userDefaultsMoviesKey.text)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func getCachedMovies() {
+        if let data = UserDefaults.standard.data(forKey: Text.userDefaultsMoviesKey.text) {
+            do {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                let arrayOfMovies = try decoder.decode([Movie].self, from: data)
+                
+                arrayOfMovies.forEach { movie in
+                    let image = getImageFromFile(for: movie.id)
+                    movie.setPosterImage(image ?? Icon.noImage.image)
+                }
+                
+                addMovies(movies: arrayOfMovies)
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
     }
     
     func sortedAndFiltered(by sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
@@ -61,6 +103,10 @@ class MoviesListManager {
         allMovies[index].setPosterImage(image)
         self.posterImages.setObject(image, forKey: movie.id as NSNumber)
         NotificationCenter.default.post(name: .ImageLoaded, object: allMovies[index])
+        
+        if allImagesSet() {
+            cacheMovies()
+        }
     }
     
     func setDetails(for id: Int, details: Details){
@@ -88,6 +134,13 @@ class MoviesListManager {
                 allMovies.append(movie)
             }
         }
+        NotificationCenter.default.post(name: .DatasourceChanged, object: nil)
+    }
+
+    private func getAllPosterImages() -> [UIImage] {
+        var allImages: [UIImage] = []
+        allMovies.forEach { if let image = $0.posterImage {allImages.append(image)} }
+        return allImages
     }
     
     private func allImagesSet() -> Bool {
@@ -100,6 +153,10 @@ class MoviesListManager {
     
     func getMovieById(id: Int) -> Movie? {
         return allMovies.filter { $0.id == id }.first
+    }
+    
+    private func getMovieIdByImage(with image: UIImage) -> Int? {
+        return image == Icon.noImage.image ? nil : allMovies.filter { $0.posterImage == image }.first?.id
     }
     
     private func existById(id: Int) -> Bool {

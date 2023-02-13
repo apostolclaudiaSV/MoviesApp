@@ -19,7 +19,9 @@ protocol MovieDetailsDelegate: AnyObject {
 class BaseTableViewController: UITableViewController {
     @objc func datasourceChanged(notification: Notification) {
         reloadFilteredMovies()
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     @objc func imageLoaded(notification: Notification) {
@@ -84,7 +86,7 @@ class BaseTableViewController: UITableViewController {
         
         networkingManager.getAllMovies(pageNumber: currentPage) { [weak self] result in
             self?.isLoadingList = false
-            self?.footerView.stopAnimating()
+            //self?.footerView.stopAnimating()
             switch result {
             case .success(let movies):
                 self?.moviesManager.updateAllMovies(with: movies)
