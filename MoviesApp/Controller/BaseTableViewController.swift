@@ -35,8 +35,8 @@ class BaseTableViewController: UITableViewController {
     var sortCriteria: SortCriteria { .popularityDesc }
     var filterCriteria: FilterCriteria { .none }
     var shouldHideFavoriteButton: Bool { false }
-    var moviesManager = MoviesListManager.shared
-    var networkingManager = NetworkManager()
+    var moviesManager = MoviesDataClient.shared
+    var networkingManager = MoviesAPIService()
     var screenTitle: String { Text.allMovies.text }
     var currentPage = 1
     var isLoadingList = false
@@ -84,7 +84,7 @@ class BaseTableViewController: UITableViewController {
         isLoadingList = true
         footerView.startAnimating()
         
-        networkingManager.getAllMovies(pageNumber: currentPage) { [weak self] result in
+        networkingManager.fetchMovies(pageNumber: currentPage) { [weak self] result in
             self?.isLoadingList = false
             //self?.footerView.stopAnimating()
             switch result {

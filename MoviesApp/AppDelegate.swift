@@ -33,14 +33,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UITabBar.appearance().scrollEdgeAppearance = UITabBar.appearance().standardAppearance
         }
         
-        let networkingManager = NetworkManager()
-        let moviesManager = MoviesListManager.shared
-        networkingManager.getAllMovies { result in
+        let networkingManager = MoviesAPIService()
+        let fileManager = MoviesFileService()
+        let moviesManager = MoviesDataClient.shared
+        networkingManager.fetchMovies { result in
             switch result {
             case .success(let movies):
                 moviesManager.updateAllMovies(with: movies)
             case .failure(let error):
-                moviesManager.getCachedMovies()
+                fileManager.fetchMovies()
                 print(error.description ?? "")
             }
         }

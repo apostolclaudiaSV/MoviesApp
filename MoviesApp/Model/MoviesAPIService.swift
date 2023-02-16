@@ -27,7 +27,15 @@ enum Paths {
     }
 }
 
-class NetworkManager {
+protocol MovieFetchStrategy {
+    func fetchMovies(pageNumber: Int, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void)
+}
+
+class MoviesAPIService: MovieFetchStrategy {
+    func fetchMovies(pageNumber: Int = 1, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
+        getAllMovies(pageNumber: pageNumber, completionHandler: completionHandler)
+    }
+    
     private let key = "626d05abf324b3be1c089c695497d49c"
         
     func getAllBaseMovies(url: URL, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
@@ -116,13 +124,13 @@ class NetworkManager {
             completion(nil)
             return
         }
-        if let image = MoviesListManager.shared.getImage(for: movie.id) {
+        if let image = MoviesDataClient.shared.getImage(for: movie.id) {
             print("using cached image")
             completion(image)
             return
         }
         
-        if let image = MoviesListManager.shared.getImageFromFile(for: movie.id) {
+        if let image = MoviesDataClient.shared.getImageFromFile(for: movie.id) {
             print("using image from file manager")
             movie.setPosterImage(image)
             completion(image)
@@ -135,7 +143,7 @@ class NetworkManager {
                     completion(nil)
                     return
                 }
-                MoviesListManager.shared.updateImageFor(for: movie, image: image)
+                MoviesDataClient.shared.updateImageFor(for: movie, image: image)
                 completion(image)
             }
         }

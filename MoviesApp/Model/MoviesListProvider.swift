@@ -29,8 +29,8 @@ enum FilterCriteria {
     }
 }
 
-class MoviesListManager {
-    static let shared = MoviesListManager()
+class MoviesDataClient {
+    static let shared = MoviesDataClient()
     private var posterImages = NSCache<NSNumber, UIImage>()
     private let imageCache = ImageCache()
     private init() {}
@@ -68,26 +68,7 @@ class MoviesListManager {
             print(error.localizedDescription)
         }
     }
-    
-    func getCachedMovies() {
-        if let data = UserDefaults.standard.data(forKey: Text.userDefaultsMoviesKey.text) {
-            do {
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .iso8601
-                let arrayOfMovies = try decoder.decode([Movie].self, from: data)
-                
-                arrayOfMovies.forEach { movie in
-                    let image = getImageFromFile(for: movie.id)
-                    movie.setPosterImage(image ?? Icon.noImage.image)
-                }
-                
-                addMovies(movies: arrayOfMovies)
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
+        
     func sortedAndFiltered(by sortCriteria: SortCriteria, filterCriteria: FilterCriteria) -> [Movie] {
         let sortedMovies = allMovies.sorted(by: sortCriteria)
         return sortedMovies.filtered(by: filterCriteria)
@@ -128,7 +109,7 @@ class MoviesListManager {
         allMovies[index].details?.similarMovies = movies
     }
     
-    private func addMovies(movies: [Movie]) {
+    func addMovies(movies: [Movie]) {
         movies.forEach { movie in
             if !existById(id: movie.id) {
                 allMovies.append(movie)

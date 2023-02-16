@@ -26,8 +26,8 @@ class MovieDetailsViewController: UIViewController {
     }
     
     weak var delegate: MovieDetailsDelegate?
-    var networkingManager = NetworkManager()
-    var moviesManager = MoviesListManager.shared
+    var networkingManager = MoviesAPIService()
+    var moviesManager = MoviesDataClient.shared
 
     init?(coder: NSCoder, movie: Movie) {
         movieToDisplay = movie
