@@ -37,6 +37,7 @@ class BaseTableViewController: UITableViewController {
     var shouldHideFavoriteButton: Bool { false }
     var moviesManager = MoviesDataClient.shared
     var networkingManager = MoviesAPIService()
+    let fileManager = MoviesFileService()
     var screenTitle: String { Text.allMovies.text }
     var currentPage = 1
     var isLoadingList = false
@@ -47,7 +48,8 @@ class BaseTableViewController: UITableViewController {
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
         tableView.tableFooterView = footerView
         self.title = screenTitle
-        
+        getMovieList()
+
         NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .ImageLoaded, object: nil)
     }
@@ -83,7 +85,6 @@ class BaseTableViewController: UITableViewController {
     private func getMovieList() {
         isLoadingList = true
         footerView.startAnimating()
-        
         networkingManager.fetchMovies(pageNumber: currentPage) { [weak self] result in
             self?.isLoadingList = false
             //self?.footerView.stopAnimating()
@@ -91,6 +92,7 @@ class BaseTableViewController: UITableViewController {
             case .success(let movies):
                 self?.moviesManager.updateAllMovies(with: movies)
             case .failure(let error):
+                self?.fileManager.fetchMovies()
                 print(error.description ?? "")
             }
         }

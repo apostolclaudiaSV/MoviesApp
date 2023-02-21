@@ -27,24 +27,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             let appearance = UITabBarAppearance()
             appearance.configureWithOpaqueBackground()
-            //appearance.backgroundColor = .black
             
             UITabBar.appearance().standardAppearance = appearance
             UITabBar.appearance().scrollEdgeAppearance = UITabBar.appearance().standardAppearance
         }
         
-        let networkingManager = MoviesAPIService()
-        let fileManager = MoviesFileService()
-        let moviesManager = MoviesDataClient.shared
-        networkingManager.fetchMovies { result in
-            switch result {
-            case .success(let movies):
-                moviesManager.updateAllMovies(with: movies)
-            case .failure(let error):
-                fileManager.fetchMovies()
-                print(error.description ?? "")
-            }
-        }
         return true
     }
 
