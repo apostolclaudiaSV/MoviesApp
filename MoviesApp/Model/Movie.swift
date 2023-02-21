@@ -47,12 +47,11 @@ class Movie: Identifiable {
               let id = rawId,
               let overview = rawOverview,
               let rating = rawRating?.truncate(places: 1),
-              let poster = rawPosterPath,
               let date = rawDate?.toDate() else {
             throw CustomError.decodingFailure
         }
-    
-        self.init(id: id, title: title, rating: rating, releaseDate: date, isFavourite: false, overview: overview, poster: poster, popularity: 0)
+        
+        self.init(id: id, title: title, rating: rating, releaseDate: date, isFavourite: false, overview: overview, poster: rawPosterPath ?? "", popularity: 0)
     }
     
     func setPosterImage(_ image: UIImage) {

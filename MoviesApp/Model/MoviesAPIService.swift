@@ -91,26 +91,6 @@ class MoviesAPIService: MovieFetchStrategy {
         }.resume()
     }
     
-    func getSimilarMovies(for id: Int, completion: @escaping (Result<[Movie], CustomError>) -> Void) {
-        guard let url = Paths.similarMovies(key: key, id: id).url else {
-            fatalError("Error getting similar movies")
-        }
-        
-        let session = URLSession.shared
-        session.dataTask(with: url) { (data, response, error) in
-            guard let data = data else {
-                return completion(.failure(CustomError.decodingFailure))
-            }
-            do {
-                let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)
-                DispatchQueue.main.async {
-                    completion(.success(decoded.results))
-                }
-            } catch {
-                completion(.failure(CustomError.decodingFailure))
-            }
-        }.resume()
-    }
     
     private func getPosterImages(for movies: [Movie]) {
         movies.forEach { movie in
