@@ -84,7 +84,7 @@ class BaseTableViewController: UITableViewController {
     
     private func getMovieList() {
         isLoadingList = true
-        footerView.startAnimating()
+        footerView?.startAnimating()
         networkingManager.fetchMovies(pageNumber: currentPage) { [weak self] result in
             self?.isLoadingList = false
             //self?.footerView.stopAnimating()

@@ -37,23 +37,34 @@ class MoviesAPIService: MovieFetchStrategy {
     }
     
     private let key = "626d05abf324b3be1c089c695497d49c"
-        
-    func getAllBaseMovies(url: URL, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
+    
+    private func decode <T: Decodable>(from url: URL, decodingType: T.Type, completionHandler: @escaping (Result<T, CustomError>) -> Void) {
         let session = URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
             guard let data = data else {
                 return completionHandler(.failure(CustomError.decodingFailure))
             }
             do {
-                let decoded = try JSONDecoder().decode(ClientResponse.self, from: data)
+                let decoded = try JSONDecoder().decode(decodingType, from: data)
                 DispatchQueue.main.async {
-                    self.getPosterImages(for: decoded.results)
-                    completionHandler(.success(decoded.results))
+                    completionHandler(.success(decoded))
                 }
             } catch {
                 completionHandler(.failure(CustomError.decodingFailure))
             }
         }.resume()
+    }
+    
+    func getAllBaseMovies(url: URL, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
+        decode(from: url, decodingType: ClientResponse.self) { (result: Result<ClientResponse, CustomError>) in
+            switch result {
+            case .success(let response):
+                self.getPosterImages(for: response.results)
+                completionHandler(.success(response.results))
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+        }
     }
     
     func getAllSimilarMovies(id: Int, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
@@ -74,21 +85,7 @@ class MoviesAPIService: MovieFetchStrategy {
         guard let url = Paths.movieDetails(key: key, id: id).url else {
             fatalError("error getting movie details")
         }
-        let session = URLSession.shared
-        session.dataTask(with: url) { (data, response, error) in
-            guard let data = data else {
-                return completionHandler(.failure(CustomError.decodingFailure))
-            }
-            do {
-                
-                let decoded = try JSONDecoder().decode(Details.self, from: data)
-                DispatchQueue.main.async {
-                    completionHandler(.success(decoded))
-                }
-            } catch {
-                completionHandler(.failure(CustomError.decodingFailure))
-            }
-        }.resume()
+        decode(from: url, decodingType: Details.self, completionHandler: completionHandler)
     }
     
     
