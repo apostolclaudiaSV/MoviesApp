@@ -149,6 +149,7 @@ extension BaseTableViewController: MovieCellDelegate {
 extension Notification.Name {
     static let DatasourceChanged = Notification.Name("datasourceChanged")
     static let ImageLoaded = Notification.Name("imageLoaded")
+    static let DetailsLoaded = Notification.Name("detailsLoaded")
 }
 
 extension BaseTableViewController: MovieDetailsDelegate {

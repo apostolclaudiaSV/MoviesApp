@@ -107,6 +107,7 @@ class MoviesDataClient {
         guard let movie = getMovieById(id: id),
               let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].details?.similarMovies = movies
+        NotificationCenter.default.post(name: .DetailsLoaded, object: movie)
     }
     
     func addMovies(movies: [Movie]) {

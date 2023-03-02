@@ -138,4 +138,31 @@ class MoviesAPIService: MovieFetchStrategy {
             }
         }
     }
+    
+    
+    
+    
+    func downloadDetails(for id: Int) {
+        getMovieDetails(for: id) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let details):
+                MoviesDataClient.shared.setDetails(for: id, details: details)
+                self.getBackDropImage(for: details.backdropPath) { [weak self] image in
+                    guard let self = self else { return }
+                    MoviesDataClient.shared.setBackDrop(for: id, image: image)
+                    self.getAllSimilarMovies(id: id) { result in
+                        switch result {
+                        case .success(let movies):
+                            MoviesDataClient.shared.setSimilarMovies(for: id, movies: movies)
+                        case .failure:
+                            MoviesDataClient.shared.setSimilarMovies(for: id, movies: [])
+                        }
+                    }
+                }
+            case .failure:
+                MoviesDataClient.shared.setSimilarMovies(for: id, movies: [])
+            }
+        }
+   }
 }

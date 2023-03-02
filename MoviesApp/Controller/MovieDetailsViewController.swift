@@ -12,6 +12,11 @@ protocol SimilarMoviesDelegate: AnyObject {
 }
 
 class MovieDetailsViewController: UIViewController {
+    @objc func detailsLoaded(notification: Notification) {
+        guard let movie = notification.object as? Movie else { return }
+        self.stopSpinner()
+        self.movieToDisplay = movie
+    }
     
     @IBOutlet weak var similarMoviesView: SimilarMoviesView!
     @IBOutlet weak var detailsView: DetailsAndGenreView!
@@ -44,6 +49,7 @@ class MovieDetailsViewController: UIViewController {
         showSpinner()
         displayOrDownloadDetails()
         setNavigationBarButtons()
+        NotificationCenter.default.addObserver(self, selector:#selector(detailsLoaded(notification:)), name: .DetailsLoaded, object: nil)
     }
     
     private func showSpinner() {
@@ -71,33 +77,7 @@ class MovieDetailsViewController: UIViewController {
     
     private func displayOrDownloadDetails() {
         if movieToDisplay.details == nil {
-            networkingManager.getMovieDetails(for: movieToDisplay.id) { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success(let details):
-                    let id = self.movieToDisplay.id
-                    self.moviesManager.setDetails(for: id, details: details)
-                    self.networkingManager.getBackDropImage(for: details.backdropPath) { [weak self] image in
-                        guard let self = self else { return }
-                        self.moviesManager.setBackDrop(for: id, image: image)
-                        self.networkingManager.getAllSimilarMovies(id: id) { [weak self] result in
-                            guard let self = self else { return }
-                            switch result {
-                            case .success(let movies):
-                                self.moviesManager.setSimilarMovies(for: id, movies: movies)
-                                self.stopSpinner()
-                                guard let movie = self.moviesManager.getMovieById(id: id) else { return }
-                                self.movieToDisplay = movie
-                            case .failure(let error):
-                                print(error)
-                            }
-                        }
-                       
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            }
+            networkingManager.downloadDetails(for: movieToDisplay.id)
         } else {
             self.stopSpinner()
             self.configureCustomViews(with: movieToDisplay)
