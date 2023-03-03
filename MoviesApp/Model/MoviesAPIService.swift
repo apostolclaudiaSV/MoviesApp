@@ -55,6 +55,17 @@ class MoviesAPIService: MovieFetchStrategy {
         }.resume()
     }
     
+    private func decodeImage(from url: URL, completionHandler: @escaping (UIImage?) -> Void = {_ in }) {
+        let data = try? Data(contentsOf: url)
+        DispatchQueue.main.async {
+            guard let data = data, let image = UIImage(data: data) else {
+                completionHandler(nil)
+                return
+            }
+            completionHandler(image)
+        }
+    }
+    
     func getAllBaseMovies(url: URL, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
         decode(from: url, decodingType: ClientResponse.self) { (result: Result<ClientResponse, CustomError>) in
             switch result {
@@ -114,33 +125,21 @@ class MoviesAPIService: MovieFetchStrategy {
             return
         }
         DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url)
-            DispatchQueue.main.async {
-                guard let data = data, let image = UIImage(data: data) else {
-                    completion(nil)
-                    return
-                }
-                MoviesDataClient.shared.updateImageFor(for: movie, image: image)
-                completion(image)
+            self.decodeImage(from: url) { image in
+                MoviesDataClient.shared.updateImageFor(for: movie, image: image ?? Icon.noImage.image)
             }
         }
     }
     
-    func getBackDropImage(for path: String?, completion: @escaping (UIImage) -> Void) {
+    func getBackDropImage(for path: String?, completion: @escaping (UIImage?) -> Void) {
         guard let path = path, let url = Paths.poster(path).url else {
-            completion(UIImage(data: Icon.noImage.data)!)
+            completion(nil)
             return
         }
         DispatchQueue.global().async {
-            let data = try? Data(contentsOf: url)
-            DispatchQueue.main.async {
-                completion(UIImage(data: data ?? Icon.noImage.data)!)
-            }
+            self.decodeImage(from: url, completionHandler: completion)
         }
     }
-    
-    
-    
     
     func downloadDetails(for id: Int) {
         getMovieDetails(for: id) { [weak self] result in

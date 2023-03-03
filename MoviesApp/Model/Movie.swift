@@ -62,7 +62,7 @@ class Movie: Identifiable {
         return details?.similarMovies.firstIndex(where: {$0.id == movie.id})
     }
     
-    func setBackdropImage(_ image: UIImage) {
+    func setBackdropImage(_ image: UIImage?) {
         self.details?.backdropImage = image
     }
     

@@ -96,7 +96,7 @@ class MoviesDataClient {
         allMovies[index].details = details
     }
     
-    func setBackDrop(for id: Int, image: UIImage) {
+    func setBackDrop(for id: Int, image: UIImage?) {
         guard let movie = getMovieById(id: id),
               let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].setBackdropImage(image)

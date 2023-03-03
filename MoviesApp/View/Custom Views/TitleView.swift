@@ -19,8 +19,12 @@ class TitleView: BaseCustomView {
         titleLabel.text = movie.title
         duarationLabel.text = movie.details?.convertDurationTime()
         releaseYearLabel.text = movie.releaseYear
-        backdropImage.image = movie.details?.backdropImage
         ratingLabel.attributedText = configureRatingLabel(for: String(movie.rating))
+        if let img = movie.details?.backdropImage {
+            backdropImage.image = img
+        } else {
+            backdropImage.image = UIImage(data: Icon.noImage.data)
+        }
     }
     
     private func configureRatingLabel(for rating: String) -> NSMutableAttributedString {
