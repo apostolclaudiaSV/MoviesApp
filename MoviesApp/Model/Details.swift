@@ -40,14 +40,13 @@ extension Details: Decodable {
         let rawGenre = try? values.decode([Genre].self, forKey: .genres)
        
         guard let id = rawId,
-              let backdropPath = rawBackdrop,
               let duration = rawDuration else {
             throw CustomError.decodingFailure
         }
         
         self.id = id
         self.duration = duration
-        self.backdropPath = backdropPath
+        self.backdropPath = rawBackdrop ?? ""
         self.backdropImage = nil
         self.genres = rawGenre ?? []
     }

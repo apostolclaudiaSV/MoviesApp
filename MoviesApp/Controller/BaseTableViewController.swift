@@ -35,8 +35,9 @@ class BaseTableViewController: UITableViewController {
     var sortCriteria: SortCriteria { .popularityDesc }
     var filterCriteria: FilterCriteria { .none }
     var shouldHideFavoriteButton: Bool { false }
-    var moviesManager = MoviesListManager.shared
-    var networkingManager = NetworkManager()
+    var moviesManager = MoviesDataClient.shared
+    var networkingManager = MoviesAPIService()
+    let fileManager = MoviesFileService()
     var screenTitle: String { Text.allMovies.text }
     var currentPage = 1
     var isLoadingList = false
@@ -47,7 +48,8 @@ class BaseTableViewController: UITableViewController {
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
         tableView.tableFooterView = footerView
         self.title = screenTitle
-        
+        getMovieList()
+
         NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .ImageLoaded, object: nil)
     }
@@ -82,15 +84,15 @@ class BaseTableViewController: UITableViewController {
     
     private func getMovieList() {
         isLoadingList = true
-        footerView.startAnimating()
-        
-        networkingManager.getAllMovies(pageNumber: currentPage) { [weak self] result in
+        footerView?.startAnimating()
+        networkingManager.fetchMovies(pageNumber: currentPage) { [weak self] result in
             self?.isLoadingList = false
             //self?.footerView.stopAnimating()
             switch result {
             case .success(let movies):
                 self?.moviesManager.updateAllMovies(with: movies)
             case .failure(let error):
+                self?.fileManager.fetchMovies()
                 print(error.description ?? "")
             }
         }
@@ -147,6 +149,7 @@ extension BaseTableViewController: MovieCellDelegate {
 extension Notification.Name {
     static let DatasourceChanged = Notification.Name("datasourceChanged")
     static let ImageLoaded = Notification.Name("imageLoaded")
+    static let DetailsLoaded = Notification.Name("detailsLoaded")
 }
 
 extension BaseTableViewController: MovieDetailsDelegate {

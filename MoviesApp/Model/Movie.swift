@@ -47,12 +47,11 @@ class Movie: Identifiable {
               let id = rawId,
               let overview = rawOverview,
               let rating = rawRating?.truncate(places: 1),
-              let poster = rawPosterPath,
               let date = rawDate?.toDate() else {
             throw CustomError.decodingFailure
         }
-    
-        self.init(id: id, title: title, rating: rating, releaseDate: date, isFavourite: false, overview: overview, poster: poster, popularity: 0)
+        
+        self.init(id: id, title: title, rating: rating, releaseDate: date, isFavourite: false, overview: overview, poster: rawPosterPath ?? "", popularity: 0)
     }
     
     func setPosterImage(_ image: UIImage) {
@@ -63,7 +62,7 @@ class Movie: Identifiable {
         return details?.similarMovies.firstIndex(where: {$0.id == movie.id})
     }
     
-    func setBackdropImage(_ image: UIImage) {
+    func setBackdropImage(_ image: UIImage?) {
         self.details?.backdropImage = image
     }
     

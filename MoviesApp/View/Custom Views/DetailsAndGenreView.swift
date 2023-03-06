@@ -14,7 +14,11 @@ class DetailsAndGenreView: BaseCustomView {
     var genres: [Genre] = []
 
     func configure(with movie: Movie) {
-        posterImage.image = movie.posterImage
+        if let img = movie.posterImage {
+            posterImage.image = img
+        } else {
+            posterImage.image = UIImage(data: Icon.noImage.data)
+        }
         overviewTextField.text = movie.overview
         setupCollectionView()
         genres = movie.details?.genres ?? []
