@@ -7,13 +7,24 @@
 
 import UIKit
 
-enum SortCriteria {
-    case titleAsc
-    case titleDesc
-    case ratingDesc
+enum SortCriteria: CaseIterable {
     case popularityDesc
     case releaseDesc
+    case ratingDesc
+    case titleAsc
+    case titleDesc
     case none
+    
+    var criteriaTitle: String? {
+        switch self {
+        case .releaseDesc: return "Release date"
+        case .popularityDesc: return "Popularity"
+        case .titleAsc: return "Title (A-Z)"
+        case .titleDesc: return "Title (Z-A)"
+        case .ratingDesc: return "Rating"
+        default: return nil
+        }
+    }
 }
 
 enum FilterCriteria {
