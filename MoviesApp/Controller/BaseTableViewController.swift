@@ -71,8 +71,7 @@ class BaseTableViewController: UITableViewController {
             if let titlee = sortTitle.criteriaTitle {
                 let popularity = UIAction(title: titlee, state: self.sortCriteria == sortTitle ? .on : .off) { (action) in
                     self.sortCriteria = sortTitle
-                    self.reloadFilteredMovies()
-                    self.tableView.reloadData()
+                    self.getMovieList(with: self.sortCriteria)
                     self.navigationItem.rightBarButtonItem?.menu = self.createContextMenu()
                 }
                 children.append(popularity)
@@ -102,7 +101,7 @@ class BaseTableViewController: UITableViewController {
         }
     }
     
-    private func getMovieList() {
+    private func getMovieList(with sortCriteria: SortCriteria = .none) {
         isLoadingList = true
         footerView?.startAnimating()
         networkingManager.fetchMovies(pageNumber: currentPage) { [weak self] result in
@@ -120,7 +119,7 @@ class BaseTableViewController: UITableViewController {
     
     private func loadMoreItems(){
         currentPage += 1
-        getMovieList()
+        getMovieList(with: sortCriteria)
     }
 }
 

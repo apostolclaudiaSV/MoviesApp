@@ -8,15 +8,15 @@
 import UIKit
 
 enum Paths {
-    case allMovies(_ key: String, page: Int)
+    case allMovies(_ key: String, page: Int, sortCriteria: SortCriteria)
     case poster(_ path: String)
     case movieDetails(key: String, id: Int)
     case similarMovies(key: String, id: Int)
     
     var url: URL? {
         switch self {
-        case .allMovies(let key, let page):
-            return URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=\(key)&page=\(page)")
+        case .allMovies(let key, let page, let sortCriteria):
+            return URL(string: "https://api.themoviedb.org/3/discover/movie?api_key=\(key)&page=\(page)&sort_by=\(sortCriteria.parameterName)")
         case .poster(let path):
             return URL(string: "https://image.tmdb.org/t/p/w500" + path)
         case .movieDetails(let key, let id):
@@ -85,8 +85,8 @@ class MoviesAPIService: MovieFetchStrategy {
         self.getAllBaseMovies(url: url, completionHandler: completionHandler)
     }
     
-    func getAllMovies(pageNumber: Int = 1, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
-        guard let url = Paths.allMovies(key, page: pageNumber).url else {
+    func getAllMovies(pageNumber: Int = 1, sortCriteria: SortCriteria = .none, completionHandler: @escaping (Result<[Movie], CustomError>) -> Void) {
+        guard let url = Paths.allMovies(key, page: pageNumber, sortCriteria: sortCriteria).url else {
             fatalError("error getting movies")
         }
         self.getAllBaseMovies(url: url, completionHandler: completionHandler)

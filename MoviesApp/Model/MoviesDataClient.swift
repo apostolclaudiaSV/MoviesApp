@@ -25,6 +25,16 @@ enum SortCriteria: CaseIterable {
         default: return nil
         }
     }
+    
+    var parameterName: String {
+        switch self {
+        case .releaseDesc: return "release_date.desc"
+        case .titleAsc: return "original_title.asc"
+        case .titleDesc: return "original_title.desc"
+        case .ratingDesc: return "vote_average.desc"
+        default: return "popularity.desc"
+        }
+    }
 }
 
 enum FilterCriteria {
