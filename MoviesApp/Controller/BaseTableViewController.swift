@@ -32,7 +32,7 @@ class BaseTableViewController: UITableViewController {
     }
     
     var filteredMovies: [Movie] = []
-    var sortCriteria: SortCriteria { .popularityDesc }
+    var sortCriteria: SortCriteria = .popularityDesc
     var filterCriteria: FilterCriteria { .none }
     var shouldHideFavoriteButton: Bool { false }
     var moviesManager = MoviesDataClient.shared
@@ -42,7 +42,7 @@ class BaseTableViewController: UITableViewController {
     var currentPage = 1
     var isLoadingList = false
     @IBOutlet weak var footerView: UIActivityIndicatorView!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
@@ -52,6 +52,10 @@ class BaseTableViewController: UITableViewController {
 
         NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .ImageLoaded, object: nil)
+                
+        let navItems = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"), menu: createContextMenu())
+        self.navigationItem.rightBarButtonItem = navItems
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,6 +63,21 @@ class BaseTableViewController: UITableViewController {
         reloadFilteredMovies()
         tableView.reloadData()
         footerView?.startAnimating()
+    }
+    
+    private func createContextMenu() -> UIMenu {
+        var children: [UIAction] = []
+        for sortTitle in SortCriteria.allCases {
+            if let titlee = sortTitle.criteriaTitle {
+                let popularity = UIAction(title: titlee, state: self.sortCriteria == sortTitle ? .on : .off) { (action) in
+                    self.sortCriteria = sortTitle
+                    self.getMovieList(with: self.sortCriteria)
+                    self.navigationItem.rightBarButtonItem?.menu = self.createContextMenu()
+                }
+                children.append(popularity)
+            }
+        }
+        return UIMenu(title: "Sort by", options: .displayInline, children: children)
     }
     
     func reloadFilteredMovies() {
@@ -82,7 +101,7 @@ class BaseTableViewController: UITableViewController {
         }
     }
     
-    private func getMovieList() {
+    private func getMovieList(with sortCriteria: SortCriteria = .none) {
         isLoadingList = true
         footerView?.startAnimating()
         networkingManager.fetchMovies(pageNumber: currentPage) { [weak self] result in
@@ -100,7 +119,7 @@ class BaseTableViewController: UITableViewController {
     
     private func loadMoreItems(){
         currentPage += 1
-        getMovieList()
+        getMovieList(with: sortCriteria)
     }
 }
 
