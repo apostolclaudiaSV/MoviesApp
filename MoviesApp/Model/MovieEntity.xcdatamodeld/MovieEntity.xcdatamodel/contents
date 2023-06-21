@@ -1,4 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21G115" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+    <entity name="DetailsDB" representedClassName=".DetailsDB" syncable="YES">
+        <attribute name="backdropImage" optional="YES" attributeType="Binary"/>
+        <attribute name="backdropPath" attributeType="String"/>
+        <attribute name="duration" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="genres" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="GenreDB" inverseName="newRelationship" inverseEntity="GenreDB"/>
+        <relationship name="similarMovies" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="MovieDB" inverseName="details" inverseEntity="MovieDB"/>
+    </entity>
+    <entity name="GenreDB" representedClassName=".GenreDB" syncable="YES">
+        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+        <relationship name="newRelationship" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="DetailsDB" inverseName="genres" inverseEntity="DetailsDB"/>
+    </entity>
+    <entity name="MovieDB" representedClassName=".MovieDB" syncable="YES">
+        <attribute name="id" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isFavorite" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="overview" attributeType="String"/>
+        <attribute name="popularity" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="poster" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="posterImage" optional="YES" attributeType="Binary"/>
+        <attribute name="rating" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="releaseDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="releaseYear" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <relationship name="details" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DetailsDB" inverseName="similarMovies" inverseEntity="DetailsDB"/>
+    </entity>
+    <elements>
+        <element name="GenreDB" positionX="213.3377990722656" positionY="-20.6153564453125" width="128" height="88"/>
+        <element name="DetailsDB" positionX="247.981689453125" positionY="227.5755004882812" width="128" height="133"/>
+        <element name="MovieDB" positionX="-24.89877319335938" positionY="137.0758666992188" width="128" height="208"/>
+    </elements>
 </model>
