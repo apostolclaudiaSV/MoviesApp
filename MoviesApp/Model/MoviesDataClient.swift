@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 enum SortCriteria: CaseIterable {
     case popularityDesc
@@ -54,6 +55,7 @@ class MoviesDataClient {
     static let shared = MoviesDataClient()
     private var posterImages = NSCache<NSNumber, UIImage>()
     private let imageCache = ImageCache()
+    private let userDefaults = UserDefaults.standard
     private init() {}
     
     private (set) var allMovies = unsortedMovies
@@ -98,6 +100,120 @@ class MoviesDataClient {
     func modifyFavorite(for movie: Movie) {
         guard let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].isFavourite.toggle()
+        allMovies[index].isFavourite ? save(movie) : delete(movie)
+    }
+    
+    private func save(_ movie: Movie) {
+        saveToUserDefaults(for: movie.id)
+        savetoCoreData(movie)
+    }
+    
+    private func delete(_ movie: Movie) {
+        deleteFromUserDefaults(for: movie.id)
+        deleteFromCoreData(movie)
+    }
+    
+    private func saveToUserDefaults(for id: Int) {
+        var data = (userDefaults.array(forKey: Text.userDefaulsFavoritesKey.text) ?? []) as [Int]
+        //userDefaults.removeObject(forKey: Text.userDefaulsFavoritesKey.text)
+        data.append(id)
+        userDefaults.set(data, forKey: Text.userDefaulsFavoritesKey.text)
+    }
+    
+    private func deleteFromUserDefaults(for id: Int) {
+        let data = (userDefaults.array(forKey: Text.userDefaulsFavoritesKey.text) ?? []) as [Int]
+        //userDefaults.removeObject(forKey: Text.userDefaulsFavoritesKey.text)
+        userDefaults.set(data.filter { $0 != id}, forKey: Text.userDefaulsFavoritesKey.text)
+    }
+    
+    private func deleteFromCoreData(_ favoriteMovie: Movie) {
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+            return
+          }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MovieDB")
+        fetchRequest.predicate = NSPredicate(format: "id == %ld", favoriteMovie.id)
+        
+        if let object = getMovieObjectById(favoriteMovie) {
+            managedContext.delete(object)
+            do {
+                try managedContext.save()
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+            }
+        }
+    }
+    
+    private func getMovieObjectById(_ movie: Movie) -> NSManagedObject?  {
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+            return nil
+          }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MovieDB")
+        fetchRequest.predicate = NSPredicate(format: "id == %ld", movie.id)
+        return try? managedContext.fetch(fetchRequest).first as? NSManagedObject
+    }
+    
+    private func existsById(_ id: Int) -> Bool {
+        if let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate {
+            let managedContext = appDelegate.persistentContainer.viewContext
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MovieDB")
+            fetchRequest.predicate = NSPredicate(format: "id == %ld", id)
+            
+            do {
+                let result = try managedContext.fetch(fetchRequest)
+                return result.count > 0
+            } catch let error as NSError {
+                print("Could not fetch. \(error), \(error.userInfo)")
+              }
+        }
+        return true
+    }
+    
+    
+    private func savetoCoreData(_ favoriteMovie: Movie) {
+        guard let appDelegate =
+            UIApplication.shared.delegate as? AppDelegate else {
+            return
+          }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let entity =
+            NSEntityDescription.entity(forEntityName: "MovieDB",
+                                       in: managedContext)!
+          
+          let movie = NSManagedObject(entity: entity,
+                                       insertInto: managedContext)
+        
+        movie.setValue(favoriteMovie.id, forKey: "id")
+        //movie.setValue(favoriteMovie.isFavourite, forKey: "isFavorite")
+        movie.setValue(favoriteMovie.overview, forKey: "overview")
+        movie.setValue(favoriteMovie.popularity, forKey: "popularity")
+        movie.setValue(favoriteMovie.poster, forKey: "poster")
+        movie.setValue(favoriteMovie.posterImage?.pngData(), forKey: "posterImage")
+        movie.setValue(favoriteMovie.rating, forKey: "rating")
+        movie.setValue(favoriteMovie.releaseDate, forKey: "releaseDate")
+        movie.setValue(favoriteMovie.releaseYear, forKey: "releaseYear")
+        movie.setValue(favoriteMovie.title, forKey: "title")
+        
+        if !existsById(favoriteMovie.id) {
+            do {
+                try managedContext.save()
+                print(movie)
+            } catch let error as NSError {
+                print("Could not save. \(error), \(error.userInfo)")
+            }
+            return
+        }
+        
     }
     
     func updateImageFor(for movie: Movie, image: UIImage) {
@@ -132,8 +248,12 @@ class MoviesDataClient {
     }
     
     func addMovies(movies: [Movie]) {
+        let data = (userDefaults.array(forKey: Text.userDefaulsFavoritesKey.text) ?? []) as [Int]
         movies.forEach { movie in
             if !existById(id: movie.id) {
+                if let _ = data.firstIndex(of: movie.id) {
+                    movie.isFavourite = true
+                }
                 allMovies.append(movie)
             }
         }
