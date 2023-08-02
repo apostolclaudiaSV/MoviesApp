@@ -70,8 +70,10 @@ class MoviesAPIService: MovieFetchStrategy {
         decode(from: url, decodingType: ClientResponse.self) { (result: Result<ClientResponse, CustomError>) in
             switch result {
             case .success(let response):
-                self.getPosterImages(for: response.results)
-                completionHandler(.success(response.results))
+                let array = Array(response.results[0...1])
+                self.getPosterImages(for: array)
+                
+                completionHandler(.success(array))
             case .failure(let error):
                 completionHandler(.failure(error))
             }

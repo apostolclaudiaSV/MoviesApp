@@ -17,28 +17,12 @@ class FavoritesTableViewController: BaseTableViewController {
     var filteredMoviesObject: [NSManagedObject] = []
     
     override func reloadFilteredMovies() {
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
-              return
-          }
-          
-          let managedContext =
-            appDelegate.persistentContainer.viewContext
-          
-          let fetchRequest =
-            NSFetchRequest<NSManagedObject>(entityName: "MovieDB")
-          
-          do {
-            filteredMoviesObject = try managedContext.fetch(fetchRequest)
-              filteredMovies = []
-              filteredMoviesObject.forEach { movieObject in
-                        filteredMovies.append(movieObject.convertToMovie())
-//                  managedContext.delete(movieObject)
-//                  try! managedContext.save()
-              }
-          } catch let error as NSError {
-            print("Could not fetch. \(error), \(error.userInfo)")
-          }
+        if let movieObject = moviesManager.getFavoriteMovies() {
+            filteredMovies = []
+            movieObject.forEach { movieObject in
+                filteredMovies.append(movieObject.convertToMovie())
+            }
+        }
     }
 }
 

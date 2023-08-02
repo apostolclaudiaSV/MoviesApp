@@ -48,8 +48,10 @@ class BaseTableViewController: UITableViewController {
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
         tableView.tableFooterView = footerView
         self.title = screenTitle
+//        if title == Text.allMovies.text {
+//            getMovieList()
+//        }
         getMovieList()
-
         NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .ImageLoaded, object: nil)
                 
@@ -141,7 +143,7 @@ extension BaseTableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if filteredMovies.count >= 2 && indexPath.row == filteredMovies.count - 2 && !isLoadingList && !filterCriteria.isFavorites {
-            self.loadMoreItems()
+           // self.loadMoreItems()
         }
     }
 }
