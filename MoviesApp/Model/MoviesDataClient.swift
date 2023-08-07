@@ -130,9 +130,7 @@ class MoviesDataClient {
         let managedContext = appDelegate.persistentContainer.viewContext
         
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MovieDB")
-        // fetchRequest.returnsDistinctResults = true
         fetchRequest.predicate = NSPredicate(format: "id IN %@", favoriteMovieIds)
-        // getAllMoviesFromCoreData()
         return try? managedContext.fetch(fetchRequest) as? [NSManagedObject]
     }
     
@@ -141,7 +139,7 @@ class MoviesDataClient {
             UIApplication.shared.delegate as? AppDelegate {
             let managedContext = appDelegate.persistentContainer.viewContext
             let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MovieDB")
-            // fetchRequest.predicate = NSPredicate(format: "id == %ld", id)
+            fetchRequest.predicate = NSPredicate(format: "id == %ld", id)
             
             do {
                 let result = try managedContext.fetch(fetchRequest)
@@ -185,30 +183,24 @@ class MoviesDataClient {
         
         let managedContext = appDelegate.persistentContainer.viewContext
         
-        let entity =
-            NSEntityDescription.entity(forEntityName: "MovieDB",
-                                       in: managedContext)!
-        
         movies.forEach {
-            let movie = NSManagedObject(entity: entity,
-                                                 insertInto: managedContext)
-            movie.setValue($0.id, forKey: "id")
-            movie.setValue($0.overview, forKey: "overview")
-            movie.setValue($0.popularity, forKey: "popularity")
-            movie.setValue($0.poster, forKey: "poster")
-            movie.setValue($0.posterImage?.pngData(), forKey: "posterImage")
-            movie.setValue($0.rating, forKey: "rating")
-            movie.setValue($0.releaseDate, forKey: "releaseDate")
-            movie.setValue($0.releaseYear, forKey: "releaseYear")
-            movie.setValue($0.title, forKey: "title")
-            
             if !existsInCDById($0.id) {
-                do {
-                    try managedContext.save()
-                    print(movie)
-                } catch let error as NSError {
-                    print("Could not save. \(error), \(error.userInfo)")
-                }
+                let entity =
+                    NSEntityDescription.entity(forEntityName: "MovieDB",
+                                               in: managedContext)!
+                let movie = MovieDB(entity: entity,
+                                            insertInto: managedContext)
+                
+                movie.setValue($0.id, forKey: "id")
+                movie.setValue($0.overview, forKey: "overview")
+                movie.setValue($0.popularity, forKey: "popularity")
+                movie.setValue($0.poster, forKey: "poster")
+                movie.setValue($0.posterImage?.pngData(), forKey: "posterImage")
+                movie.setValue($0.rating, forKey: "rating")
+                movie.setValue($0.releaseDate, forKey: "releaseDate")
+                movie.setValue($0.releaseYear, forKey: "releaseYear")
+                movie.setValue($0.title, forKey: "title")
+                
             }
         }
     }
@@ -246,9 +238,10 @@ class MoviesDataClient {
     
     func addMovies(movies: [Movie]) {
         saveMoviesToCoreData(with: movies)
-        //getAllMoviesFromCoreData()
+        favoriteMovieIds = userDefaults.array(forKey: Text.userDefaulsFavoritesKey.text) as? [Int] ?? [Int]()
         movies.forEach { movie in
             if !existById(id: movie.id) {
+                movie.isFavourite = favoriteMovieIds.contains(movie.id)
                 allMovies.append(movie)
             }
         }

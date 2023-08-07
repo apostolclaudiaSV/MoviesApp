@@ -85,8 +85,8 @@ class MovieDetailsViewController: UIViewController {
     }
     
     @objc func heartTapped() {
-        movieToDisplay.isFavourite.toggle()
-        //delegate?.didChangeFavorite(movie: movieToDisplay)
+        // movieToDisplay.isFavourite.toggle()
+        delegate?.didChangeFavorite(movie: movieToDisplay)
         setNavigationBarButtons()
     }
 }

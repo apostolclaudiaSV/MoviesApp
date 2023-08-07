@@ -19,8 +19,11 @@ protocol MovieDetailsDelegate: AnyObject {
 class BaseTableViewController: UITableViewController {
     @objc func datasourceChanged(notification: Notification) {
         reloadFilteredMovies()
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if self.isViewLoaded && self.view.window != nil  {
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -143,7 +146,7 @@ extension BaseTableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if filteredMovies.count >= 2 && indexPath.row == filteredMovies.count - 2 && !isLoadingList && !filterCriteria.isFavorites {
-           // self.loadMoreItems()
+           self.loadMoreItems()
         }
     }
 }
