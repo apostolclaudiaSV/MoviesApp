@@ -52,6 +52,13 @@ class MovieDetailsViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector:#selector(detailsLoaded(notification:)), name: .DetailsLoaded, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        guard let title = self.title, let movie = moviesManager.getMovieByTitle(with: title) else {
+            return
+        }
+        configureCustomViews(with: movie)
+    }
+    
     private func showSpinner() {
         spinnerView.startAnimating()
         containerView.isHidden = true

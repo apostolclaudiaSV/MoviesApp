@@ -117,6 +117,10 @@ class MoviesDataClient {
         saveToUserDefaults()
     }
     
+    func getMovieByTitle(with title: String) -> Movie? {
+        return allMovies.first { $0.title == title }
+    }
+    
     private func saveToUserDefaults() {
         userDefaults.set(favoriteMovieIds, forKey: Text.userDefaulsFavoritesKey.text)
     }
