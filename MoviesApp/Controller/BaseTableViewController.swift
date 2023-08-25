@@ -19,10 +19,12 @@ protocol MovieDetailsDelegate: AnyObject {
 class BaseTableViewController: UITableViewController {
     @objc func datasourceChanged(notification: Notification) {
         reloadFilteredMovies()
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            if self.isViewLoaded && self.view.window != nil  {
-                self.tableView.reloadData()
+        if self.isViewLoaded && self.view.window != nil {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                if self.isViewLoaded && self.view.window != nil  {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
@@ -31,7 +33,10 @@ class BaseTableViewController: UITableViewController {
         guard let movie = notification.object as? Movie else {
             return
         }
-        self.reloadOneMovie(movie: movie)
+        
+        if self.isViewLoaded && self.view.window != nil {
+            self.reloadOneMovie(movie: movie)
+        }
     }
     
     var filteredMovies: [Movie] = []

@@ -151,7 +151,7 @@ class MoviesDataClient {
         return true
     }
     
-    private func getAllMoviesFromCoreData() -> [Movie] {
+    func getAllMoviesFromCoreData() -> [Movie] {
         var movies: [Movie] = []
         guard let appDelegate =
                 UIApplication.shared.delegate as? AppDelegate else {
