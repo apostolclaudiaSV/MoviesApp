@@ -68,6 +68,11 @@ class MoviesDataClient {
     private var posterImages = NSCache<NSNumber, UIImage>()
     private let imageCache = ImageCache()
     private let userDefaults = UserDefaults.standard
+    
+    private let fetchRequest : NSFetchRequest<MovieDB> = MovieDB.fetchRequest()
+    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    lazy var managedContext = appDelegate.persistentContainer.viewContext
+    
     private init() {}
     
     private (set) var allMovies = unsortedMovies
@@ -113,7 +118,7 @@ class MoviesDataClient {
     func modifyFavorite(for movie: Movie) {
         guard let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].isFavourite.toggle()
-        allMovies[index].isFavourite ? favoriteMovieIds.append(movie.id) : favoriteMovieIds.removeAll(where:    { $0 == movie.id } )
+        allMovies[index].isFavourite ? favoriteMovieIds.append(movie.id) : favoriteMovieIds.removeAll(where: { $0 == movie.id })
         saveToUserDefaults()
     }
     
@@ -125,48 +130,24 @@ class MoviesDataClient {
         userDefaults.set(favoriteMovieIds, forKey: Text.userDefaulsFavoritesKey.text)
     }
     
-    func getFavoriteMovies() -> [NSManagedObject]?  {
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
-            return nil
-          }
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MovieDB")
+    func getFavoriteMovies() -> [MovieDB]?  {
         fetchRequest.predicate = NSPredicate(format: "id IN %@", favoriteMovieIds)
-        return try? managedContext.fetch(fetchRequest) as? [NSManagedObject]
+        return try? managedContext.fetch(fetchRequest)
     }
     
     private func existsInCDById(_ id: Int) -> Bool {
-        if let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate {
-            let managedContext = appDelegate.persistentContainer.viewContext
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "MovieDB")
-            fetchRequest.predicate = NSPredicate(format: "id == %ld", id)
-            
-            do {
-                let result = try managedContext.fetch(fetchRequest)
-                return result.count > 0
-            } catch let error as NSError {
-                print("Could not fetch. \(error), \(error.userInfo)")
-              }
+        fetchRequest.predicate = NSPredicate(format: "id == %ld", id)
+        do {
+            let result = try managedContext.fetch(fetchRequest)
+            return result.count > 0
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
         }
-        return true
+        return false
     }
     
     func getAllMoviesFromCoreData() -> [Movie] {
         var movies: [Movie] = []
-        guard let appDelegate =
-                UIApplication.shared.delegate as? AppDelegate else {
-            return movies
-        }
-        
-        let managedContext =
-        appDelegate.persistentContainer.viewContext
-        
-        let fetchRequest =
-        NSFetchRequest<NSManagedObject>(entityName: "MovieDB")
         do {
             let moviesObj = try managedContext.fetch(fetchRequest)
             moviesObj.forEach { movieObject in
@@ -175,18 +156,10 @@ class MoviesDataClient {
         } catch let error as NSError {
             print("Could not fetch. \(error), \(error.userInfo)")
         }
-    print(movies)
-    return movies
-}
+        return movies
+    }
     
     private func saveMoviesToCoreData(with movies: [Movie]) {
-        guard let appDelegate =
-            UIApplication.shared.delegate as? AppDelegate else {
-            return
-          }
-        
-        let managedContext = appDelegate.persistentContainer.viewContext
-        
         movies.forEach {
             if !existsInCDById($0.id) {
                 let entity =
@@ -194,17 +167,7 @@ class MoviesDataClient {
                                                in: managedContext)!
                 let movie = MovieDB(entity: entity,
                                             insertInto: managedContext)
-                
-                movie.setValue($0.id, forKey: "id")
-                movie.setValue($0.overview, forKey: "overview")
-                movie.setValue($0.popularity, forKey: "popularity")
-                movie.setValue($0.poster, forKey: "poster")
-                movie.setValue($0.posterImage?.pngData(), forKey: "posterImage")
-                movie.setValue($0.rating, forKey: "rating")
-                movie.setValue($0.releaseDate, forKey: "releaseDate")
-                movie.setValue($0.releaseYear, forKey: "releaseYear")
-                movie.setValue($0.title, forKey: "title")
-                
+                movie.configureObject(with: $0)
             }
         }
     }

@@ -18,10 +18,7 @@ class FavoritesTableViewController: BaseTableViewController {
     
     override func reloadFilteredMovies() {
         if let movieObject = moviesManager.getFavoriteMovies() {
-            filteredMovies = []
-            movieObject.forEach { movieObject in
-                filteredMovies.append(movieObject.convertToMovie())
-            }
+            filteredMovies = movieObject.map({ $0.convertToMovie() })
         }
     }
 }
@@ -37,11 +34,5 @@ extension FavoritesTableViewController {
         }
         action.backgroundColor = .red
         return UISwipeActionsConfiguration(actions: [action])
-    }
-}
-
-extension NSManagedObject {
-    func convertToMovie() -> Movie {
-        return Movie.init(id: self.value(forKey: "id") as! Int, title: self.value(forKey: "title") as! String, rating: self.value(forKey: "rating") as! Double, releaseDate: self.value(forKey: "releaseDate") as! Date, isFavourite: true, overview: self.value(forKey: "overview") as! String, poster: self.value(forKey: "poster") as! String, details: nil, popularity: self.value(forKey: "popularity") as! Double, posterImage: nil)
     }
 }

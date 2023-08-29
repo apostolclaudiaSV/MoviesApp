@@ -28,9 +28,22 @@ extension MovieDB {
     @NSManaged public var releaseYear: String?
     @NSManaged public var title: String
     
-//    func convertToMovie() -> Movie {
-//        return Movie.init(id: Int(self.id), title: self.title, rating: self.rating, releaseDate: self.releaseDate!, isFavourite: self.isFavorite, overview: self.overview, poster: self.poster, details: nil, popularity: self.popularity, posterImage: UIImage(data: self.posterImage ?? Icon.noImage.data))
-//    }
+    func convertToMovie() -> Movie {
+        return Movie.init(id: Int(self.id), title: self.title, rating: self.rating, releaseDate: self.releaseDate!, isFavourite: self.isFavorite, overview: self.overview, poster: self.poster, details: nil, popularity: self.popularity, posterImage: UIImage(data: self.posterImage ?? Icon.noImage.data))
+    }
+    
+    func configureObject(with movie: Movie) {
+        self.setValue(movie.id, forKey: "id")
+        self.title = movie.title
+        self.rating = movie.rating
+        self.releaseDate = movie.releaseDate
+        self.releaseYear = movie.releaseYear
+        self.isFavorite = movie.isFavourite
+        self.overview = movie.overview
+        self.poster = movie.poster
+        self.popularity = movie.popularity
+        self.posterImage = movie.posterImage?.pngData()
+    }
 }
 
 extension MovieDB : Identifiable {
