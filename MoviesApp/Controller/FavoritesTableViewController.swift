@@ -20,6 +20,8 @@ class FavoritesTableViewController: BaseTableViewController {
         if let movieObject = moviesManager.getFavoriteMovies() {
             filteredMovies = movieObject.map({ $0.convertToMovie() })
             filteredMovies.forEach({ $0.isFavourite = true })
+            super.reloadFilteredMovies()
+            tableView.reloadData()
         }
     }
 }

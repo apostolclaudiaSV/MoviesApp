@@ -78,10 +78,11 @@ class BaseTableViewController: UITableViewController {
     private func createContextMenu() -> UIMenu {
         var children: [UIAction] = []
         for sortTitle in SortCriteria.allCases {
-            if let titlee = sortTitle.criteriaTitle {
-                let popularity = UIAction(title: titlee, state: self.sortCriteria == sortTitle ? .on : .off) { (action) in
+            if let title = sortTitle.criteriaTitle {
+                let popularity = UIAction(title: title, state: self.sortCriteria == sortTitle ? .on : .off) { (action) in
                     self.sortCriteria = sortTitle
-                    self.getMovieList(with: self.sortCriteria)
+                    self.reloadFilteredMovies()
+                    self.tableView.reloadData()
                     self.navigationItem.rightBarButtonItem?.menu = self.createContextMenu()
                 }
                 children.append(popularity)
