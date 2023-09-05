@@ -11,7 +11,7 @@ protocol SimilarMoviesDelegate: AnyObject {
     func cellDidSelectMovie(movie: Movie)
 }
 
-class MovieDetailsViewController: UIViewController {
+class MovieDetailsViewController: UIViewController, Storyboarded {
     @objc func detailsLoaded(notification: Notification) {
         guard let movie = notification.object as? Movie else { return }
         self.stopSpinner()

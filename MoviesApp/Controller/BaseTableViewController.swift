@@ -16,7 +16,7 @@ protocol MovieDetailsDelegate: AnyObject {
     func didSelectSimilarMovie(movie: Movie)
 }
 
-class BaseTableViewController: UITableViewController {
+class BaseTableViewController: UITableViewController, Storyboarded {
     @objc func datasourceChanged(notification: Notification) {
         reloadFilteredMovies()
         if self.isViewLoaded && self.view.window != nil {
