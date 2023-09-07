@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class FavoritesTableViewController: BaseTableViewController {
     
@@ -13,7 +14,16 @@ class FavoritesTableViewController: BaseTableViewController {
     //override var sortCriteria: SortCriteria { .none }
     override var shouldHideFavoriteButton: Bool { true }
     override var screenTitle: String { Text.favoritesMovies.text }
+    var filteredMoviesObject: [NSManagedObject] = []
     
+    override func reloadFilteredMovies() {
+        if let movieObject = moviesManager.getFavoriteMovies() {
+            filteredMovies = movieObject.map({ $0.convertToMovie() })
+            filteredMovies.forEach({ $0.isFavourite = true })
+            super.reloadFilteredMovies()
+            tableView.reloadData()
+        }
+    }
 }
 
 extension FavoritesTableViewController {

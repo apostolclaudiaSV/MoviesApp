@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 enum SortCriteria: CaseIterable {
     case popularityDesc
@@ -50,14 +51,33 @@ enum FilterCriteria {
     }
 }
 
+//enum Predicate {
+//    case all
+//    case getById(array: [Int])
+//
+//    var text: String {
+//        switch self {
+//        case .getById(let array):
+//            return ""
+//        }
+//    }
+//}
+
 class MoviesDataClient {
     static let shared = MoviesDataClient()
     private var posterImages = NSCache<NSNumber, UIImage>()
     private let imageCache = ImageCache()
+    private let userDefaults = UserDefaults.standard
+    
+    private let fetchRequest : NSFetchRequest<MovieDB> = MovieDB.fetchRequest()
+    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    lazy var managedContext = appDelegate.persistentContainer.viewContext
+    
     private init() {}
     
     private (set) var allMovies = unsortedMovies
-
+    private (set) var favoriteMovieIds: [Int] = []
+    
     func getImage(for movieId: Int) -> UIImage? {
         return posterImages.object(forKey: movieId as NSNumber)
     }
@@ -98,6 +118,58 @@ class MoviesDataClient {
     func modifyFavorite(for movie: Movie) {
         guard let index = getIndexOfSortedMovie(movie) else { return }
         allMovies[index].isFavourite.toggle()
+        allMovies[index].isFavourite ? favoriteMovieIds.append(movie.id) : favoriteMovieIds.removeAll(where: { $0 == movie.id })
+        saveToUserDefaults()
+    }
+    
+    func getMovieByTitle(with title: String) -> Movie? {
+        return allMovies.first { $0.title == title }
+    }
+    
+    private func saveToUserDefaults() {
+        userDefaults.set(favoriteMovieIds, forKey: Text.userDefaulsFavoritesKey.text)
+    }
+    
+    func getFavoriteMovies() -> [MovieDB]?  {
+        fetchRequest.predicate = NSPredicate(format: "id IN %@", favoriteMovieIds)
+        return try? managedContext.fetch(fetchRequest)
+    }
+    
+    private func existsInCDById(_ id: Int) -> Bool {
+        fetchRequest.predicate = NSPredicate(format: "id == %ld", id)
+        do {
+            let result = try managedContext.fetch(fetchRequest)
+            return result.count > 0
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        return false
+    }
+    
+    func getAllMoviesFromCoreData() -> [Movie] {
+        var movies: [Movie] = []
+        do {
+            let moviesObj = try managedContext.fetch(fetchRequest)
+            moviesObj.forEach { movieObject in
+                movies.append(movieObject.convertToMovie())
+            }
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        return movies
+    }
+    
+    private func saveMoviesToCoreData(with movies: [Movie]) {
+        movies.forEach {
+            if !existsInCDById($0.id) {
+                let entity =
+                    NSEntityDescription.entity(forEntityName: "MovieDB",
+                                               in: managedContext)!
+                let movie = MovieDB(entity: entity,
+                                            insertInto: managedContext)
+                movie.configureObject(with: $0)
+            }
+        }
     }
     
     func updateImageFor(for movie: Movie, image: UIImage) {
@@ -132,8 +204,11 @@ class MoviesDataClient {
     }
     
     func addMovies(movies: [Movie]) {
+        saveMoviesToCoreData(with: movies)
+        favoriteMovieIds = userDefaults.array(forKey: Text.userDefaulsFavoritesKey.text) as? [Int] ?? [Int]()
         movies.forEach { movie in
             if !existById(id: movie.id) {
+                movie.isFavourite = favoriteMovieIds.contains(movie.id)
                 allMovies.append(movie)
             }
         }

@@ -19,8 +19,13 @@ protocol MovieDetailsDelegate: AnyObject {
 class BaseTableViewController: UITableViewController {
     @objc func datasourceChanged(notification: Notification) {
         reloadFilteredMovies()
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        if self.isViewLoaded && self.view.window != nil {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                if self.isViewLoaded && self.view.window != nil  {
+                    self.tableView.reloadData()
+                }
+            }
         }
     }
     
@@ -28,7 +33,10 @@ class BaseTableViewController: UITableViewController {
         guard let movie = notification.object as? Movie else {
             return
         }
-        self.reloadOneMovie(movie: movie)
+        
+        if self.isViewLoaded && self.view.window != nil {
+            self.reloadOneMovie(movie: movie)
+        }
     }
     
     var filteredMovies: [Movie] = []
@@ -48,8 +56,10 @@ class BaseTableViewController: UITableViewController {
         tableView.register(UINib.init(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
         tableView.tableFooterView = footerView
         self.title = screenTitle
+//        if title == Text.allMovies.text {
+//            getMovieList()
+//        }
         getMovieList()
-
         NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .ImageLoaded, object: nil)
                 
@@ -68,10 +78,11 @@ class BaseTableViewController: UITableViewController {
     private func createContextMenu() -> UIMenu {
         var children: [UIAction] = []
         for sortTitle in SortCriteria.allCases {
-            if let titlee = sortTitle.criteriaTitle {
-                let popularity = UIAction(title: titlee, state: self.sortCriteria == sortTitle ? .on : .off) { (action) in
+            if let title = sortTitle.criteriaTitle {
+                let popularity = UIAction(title: title, state: self.sortCriteria == sortTitle ? .on : .off) { (action) in
                     self.sortCriteria = sortTitle
-                    self.getMovieList(with: self.sortCriteria)
+                    self.reloadFilteredMovies()
+                    self.tableView.reloadData()
                     self.navigationItem.rightBarButtonItem?.menu = self.createContextMenu()
                 }
                 children.append(popularity)
@@ -141,7 +152,7 @@ extension BaseTableViewController {
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if filteredMovies.count >= 2 && indexPath.row == filteredMovies.count - 2 && !isLoadingList && !filterCriteria.isFavorites {
-            self.loadMoreItems()
+           self.loadMoreItems()
         }
     }
 }

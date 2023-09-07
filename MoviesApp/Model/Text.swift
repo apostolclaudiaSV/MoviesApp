@@ -13,6 +13,7 @@ enum Text {
     case favoritesMovies
     case appName
     case userDefaultsMoviesKey
+    case userDefaulsFavoritesKey
     case fileName(id: Int)
     case filePath(id: Int)
 }
@@ -30,6 +31,8 @@ extension Text {
             return "MoviesApp"
         case .userDefaultsMoviesKey:
             return "cachedMovies"
+        case .userDefaulsFavoritesKey:
+            return "favoriteMovies"
         case .fileName(let id):
             return "image\(id).png"
         case .filePath(let id):
