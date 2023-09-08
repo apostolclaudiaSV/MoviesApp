@@ -9,25 +9,6 @@
     </dependencies>
     <scenes>
         <!--All Movies-->
-        <scene sceneID="ixk-1L-L5j">
-            <objects>
-                <navigationController storyboardIdentifier="AllMovies" useStoryboardIdentifierAsRestorationIdentifier="YES" id="pg3-Hf-zlS" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="All Movies" image="film" catalog="system" selectedImage="film.fill" id="TjF-S7-28p"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="0oH-kZ-Pcs">
-                        <rect key="frame" x="0.0" y="44" width="390" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" systemColor="labelColor"/>
-                        <color key="barTintColor" systemColor="labelColor"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="ADh-mi-dfw" kind="relationship" relationship="rootViewController" id="Eob-Oe-yf9"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="E2I-aP-xNP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="92" y="-677"/>
-        </scene>
-        <!--Base Table View Controller-->
         <scene sceneID="5UZ-fN-o0c">
             <objects>
                 <tableViewController storyboardIdentifier="BaseTableViewController" id="ADh-mi-dfw" customClass="BaseTableViewController" customModule="MoviesApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -44,6 +25,7 @@
                             <outlet property="delegate" destination="ADh-mi-dfw" id="bCY-Ij-eYc"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" title="All Movies" image="film" catalog="system" selectedImage="film.fill" id="qV2-bW-bm3"/>
                     <navigationItem key="navigationItem" id="iSj-Az-QQ6">
                         <barButtonItem key="backBarButtonItem" title=" " id="Qcn-X2-wrp"/>
                     </navigationItem>
@@ -119,24 +101,6 @@
             <point key="canvasLocation" x="2732" y="-255"/>
         </scene>
         <!--Favorites-->
-        <scene sceneID="Ufw-0j-9Sw">
-            <objects>
-                <navigationController storyboardIdentifier="Favorites" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Znk-zg-b4c" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Favorites" image="heart" catalog="system" selectedImage="heart.fill" id="6IG-Pk-Iv8"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Q8z-8T-9tl">
-                        <rect key="frame" x="0.0" y="44" width="390" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" systemColor="labelColor"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="OdO-Ji-Cbz" kind="relationship" relationship="rootViewController" id="LHj-qn-Clt"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4eQ-hv-s6v" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="91" y="181"/>
-        </scene>
-        <!--Favorites Table View Controller-->
         <scene sceneID="e2f-gr-eaT">
             <objects>
                 <tableViewController storyboardIdentifier="FavoritesTableViewController" id="OdO-Ji-Cbz" customClass="FavoritesTableViewController" customModule="MoviesApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -149,6 +113,7 @@
                             <outlet property="delegate" destination="OdO-Ji-Cbz" id="rxz-a6-vb4"/>
                         </connections>
                     </tableView>
+                    <tabBarItem key="tabBarItem" title="Favorites" image="heart" catalog="system" selectedImage="heart.fill" id="2VE-Q5-5HS"/>
                     <navigationItem key="navigationItem" id="lUO-sa-jYX">
                         <barButtonItem key="backBarButtonItem" title=" " id="OHx-bb-erK"/>
                     </navigationItem>
@@ -157,44 +122,14 @@
             </objects>
             <point key="canvasLocation" x="1291" y="181"/>
         </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="MIw-KM-b6c">
-            <objects>
-                <tabBarController id="z9b-xY-5g0" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="pA6-z0-LX3">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="color" keyPath="unselectedItemTintColor">
-                                <color key="value" systemColor="systemGray2Color"/>
-                            </userDefinedRuntimeAttribute>
-                        </userDefinedRuntimeAttributes>
-                    </tabBar>
-                    <connections>
-                        <segue destination="pg3-Hf-zlS" kind="relationship" relationship="viewControllers" id="4TM-aQ-8Q2"/>
-                        <segue destination="Znk-zg-b4c" kind="relationship" relationship="viewControllers" id="ntp-jL-CCU"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="1xE-V2-Gjo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-911" y="-255"/>
-        </scene>
     </scenes>
     <resources>
         <image name="film" catalog="system" width="32" height="32"/>
         <image name="film.fill" catalog="system" width="32" height="32"/>
         <image name="heart" catalog="system" width="128" height="109"/>
         <image name="heart.fill" catalog="system" width="128" height="109"/>
-        <systemColor name="labelColor">
-            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray2Color">
-            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

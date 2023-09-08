@@ -63,9 +63,7 @@ class BaseTableViewController: UITableViewController, Storyboarded {
         NotificationCenter.default.addObserver(self, selector:#selector(datasourceChanged(notification:)), name: .DatasourceChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(imageLoaded(notification:)), name: .ImageLoaded, object: nil)
                 
-        let navItems = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"), menu: createContextMenu())
-        self.navigationItem.rightBarButtonItem = navItems
-        
+        configureSortButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,6 +71,12 @@ class BaseTableViewController: UITableViewController, Storyboarded {
         reloadFilteredMovies()
         tableView.reloadData()
         footerView?.startAnimating()
+    }
+    
+    private func configureSortButton() {
+        let navItems = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"), menu: createContextMenu())
+        self.navigationItem.rightBarButtonItem = navItems
+        self.navigationItem.rightBarButtonItem?.tintColor = .white
     }
     
     private func createContextMenu() -> UIMenu {
