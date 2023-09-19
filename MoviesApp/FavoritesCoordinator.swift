@@ -12,6 +12,7 @@ class FavoritesCoordinator: MovieCoordinator {
     override func start() {
         let vc = FavoritesTableViewController.instantiate()
         vc.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "heart"), selectedImage: UIImage(systemName: "heart.fill"))
+        vc.coordinator = self
         navigationController.pushViewController(vc, animated: false)
     }
 }

@@ -71,6 +71,7 @@ class MovieDetailsViewController: UIViewController, Storyboarded {
     
     private func setNavigationBarButtons() {
         navigationItem.backButtonTitle = ""
+        navigationItem.backBarButtonItem?.tintColor = .label
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: movieToDisplay.getFavoriteImage(), style: .plain, target: self, action: #selector(heartTapped))
     }
     

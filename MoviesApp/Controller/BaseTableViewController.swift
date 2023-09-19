@@ -49,6 +49,7 @@ class BaseTableViewController: UITableViewController, Storyboarded {
     var screenTitle: String { Text.allMovies.text }
     var currentPage = 1
     var isLoadingList = false
+    weak var coordinator: MovieCoordinator?
     @IBOutlet weak var footerView: UIActivityIndicatorView!
     
     override func viewDidLoad() {
@@ -108,12 +109,14 @@ class BaseTableViewController: UITableViewController, Storyboarded {
     }
     
     func showDetailsScreen(for movie: Movie) {
-        if let detailsVC = storyboard?.instantiateViewController(identifier: "MovieDetailsTableViewController", creator: { coder -> MovieDetailsViewController? in
-            MovieDetailsViewController(coder: coder, movie: movie)
-        }) {
-            detailsVC.delegate = self
-            navigationController?.pushViewController(detailsVC, animated: true)
-        }
+        coordinator?.navigateToDetails(for: movie)
+        
+//        if let detailsVC = storyboard?.instantiateViewController(identifier: "MovieDetailsTableViewController", creator: { coder -> MovieDetailsViewController? in
+//            MovieDetailsViewController(coder: coder, movie: movie)
+//        }) {
+//            detailsVC.delegate = self
+//            navigationController?.pushViewController(detailsVC, animated: true)
+//        }
     }
     
     private func getMovieList(with sortCriteria: SortCriteria = .none) {
